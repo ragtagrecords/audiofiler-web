@@ -14,37 +14,37 @@ interface AudioPlayerProps {
 }
 
 interface AudioPlayerState {
-    CurrentAudioUrl: string,
-    AudioPlayer: Howl
-    Index: number
+    currentAudioUrl: string,
+    audioPlayer: Howl
+    index: number
 }
 
-export default class AudioPlayer extends React.Component<AudioPlayerProps, AudioPlayerState> {
+export default class audioPlayer extends React.Component<AudioPlayerProps, AudioPlayerState> {
 
     constructor(props:AudioPlayerProps) {
         super(props);
         this.state = {
-            CurrentAudioUrl: 'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3?_=1',
-            AudioPlayer: new Howl({
+            currentAudioUrl: 'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3?_=1',
+            audioPlayer: new Howl({
                 src: ['https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3?_=1'],
                 html5: true
             }),
-            Index: 0
+            index: 0
         }
     }
     
 
     playAudio = () => {
-        this.state.AudioPlayer.play()
+        this.state.audioPlayer.play()
     };
 
     updatePlayer = () => {
-        const currentUrl = this.props.Tracks[this.state.Index].url;
+        const currentUrl = this.props.Tracks[this.state.index].url;
         if (currentUrl !== null) {
-            this.state.AudioPlayer.stop();
+            this.state.audioPlayer.stop();
             this.setState(
                 (state, props) => ({
-                    AudioPlayer: new Howl({
+                    audioPlayer: new Howl({
                         src: [currentUrl],
                         html5: true
                     })
@@ -57,8 +57,8 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
     changeAudioUrl = (index:number) => {
         this.setState(
             (state, props) => ({
-                CurrentAudioUrl: this.props.Tracks[index].url,
-                Index: index
+                currentAudioUrl: this.props.Tracks[index].url,
+                index: index
             }),
             this.updatePlayer
           );
@@ -69,9 +69,9 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         return (
             <>
                 <h2>audio player</h2>
-                <p> {this.props.Tracks[this.state.Index].label}</p>
-                <PlayButton ClickHandler={this.changeAudioUrl} Index={0} />
-                <PlayButton ClickHandler={this.changeAudioUrl} Index={1} />
+                <p> {this.props.Tracks[this.state.index].label}</p>
+                <PlayButton clickHandler={this.changeAudioUrl} index={0} />
+                <PlayButton clickHandler={this.changeAudioUrl} index={1} />
             </>
 
         );

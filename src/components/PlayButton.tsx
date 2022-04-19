@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 interface PlayButtonProps {
-    ClickHandler: any,
-    Index: number
+    clickHandler: any,
+    index: number
 }
 
 // doesnt do anything, simply a placeholder
 interface PlayButtonState {
-    Foo: null
+    foo: null
 }
 
 export class PlayButton extends React.Component<PlayButtonProps, PlayButtonState>  {
@@ -15,12 +15,12 @@ export class PlayButton extends React.Component<PlayButtonProps, PlayButtonState
     constructor(props:PlayButtonProps) {
         super(props);
         this.state = {
-            Foo: null
+            foo: null
         }
     }
     render() {
         return (
-            <button onClick={() => this.props.ClickHandler(this.props.Index)}>Play</button>
+            <button onClick={() => this.props.clickHandler(this.props.index)}>Play</button>
         );
     }
     
