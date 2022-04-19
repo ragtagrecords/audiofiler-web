@@ -24,12 +24,13 @@ export class FileUpload extends React.Component<FileUploadProps, FileUploadState
     saveFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
         const file = target.files ? target.files[0] : null;
+        const fileName = file!.name ? file!.name : null
 
-        if (file) {
+        if (file && fileName) {
             this.setState(
                 (state, props) => ({
                     file: file,
-                    fileName: file!.name
+                    fileName: fileName
                 }),
             );
             console.log("FILE SAVED");
