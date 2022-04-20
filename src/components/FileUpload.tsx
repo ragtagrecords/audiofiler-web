@@ -56,7 +56,7 @@ export class FileUpload extends React.Component<FileUploadProps, FileUploadState
         formData.append("fileName", this.state.fileName);
         try {
             const res = await axios.post(
-                "http://api.ragtagrecords.com/public/audio",
+                "http://api.ragtagrecords.com/public/songs",
                 formData
             );
             console.log(res);
