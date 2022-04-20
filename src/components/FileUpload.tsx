@@ -24,18 +24,23 @@ export class FileUpload extends React.Component<FileUploadProps, FileUploadState
     saveFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
         const file = target.files ? target.files[0] : null;
-        const fileName = file!.name ? file!.name : null
 
-        if (file && fileName) {
+        if(!file) {
+            return false;
+        }
+        const actualFileName = file.name;
+
+        // if file exists and we have a name for it
+        if (file && (this.state.fileName || actualFileName)) {
             this.setState(
                 (state, props) => ({
                     file: file,
-                    fileName: fileName
+                    fileName: state.fileName ? state.fileName : actualFileName // prefer users fileName
                 }),
             );
-            console.log("FILE SAVED");
+            console.log("SUCCESS: FILE SAVED");
         } else {
-            console.log("FILE NOT SAVED");
+            console.log("ERROR: FILE NOT SAVED");
         }
         
     };
@@ -59,11 +64,20 @@ export class FileUpload extends React.Component<FileUploadProps, FileUploadState
             console.log(ex);
         }
     };
+
+    handleNameChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ fileName: event.target.value });
+        
+    };
  
 
     render() {
         return (
             <>
+                <label> 
+                    Song name 
+                    <input id='songName' name='songName' type='text' onChange={this.handleNameChange}/>
+                </label>
                 <input id={this.props.id} type="file" onChange={this.saveFile} />
                 <button onClick={this.uploadFile}>Upload</button>
             </>
