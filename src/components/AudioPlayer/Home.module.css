@@ -1,0 +1,27 @@
+.container {
+    padding: 0 2rem;
+    background: aliceblue;
+  }
+  
+  .main {
+    min-height: 100vh;
+    padding: 4rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .artwork {
+    border: 0.2em solid black;
+    overflow: hidden;
+    width: 375px;
+    height: 375px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    object-fit: cover;
+    object-position: center;
+    background-size: cover;
+    background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd2igo9sfit4k1n.cloudfront.net%2Fuploads%2F2020%2F01%2F16095647%2FFunk-new-hero.jpg&f=1&nofb=1");
+  }
