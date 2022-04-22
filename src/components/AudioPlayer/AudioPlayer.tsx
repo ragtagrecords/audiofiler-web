@@ -94,10 +94,8 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
     };
 
     updateAudioPlayerTime = () : void => {
-        console.log("hello world");
         if(this.audioPlayer.current && this.audioPlayer.current.currentTime) {
             this.audioPlayer.current.currentTime = this.state.currentTime;
-            console.log("hello world 2");
         }
     }
 
@@ -140,14 +138,9 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
                 this.updateAudioPlayerTime
             );
         }
-        
     };
-    
-    
+
     whilePlaying = () : void => {
-        if( this.audioPlayer.current) {
-            console.log(this.audioPlayer.current.currentTime);
-        }
         if (this.progressBar.current && this.audioPlayer.current)
         {
             this.progressBar.current.value = (this.audioPlayer.current.currentTime).toString();

@@ -59,7 +59,8 @@ export default class Playlist extends React.Component<
   };
 
   getSongs = (): void => {
-    axios.get("http://api.ragtagrecords.com/public/songs").then((response) => {
+    // TODO: handle error
+    axios.get("http://api.ragtagrecords.com/public/playlists/1").then((response) => {
       this.setState(
         (state, props) => ({
           songs: response.data,
