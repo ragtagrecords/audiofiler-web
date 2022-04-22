@@ -1,5 +1,5 @@
 import React from 'react';
-import AudioPlayer from './../components/AudioPlayer/AudioPlayer'
+import Playlist from './../components/Playlist'
 
 
 export default class Gallery extends React.Component {
@@ -20,7 +20,7 @@ export default class Gallery extends React.Component {
     return (
       <>
         <h1>gallery page</h1>
-        <AudioPlayer />
+        <Playlist />
       </>
     );
   }

@@ -9,12 +9,15 @@ import { BsPauseCircle } from "react-icons/bs";
 import { AppProps } from 'next/app';
 import { stringify } from 'querystring';
 
+import { Button } from 'react-bootstrap';
+
 interface Song {
     name: string,
     path: string,
 }
 interface AudioPlayerProps {
     //foo: Foo
+    song: Song
 }
 
 interface AudioPlayerState {
@@ -24,7 +27,7 @@ interface AudioPlayerState {
     durationText: string,
     currentTime: number,
     currentTimeText: string,
-    songs: Song[],
+    song: Song
 }
 
 export default class AudioPlayer extends React.Component<AudioPlayerProps, AudioPlayerState> {
@@ -46,18 +49,25 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
             durationText: '00:00',
             currentTime: 0,
             currentTimeText: '00:00',
-            songs: 
-            [
-                {
-                  name: "defaultName",
-                  path: "defaultPath",
-                }
-            ]
+            song:
+            {
+                name: "defaultName",
+                path: "defaultPath",
+            },
         }
     }
 
+    static getDerivedStateFromProps(nextProps:AudioPlayerProps, prevState:AudioPlayerState) {
+        if (prevState.song !== nextProps.song) {
+          return { song: nextProps.song };
+        }
+    
+        return null;
+    }
+
+
     componentDidMount = () => {
-        const songs = this.getSongs();
+        //
     }
 
     onLoadedSongMetadata = () : void => {
@@ -75,16 +85,6 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         
     }
 
-    getSongs = (): void => {
-        axios.get("http://api.ragtagrecords.com/public/songs").then((response) => {
-            this.setState(
-                (state, props) => ({
-                    songs: response.data
-                }),
-                // callback function
-            );
-        });
-    };
 
     convertTimeToString = (secs: number) : string => {
         const minutes = Math.floor(secs / 60);
@@ -198,10 +198,10 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
     render() {
         return (
             <div className={styles.audioPlayer}>
-                <h1>{this.state.songs[0].name}</h1>
+                <h1>{this.state.song.name}</h1>
                 <audio 
                     ref={this.audioPlayer} 
-                    src={this.state.songs[0].path} 
+                    src={this.state.song.path} 
                     preload="metadata"
                     onTimeUpdate={this.onAudioPlayerTimeUpdate}
                     onLoadedMetadata={this.onLoadedSongMetadata}
