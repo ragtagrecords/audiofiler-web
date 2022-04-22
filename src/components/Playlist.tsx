@@ -1,4 +1,4 @@
-import React from "react";
+import React, { isValidElement, SyntheticEvent } from "react";
 import axios from "axios";
 import AudioPlayer from "./AudioPlayer/AudioPlayer";
 import Accordion from "react-bootstrap/Accordion";
@@ -6,11 +6,11 @@ import Button from "react-bootstrap/Button";
 import internal from "stream";
 
 interface Song {
-  id: number;
+  id: Number;
   name: string;
   path: string;
   artist: string;
-  tempo: number;
+  tempo: Number;
 }
 interface PlaylistProps {
   //foo: Foo
@@ -46,6 +46,7 @@ export default class Playlist extends React.Component<
   changeSong() {
     this.setState(
       (state, props) => ({
+        // TODO:
         song: state.songs[state.currentSongIndex],
       })
       // callback function
@@ -72,32 +73,33 @@ export default class Playlist extends React.Component<
 
   // DOES NOT WORK
   // should update the value of the current song to the song selected in the accordion
-  onSongClick = (index:Number):void => {
+  onSongClick = (i: number):void => {
+    console.log(i);
     this.setState(
-        (state, props) => ({
-          currentSongIndex: 0,
-        }),
+        {
+          currentSongIndex: i,
+        },
         // callback function
         this.changeSong
-      );
+    );
   }
 
   render() {
     return (
       <>
         <Accordion defaultActiveKey="0" flush>
-          {this.state.songs.map((song, i) => {
+          {this.state.songs.map((song : Song, i : number) => {
             return (
-              <>
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header onClick={() => {this.onSongClick(song.id)}}>{song.name}</Accordion.Header>
+                <Accordion.Item eventKey={i.toString()}>
+                  <div onClick={this.onSongClick.bind(null, i)}>
+                    <Accordion.Header>{song.name}</Accordion.Header>
+                  </div>
                   <Accordion.Body>
                     <p>id: {song.id}</p>
                     <p>artist: {song.artist}</p>
                     <p>tempo: {song.tempo}</p>
                   </Accordion.Body>
                 </Accordion.Item>
-              </>
             );
           })}
         </Accordion>
