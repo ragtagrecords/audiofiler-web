@@ -2,6 +2,7 @@ import React from 'react';
 import Playlist from './../components/Playlist'
 
 
+
 export default class Gallery extends React.Component {
 
   // TODO: pull these from API
