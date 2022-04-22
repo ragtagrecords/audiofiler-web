@@ -9,9 +9,6 @@ import { BsPauseCircle } from "react-icons/bs";
 import { AppProps } from 'next/app';
 import { stringify } from 'querystring';
 
-import Accordin from 'react-bootstrap/Accordion';
-import Button from 'react-bootstrap/Button';
-
 interface Song {
     name: string,
     path: string,
