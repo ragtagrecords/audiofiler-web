@@ -55,14 +55,19 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         }
     }
 
-    static getDerivedStateFromProps(nextProps:AudioPlayerProps, prevState:AudioPlayerState) {
-        if (prevState.song !== nextProps.song) {
-          return { song: nextProps.song };
-        }
-    
-        return null;
-    }
 
+    // handle props changing
+    componentDidUpdate(prevProps: AudioPlayerProps) {
+        // new song
+        if (this.props.song !== prevProps.song) {
+          this.setState(
+            (state, props) => ({
+                song: this.props.song,
+            }),
+            this.play
+          );
+        }
+    }
 
     componentDidMount = () => {
         //
@@ -148,23 +153,27 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         }
     };
 
-    togglePlayPause = (): void => {
-        const prevState = this.state.isPlaying;
+    pause = (): void => {
         this.setState(
             (state, props) => ({
-                isPlaying: !state.isPlaying
+                isPlaying: false
             }),
+            () => {
+                this.audioPlayer.current ? this.audioPlayer.current.pause() : console.log('ERROR: failed to pause song')
+            }
         );
-    
-        if( this.audioPlayer.current ) {
-            if (!prevState ) {
-                this.audioPlayer.current.play();
-              } else {
-                this.audioPlayer.current.pause();
-              }
-        }
-        
-    };
+    }
+
+    play = (): void => {
+        this.setState(
+            (state, props) => ({
+                isPlaying: true
+            }),
+            () => {
+                this.audioPlayer.current ? this.audioPlayer.current.play() : console.log('ERROR: failed to play song')
+            }
+        );
+    }
 
     backThirty = () : void => {
         this.setState(
@@ -203,7 +212,7 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
                 >
                     <BsArrowLeftCircle /> 30
                 </button>
-                <button className={styles.playPause} onClick={this.togglePlayPause} >
+                <button className={styles.playPause} onClick={this.state.isPlaying ? this.pause : this.play} >
                     {this.state.isPlaying ? (
                     <BsPauseCircle />
                     ) : (
