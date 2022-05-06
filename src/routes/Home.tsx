@@ -7,10 +7,10 @@ const Home = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/Gallery">Gallery</Link>
+            <Link to="/playlists">Playlists</Link>
           </li>
           <li>
-            <Link to="/Manager">Manager</Link>
+            <Link to="/manager">Manager</Link>
           </li>
         </ul>
       </nav>
