@@ -1,23 +1,20 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Gallery from './routes/Gallery';
 import Home from './routes/Home';
-import Manager from './routes/Manager';
+import ManagerView from './routes/ManagerView';
+import PlaylistView from './routes/PlaylistView';
+import PlaylistsView from './routes/PlaylistsView';
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='gallery/*' element={<Gallery />} />
-        <Route path='manager/*' element={<Manager />} />
-      </Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/playlists/' element={<PlaylistsView />} />
+          <Route path='/playlists/:playlistID' element={<PlaylistView />} />
+          <Route path='manager/*' element={<ManagerView />} />
+        </Routes>
     </Router>
   );
 }
