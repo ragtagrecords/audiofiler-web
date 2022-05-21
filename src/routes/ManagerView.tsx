@@ -1,15 +1,20 @@
 import React from 'react';
-import { FileUpload } from '../components/FileUpload';
+import AddSongsForm from '../components/AddSongsForm';
 
+const ManagerView = () => {
 
-export default class ManagerView extends React.Component{
+    const defaultSong =  {
+        fileName: "/defaultFileName.mp3",
+        name: "defaultName",
+        tempo: '0',
+    };
 
-  render() {
     return (
-      <>
-        <h1>manager page</h1>
-        <FileUpload id='main' />
-      </>
+        <>
+            <h1>manager page</h1>
+            <AddSongsForm songs={[defaultSong]}/>
+        </>
     );
-  }
 }
+
+export default ManagerView;
