@@ -1,0 +1,49 @@
+:root {
+    --primary-color: #121F26;
+    --secondary-color: #355a6e;
+    --tertiary-color: #5ae7ff;
+    --white: whitesmoke;
+}
+
+html, nav, body {
+    background: var(--primary-color) !important;
+    color: var(--tertiary-color) !important;
+}
+
+a {
+    color: var(--tertiary-color) !important;
+    text-decoration: none !important;
+    padding: 4vh 5vw !important;
+}
+
+a:hover {
+    color: black !important;
+}
+
+li {
+    list-style: none;
+}
+
+li:hover
+{
+    opacity: 0.6 !important;
+}
+
+.title {
+    text-align: center;
+    padding: 5vh;
+}
+
+.audioPlayer { 
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    position: fixed; 
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    z-index: 1000;
+}

@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useRef } from 'react';
 import axios from 'axios';
-import styles from "./AudioPlayer.module.css";
+import "./AudioPlayer.css";
 
 import { BsArrowLeftCircle } from "react-icons/bs";
 import { BsArrowRightCircle } from "react-icons/bs";
@@ -197,7 +197,7 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
 
     render() {
         return (
-            <div className={styles.audioPlayer}>
+            <div className="audioPlayer">
                 <h1>{this.state.song.name}</h1>
                 <audio 
                     ref={this.audioPlayer} 
@@ -207,42 +207,42 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
                     onLoadedMetadata={this.onLoadedSongMetadata}
                 ></audio>
                 <button 
-                    className={styles.forwardBackward} 
+                    className="forwardBackward" 
                     onClick={this.backThirty}
                 >
-                    <BsArrowLeftCircle /> 30
+                    <BsArrowLeftCircle />
                 </button>
-                <button className={styles.playPause} onClick={this.state.isPlaying ? this.pause : this.play} >
+                <button className="playPause" onClick={this.state.isPlaying ? this.pause : this.play} >
                     {this.state.isPlaying ? (
                     <BsPauseCircle />
                     ) : (
-                    <BsPlayCircle className={styles.play} />
+                    <BsPlayCircle className="play" />
                     )}
                 </button>
                 <button 
-                    className={styles.forwardBackward} 
+                    className="forwardBackward" 
                     onClick={this.forwardThirty}
                 >
-                30 
+             
                 <BsArrowRightCircle />
                 </button>
 
                 {/* current time */}
-                <div className={styles.currentTime}>{this.state.currentTimeText}</div>
+                <div className="currentTime">{this.state.currentTimeText}</div>
 
                 {/* progress bar */}
                 <div>
                     <input
                     type="range"
                     defaultValue="0"
-                    className={styles.progressBar}
+                    className="progressBar"
                     ref={this.progressBar}
                     onChange={this.onTimeSliderChange}
                     />
                 </div>
 
                 {/* duration */}
-                <div className={styles.duration}>
+                <div className="duration">
                     {this.state.durationText ? this.state.durationText : '00:00'}
                 </div>
             </div>

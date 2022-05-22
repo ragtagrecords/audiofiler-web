@@ -1,0 +1,16 @@
+git status
+git log
+
+commit changes
+git add -A
+git commit -m "messaage"
+
+
+see branches
+git branch
+
+delete branch
+git branch -D branchName
+
+create a new branch
+git checkout -b branchName

@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+}
+
+li {
+    padding: 3vh 0;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-size: 3rem;
+    margin: 5vh 5vw;
+    background-color: var(--secondary-color);
+}
