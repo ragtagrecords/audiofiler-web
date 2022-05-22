@@ -1,5 +1,6 @@
 import React from 'react';
 import AddSongsForm from '../components/AddSongsForm';
+import styles from '../globalstyle.module.css';
 
 const ManagerView = () => {
 
@@ -11,7 +12,7 @@ const ManagerView = () => {
 
     return (
         <>
-            <h1>manager page</h1>
+            <h1 className={styles.title}>Manager</h1>
             <AddSongsForm songs={[defaultSong]}/>
         </>
     );

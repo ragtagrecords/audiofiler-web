@@ -6,6 +6,8 @@ import ManagerView from './routes/ManagerView';
 import PlaylistView from './routes/PlaylistView';
 import PlaylistsView from './routes/PlaylistsView';
 
+import styles from './globalstyle.module.css';
+
 export default function App() {
   return (
     <Router>
