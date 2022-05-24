@@ -14,12 +14,11 @@ interface Song {
     path: string,
 }
 interface AudioPlayerProps {
-    //foo: Foo
-    song: Song
+    song: Song,
+    onSongEnded: any
 }
 
 interface AudioPlayerState {
-    currentSongIndex: number,
     isPlaying: boolean,
     duration: Number,
     durationText: string,
@@ -29,11 +28,9 @@ interface AudioPlayerState {
 }
 
 export default class AudioPlayer extends React.Component<AudioPlayerProps, AudioPlayerState> {
-
     
     private audioPlayer: React.RefObject<HTMLAudioElement>;
     private progressBar: React.RefObject<HTMLInputElement>;
-    
 
     constructor(props:AudioPlayerProps) {
         super(props);
@@ -41,7 +38,6 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         this.audioPlayer = React.createRef();
         this.progressBar = React.createRef();
         this.state = {
-            currentSongIndex: 0,
             isPlaying: false,
             duration: 0,
             durationText: '00:00',
@@ -87,7 +83,6 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         }
         
     }
-
 
     convertTimeToString = (secs: number) : string => {
         const minutes = Math.floor(secs / 60);
@@ -149,7 +144,6 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         if (this.progressBar.current && this.audioPlayer.current)
         {
             this.progressBar.current.value = (this.audioPlayer.current.currentTime).toString();
-            //this.changePlayerCurrentTime();
         }
     };
 
@@ -205,6 +199,7 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
                     preload="metadata"
                     onTimeUpdate={this.onAudioPlayerTimeUpdate}
                     onLoadedMetadata={this.onLoadedSongMetadata}
+                    onEnded={this.props.onSongEnded}
                 ></audio>
                 <button 
                     className="forwardBackward" 
