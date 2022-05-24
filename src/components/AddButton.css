@@ -1,0 +1,11 @@
+button.addPlaylist {
+    background: var(--primary-color);
+}
+
+img {
+    background-color: --primary-color;
+    width: 8%;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
