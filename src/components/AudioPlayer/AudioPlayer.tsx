@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useRef } from 'react';
+import React, { SyntheticEvent, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import "./AudioPlayer.css";
 
@@ -6,85 +6,62 @@ import { BsArrowLeftCircle } from "react-icons/bs";
 import { BsArrowRightCircle } from "react-icons/bs";
 import { BsPlayCircle } from "react-icons/bs";
 import { BsPauseCircle } from "react-icons/bs";
-import { AppProps } from 'next/app';
-import { stringify } from 'querystring';
+import { updateTypeOperatorNode } from 'typescript';
 
-interface Song {
+type Song = {
     name: string,
     path: string,
 }
-interface AudioPlayerProps {
+type AudioPlayerProps = {
     song: Song,
     onSongEnded: any
 }
 
-interface AudioPlayerState {
-    isPlaying: boolean,
-    duration: Number,
-    durationText: string,
-    currentTime: number,
-    currentTimeText: string,
-    song: Song
+const defaultSong = {
+    name: '',
+    path: '',
 }
 
-export default class AudioPlayer extends React.Component<AudioPlayerProps, AudioPlayerState> {
+const AudioPlayer = (props: AudioPlayerProps) => {
     
-    private audioPlayer: React.RefObject<HTMLAudioElement>;
-    private progressBar: React.RefObject<HTMLInputElement>;
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
+    const [duration, setDuration] = useState<number>(0);
+    const [durationText,setDurationText] = useState<string>('00:00');
+    const [currentTime,setCurrentTime] = useState<number>(0);
+    const [currentTimeText,setCurrentTimeText] = useState<string>('00:00');
+    const [song,setSong] = useState<Song>(defaultSong);
 
-    constructor(props:AudioPlayerProps) {
-        super(props);
-        
-        this.audioPlayer = React.createRef();
-        this.progressBar = React.createRef();
-        this.state = {
-            isPlaying: false,
-            duration: 0,
-            durationText: '00:00',
-            currentTime: 0,
-            currentTimeText: '00:00',
-            song:
-            {
-                name: "defaultName",
-                path: "defaultPath",
-            },
+    const audioPlayer: React.RefObject<HTMLAudioElement> = useRef(null);
+    const progressBar: React.RefObject<HTMLInputElement> = useRef(null);
+
+    useEffect(() => {
+        setSong(props.song);
+        console.log(props.song);
+    }, [props.song]);
+
+    useEffect(() => {
+        if(audioPlayer.current) {
+            console.log(isPlaying);
+            console.log("audioplayer source" + audioPlayer.current.src);
+            console.log("song path: " + song.path);
+            isPlaying ? audioPlayer.current.play() : audioPlayer.current.pause();
+        } else {
+            console.log('ERROR: failed to play song');
+        }
+    }, [isPlaying]);
+
+
+    const onLoadedSongMetadata = () : void => {
+        if(audioPlayer.current && audioPlayer.current.duration) {
+            const duration = audioPlayer.current.duration;
+            const durationText = convertTimeToString(duration);
+            setDuration(duration);
+            setDurationText(durationText);
+            audioPlayer.current.play();
         }
     }
 
-
-    // handle props changing
-    componentDidUpdate(prevProps: AudioPlayerProps) {
-        // new song
-        if (this.props.song !== prevProps.song) {
-          this.setState(
-            (state, props) => ({
-                song: this.props.song,
-            }),
-            this.play
-          );
-        }
-    }
-
-    componentDidMount = () => {
-        //
-    }
-
-    onLoadedSongMetadata = () : void => {
-        if(this.audioPlayer.current && this.audioPlayer.current.duration) {
-            const duration = this.audioPlayer.current.duration;
-            const durationText = this.convertTimeToString(duration);
-            this.setState(
-                (state, props) => ({
-                    duration: duration,
-                    durationText: durationText
-                }),
-                // function
-            );
-        }
-        
-    }
-
-    convertTimeToString = (secs: number) : string => {
+    const convertTimeToString = (secs: number) : string => {
         const minutes = Math.floor(secs / 60);
         const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
         const seconds = Math.floor(secs % 60);
@@ -93,155 +70,110 @@ export default class AudioPlayer extends React.Component<AudioPlayerProps, Audio
         return `${returnedMinutes}:${returnedSeconds}`;
     };
 
-    updateAudioPlayerTime = () : void => {
-        if(this.audioPlayer.current && this.audioPlayer.current.currentTime) {
-            this.audioPlayer.current.currentTime = this.state.currentTime;
+    const updateAudioPlayerTime = () : void => {
+        if(audioPlayer.current && audioPlayer.current.currentTime) {
+            audioPlayer.current.currentTime = currentTime;
         }
     }
 
-    updateTimeSlider = () : void => {
-        if(
-            this.progressBar.current && 
-            this.progressBar.current.value && 
-            this.audioPlayer.current 
-        ){
-            const songProgress = this.state.currentTime / this.audioPlayer.current.duration * 100;
-            this.progressBar.current.value = (songProgress).toString();
+    const updateTimeSlider = () : void => {
+        if( progressBar.current && 
+            progressBar.current.value && 
+            audioPlayer.current 
+        ) {
+            const songProgress = currentTime / audioPlayer.current.duration * 100;
+            progressBar.current.value = (songProgress).toString();
         }
     }
 
-    onAudioPlayerTimeUpdate = () : void => {
-        
-        if( this.audioPlayer.current && this.audioPlayer.current.currentTime) {
-            const timeFromAudioPlayer = this.audioPlayer.current.currentTime;
-            const timeText = this.convertTimeToString(timeFromAudioPlayer);
-            this.setState(
-                (state, props) => ({
-                    currentTime: timeFromAudioPlayer,
-                    currentTimeText: timeText
-                }),
-                this.updateTimeSlider
-            );
+    const onAudioPlayerTimeUpdate = () : void => {
+        if( audioPlayer.current 
+            && audioPlayer.current.currentTime
+        ) {
+            const timeFromAudioPlayer = audioPlayer.current.currentTime;
+            const timeText = convertTimeToString(timeFromAudioPlayer);
+            setCurrentTime(timeFromAudioPlayer);
+            setCurrentTimeText(timeText);
+            updateTimeSlider();
         }
     }
 
-    onTimeSliderChange = (event: SyntheticEvent) : void => {
-        if (this.progressBar.current && this.progressBar.current.value) {
-            const valueOfProgressBar = Number(this.progressBar.current.value);
-            const timeFromProgressBar = valueOfProgressBar * Number(this.state.duration) / 100;
-            const timeText = this.convertTimeToString(timeFromProgressBar);
-            this.setState(
-                (state, props) => ({
-                    currentTime: timeFromProgressBar,
-                    currentTimeText: timeText
-                }),
-                this.updateAudioPlayerTime
-            );
+    const onTimeSliderChange = (event: any) : void => {
+        if (audioPlayer.current
+            && audioPlayer.current
+            && progressBar.current 
+            && progressBar.current.value
+        ) {
+            const valueOfProgressBar = parseInt(progressBar.current.value);
+            const timeFromProgressBar = valueOfProgressBar * duration / 100;
+            const timeText = convertTimeToString(timeFromProgressBar);
+            setCurrentTime(timeFromProgressBar);
+            setCurrentTimeText(timeText);
+            audioPlayer.current.currentTime = timeFromProgressBar;
         }
     };
 
-    whilePlaying = () : void => {
-        if (this.progressBar.current && this.audioPlayer.current)
-        {
-            this.progressBar.current.value = (this.audioPlayer.current.currentTime).toString();
-        }
-    };
-
-    pause = (): void => {
-        this.setState(
-            (state, props) => ({
-                isPlaying: false
-            }),
-            () => {
-                this.audioPlayer.current ? this.audioPlayer.current.pause() : console.log('ERROR: failed to pause song')
-            }
-        );
+    const pause = (): void => {
+        setIsPlaying(false);
     }
 
-    play = (): void => {
-        this.setState(
-            (state, props) => ({
-                isPlaying: true
-            }),
-            () => {
-                this.audioPlayer.current ? this.audioPlayer.current.play() : console.log('ERROR: failed to play song')
-            }
-        );
+    const play = (): void => {
+        setIsPlaying(true);
     }
 
-    backThirty = () : void => {
-        this.setState(
-            (state, props) => ({
-                currentTime: state.currentTime - 30,
-                currentTimeText: this.convertTimeToString(state.currentTime - 30)
-            }),
-            this.updateAudioPlayerTime
-        );
-    };
-
-    forwardThirty = () : void => {
-        this.setState(
-            (state, props) => ({
-                currentTime: state.currentTime + 30,
-                currentTimeText: this.convertTimeToString(state.currentTime - 30)
-            }),
-            this.updateAudioPlayerTime
-        );
-    };
-
-    render() {
-        return (
-            <div className="audioPlayer">
-                <h1>{this.state.song.name}</h1>
+    return (
+        <div className="audioPlayer">
+            <h1>{song.name}</h1>
+            {song && song.path != "" &&
                 <audio 
-                    ref={this.audioPlayer} 
-                    src={this.state.song.path} 
+                    ref={audioPlayer} 
+                    src={song.path} 
                     preload="metadata"
-                    onTimeUpdate={this.onAudioPlayerTimeUpdate}
-                    onLoadedMetadata={this.onLoadedSongMetadata}
-                    onEnded={this.props.onSongEnded}
+                    onTimeUpdate={onAudioPlayerTimeUpdate}
+                    onLoadedMetadata={onLoadedSongMetadata}
+                    onEnded={props.onSongEnded}
+                    onPause={pause}
+                    onPlay={play}
                 ></audio>
-                <button 
-                    className="forwardBackward" 
-                    onClick={this.backThirty}
-                >
-                    <BsArrowLeftCircle />
-                </button>
-                <button className="playPause" onClick={this.state.isPlaying ? this.pause : this.play} >
-                    {this.state.isPlaying ? (
-                    <BsPauseCircle />
-                    ) : (
-                    <BsPlayCircle className="play" />
-                    )}
-                </button>
-                <button 
-                    className="forwardBackward" 
-                    onClick={this.forwardThirty}
-                >
-             
-                <BsArrowRightCircle />
-                </button>
+            }
+            <button 
+                className="forwardBackward" 
+                onClick={() => null}
+            >
+                <BsArrowLeftCircle />
+            </button>
+            <button className="playPause" onClick={isPlaying ? pause : play} >
+                {isPlaying 
+                    ? <BsPauseCircle />
+                    : <BsPlayCircle className="play" />
+                }
+            </button>
+            <button 
+                className="forwardBackward" 
+                onClick={() => null}
+            >
+            
+            <BsArrowRightCircle />
+            </button>
 
-                {/* current time */}
-                <div className="currentTime">{this.state.currentTimeText}</div>
+            <div className="currentTime">{currentTimeText}</div>
 
-                {/* progress bar */}
-                <div>
-                    <input
-                    type="range"
-                    defaultValue="0"
-                    className="progressBar"
-                    ref={this.progressBar}
-                    onChange={this.onTimeSliderChange}
-                    />
-                </div>
-
-                {/* duration */}
-                <div className="duration">
-                    {this.state.durationText ? this.state.durationText : '00:00'}
-                </div>
+            <div>
+                <input
+                type="range"
+                defaultValue="0"
+                className="progressBar"
+                ref={progressBar}
+                onChange={onTimeSliderChange}
+                />
             </div>
 
-        );
-    }
+            <div className="duration">
+                {durationText ? durationText : '00:00'}
+            </div>
+        </div>
+
+    );
 }
+
+export default AudioPlayer;
