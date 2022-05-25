@@ -13,7 +13,9 @@ type Song = {
 }
 type AudioPlayerProps = {
     song: Song,
-    onSongEnded: any
+    onSongEnded: any,
+    skipSong: any,
+    prevSong: any,
 }
 
 const defaultSong = {
@@ -111,65 +113,69 @@ const AudioPlayer = (props: AudioPlayerProps) => {
             audioPlayer.current.currentTime = timeFromProgressBar;
         }
     };
-
+    
     const pause = (): void => {
         setIsPlaying(false);
     }
-
+    
     const play = (): void => {
         setIsPlaying(true);
     }
-
+    
     return (
         <div className="audioPlayer">
-            <h1>{song.name}</h1>
             {song && song.path != "" &&
                 <audio 
-                    ref={audioPlayer} 
-                    src={song.path} 
-                    preload="metadata"
-                    onTimeUpdate={onAudioPlayerTimeUpdate}
-                    onLoadedMetadata={onLoadedSongMetadata}
-                    onEnded={props.onSongEnded}
-                    onPause={pause}
-                    onPlay={play}
+                ref={audioPlayer} 
+                src={song.path} 
+                preload="metadata"
+                onTimeUpdate={onAudioPlayerTimeUpdate}
+                onLoadedMetadata={onLoadedSongMetadata}
+                onEnded={props.onSongEnded}
+                onPause={pause}
+                onPlay={play}
                 ></audio>
             }
-            <button 
-                className="forwardBackward" 
-                onClick={() => null}
-            >
-                <BsArrowLeftCircle />
-            </button>
-            <button className="playPause" onClick={isPlaying ? pause : play} >
-                {isPlaying 
-                    ? <BsPauseCircle />
-                    : <BsPlayCircle className="play" />
-                }
-            </button>
-            <button 
-                className="forwardBackward" 
-                onClick={() => null}
-            >
-            
-            <BsArrowRightCircle />
-            </button>
+            <span className="audioPlayerUI name">
+                <h2>{song.name}</h2>
+            </span>
 
-            <div className="currentTime">{currentTimeText}</div>
+            <span className="audioPlayerUI slider">
+                <div className="currentTime">{currentTimeText}</div>
+                <div>
+                    <input
+                    type="range"
+                    defaultValue="0"
+                    className="progressBar"
+                    ref={progressBar}
+                    onChange={onTimeSliderChange}
+                    />
+                </div>
+                <div className="duration">
+                    {durationText ? durationText : '00:00'}
+                </div>
+            </span>
 
-            <div>
-                <input
-                type="range"
-                defaultValue="0"
-                className="progressBar"
-                ref={progressBar}
-                onChange={onTimeSliderChange}
-                />
-            </div>
-
-            <div className="duration">
-                {durationText ? durationText : '00:00'}
-            </div>
+            <span className="audioPlayerUI controls">
+                <button 
+                    className="forwardBackward" 
+                    onClick={props.prevSong}
+                >
+                    <BsArrowLeftCircle />
+                </button>
+                <button className="playPause" onClick={isPlaying ? pause : play} >
+                    {isPlaying 
+                        ? <BsPauseCircle />
+                        : <BsPlayCircle className="play" />
+                    }
+                </button>
+                <button 
+                    className="forwardBackward" 
+                    onClick={props.skipSong}
+                >
+                    <BsArrowRightCircle />
+                </button>
+            </span>
         </div>
     );
 }

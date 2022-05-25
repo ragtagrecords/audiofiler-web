@@ -1,5 +1,5 @@
 .accordion {
-  height: calc(100vh - 250px);
+  height: 105vh;
   overflow: auto;
 }
 

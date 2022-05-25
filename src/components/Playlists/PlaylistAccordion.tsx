@@ -45,6 +45,14 @@ const PlaylistAccordion = (props: PlaylistAccordionProps) => {
         setCurrentSongIndex(currentSongIndex + 1);
     }
 
+    const skipSong = () => {
+        setCurrentSongIndex(currentSongIndex + 1);
+    }
+
+    const prevSong = () => {
+        setCurrentSongIndex(currentSongIndex - 1);
+    }
+
     // load new playlist when ID changes
     useEffect(() => {
         loadPlaylist();
@@ -87,11 +95,14 @@ const PlaylistAccordion = (props: PlaylistAccordionProps) => {
                 <AudioPlayer
                     song={song}
                     onSongEnded={onSongEnded}
+                    skipSong={skipSong}
+                    prevSong={prevSong}
                 />
             </div>
             }
         </>
     );
 };
-        export default PlaylistAccordion;
+
+export default PlaylistAccordion;
         
