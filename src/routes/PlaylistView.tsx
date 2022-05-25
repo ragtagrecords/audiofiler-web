@@ -7,16 +7,17 @@ import styles from '../globalstyle.module.css';
 
 type PlaylistViewParams = {
   playlistID: string;
+  playlistName: string;
 }
 
 const PlaylistView = () => {
-  let { playlistID } = useParams<PlaylistViewParams>();
+  let { playlistID, playlistName } = useParams<PlaylistViewParams>();
   if (playlistID == undefined) {
     playlistID = '1';
   }
   return (
     <>
-      <h1 className={styles.title}>Name of Playlist</h1>
+      <h1 className={styles.title}>{playlistName}</h1>
       <PlaylistAccordion playlistID={playlistID}/>
     </>
   );

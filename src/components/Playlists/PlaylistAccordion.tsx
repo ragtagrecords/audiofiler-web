@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import Accordion from "react-bootstrap/Accordion";
 
-import styles from '../../globalstyle.module.css';
+import styles from "../../globalstyle.module.css";
+import "./PlaylistAccordion.css";
 
 interface Song {
   id: Number;

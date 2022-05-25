@@ -1,163 +1,199 @@
-button {
-    color: var(--white);
+h2 {
+  text-align: center;
 }
 
-.audioPlayer { 
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--primary-color);
-    position: fixed; 
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    z-index: 1000;
+button {
+  color: whitesmoke;
+  padding: 0 10%;
+}
+
+.audioPlayer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  z-index: 1000;
+}
+
+.audioPlayerUI {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2%;
+}
+
+@media screen and (max-width: 600px) {
+  .audioPlayer {
+    display: block;
+    height: 200px;
+  }
+
+  .audioPlayerUI {
+    text-align: center;
+    padding: 0;
+  }
+
+  .audioPlayerUI h2 {
+    padding: 2vh 0;
+    display: block;
+  }
+
+  .audioPlayerUI button {
+    padding: 1vh;
+  }
+
+  .currentTime {
+    margin: 0 !important;
+  }
 }
 
 .forwardBackward {
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    font-family: monospace;
-    font-size: 18px;
-    cursor: pointer;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  font-family: monospace;
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .forwardBackward:hover {
-    color: var(--white);
+  color: whitesmoke;
 }
 
 .playPause {
-    background-color: var(--secondary);
-    border: none;
-    border-radius: 50%;
-    width: 75px;
-    height: 75px;
-    font-size: 32px;
-    color: var(--white);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: var(--secondary);
+  border: none;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  font-size: 5rem;
+  color: whitesmoke;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .play {
-    position: relative;
+  position: relative;
 }
 
-.currentTime, .duration {
-    font-family: monospace;
-    font-size: 16px;
-
+.currentTime,
+.duration {
+  font-family: monospace;
+  font-size: 16px;
+  padding: 0 2%;
 }
 
 .currentTime {
-    margin-left: 25px;
+  margin-left: 25px;
 }
 
 .progressBar {
-    --bar-bg: #74b0d6d5;
-    --seek-before-width: 0;
-    --seek-before-color: #54809cd5;
-    --knob: black;
-    --selected-knob: rgb(66, 65, 65);
+  --bar-bg: #74b0d6d5;
+  --seek-before-width: 0;
+  --seek-before-color: #54809cd5;
+  --knob: black;
+  --selected-knob: rgb(66, 65, 65);
 
-
-    appearance: none;
-    background: var(--bar-bg);
-    border-radius: 10px;
-    position: relative;
-    width: 100%;
-    height: 11px;
-    outline: none;
+  appearance: none;
+  background: var(--bar-bg);
+  border-radius: 10px;
+  position: relative;
+  width: 100%;
+  height: 11px;
+  outline: none;
 }
 
 /* firefox */
 .progressBar::-moz-range-track {
-    background: var(--bar-bg);
-    border-radius: 10px;
-    position: relative;
-    width: 100%;
-    height: 11px;
-    outline: none;
+  background: var(--bar-bg);
+  border-radius: 10px;
+  position: relative;
+  width: 100%;
+  height: 11px;
+  outline: none;
 }
 
-.progressBar::-moz-focus-outer{
-    border: 0;
+.progressBar::-moz-focus-outer {
+  border: 0;
 }
 
 /* safari */
 .progressBar::-webkit-slider-runnable-track {
-    background: var(--bar-bg);
-    border-radius: 10px;
-    position: relative;
-    width: 100%;
-    height: 11px;
-    outline: none;
+  background: var(--bar-bg);
+  border-radius: 10px;
+  position: relative;
+  width: 100%;
+  height: 11px;
+  outline: none;
 }
 
 /* chrome safari progress bar */
 .progressBar::before {
-    content: '';
-    height: 11px;
-    width: var(--seek-before-width);
-    background-color: var(--seek-before-color);
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    cursor: pointer;
+  content: "";
+  height: 11px;
+  width: var(--seek-before-width);
+  background-color: var(--seek-before-color);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  cursor: pointer;
 }
 
 /* firefox progress bar */
 .progressBar::-moz-range-progress {
-    background-color: var(--seek-before-color);
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    height: 11px;
+  background-color: var(--seek-before-color);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  height: 11px;
 }
 
 /* chrome safari knob */
-.progressBar::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    border: none;
-    background-color: var(--knob);
-    cursor: pointer;
-    position: relative;
-    margin: -2px 0 0 0;
-    z-index: 3;
-    box-sizing: border-box;
+.progressBar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--knob);
+  cursor: pointer;
+  position: relative;
+  margin: -2px 0 0 0;
+  z-index: 3;
+  box-sizing: border-box;
 }
 
 /* chrome safari knob while dragging */
 .progressBar:active::-webkit-slider-thumb {
-    transform: scale(1.2);
-    background: var(--selected-knob);
+  transform: scale(1.2);
+  background: var(--selected-knob);
 }
 
 /* firefox knob */
 .progressBar::-moz-range-thumb {
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    border: transparent;
-    background-color: var(--knob);
-    cursor: pointer;
-    position: relative;
-    z-index: 3;
-    box-sizing: border-box;
-
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: transparent;
+  background-color: var(--knob);
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+  box-sizing: border-box;
 }
 
 /* firefox knob while dragging */
 .progressBar:active::-moz-range-thumb {
-    transform: scale(1.2);
-    background: var(--selected-knob);
+  transform: scale(1.2);
+  background: var(--selected-knob);
 }
