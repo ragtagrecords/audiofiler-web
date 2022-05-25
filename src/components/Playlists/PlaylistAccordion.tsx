@@ -11,9 +11,6 @@ interface Song {
     artist: string;
     tempo: Number;
 }
-interface Songs {
-    songs: Song[];
-}
 
 interface PlaylistAccordionProps {
     playlistID: string;
@@ -22,9 +19,9 @@ interface PlaylistAccordionProps {
 const PlaylistAccordion = (props: PlaylistAccordionProps) => {
     const defaultSong = {
         id: 0,
-        name: "defaultName",
-        path: "defaultPath",
-        artist: "defaultArtist",
+        name: "",
+        path: "",
+        artist: "",
         tempo: 0,
     };
 
@@ -54,6 +51,10 @@ const PlaylistAccordion = (props: PlaylistAccordionProps) => {
 
     useEffect(() => {
         setSong(songs[currentSongIndex]);
+    }, [songs]);
+
+    useEffect(() => {
+        setSong(songs[currentSongIndex]);
     }, [currentSongIndex]);
 
     // set new playlistID if props update
@@ -61,10 +62,11 @@ const PlaylistAccordion = (props: PlaylistAccordionProps) => {
         setPlaylistID(props.playlistID);
     }, [props]);
 
+
     return (
         <>
             <Accordion defaultActiveKey="0" flush>
-                {songs.map((song: Song, i: number) => {
+                {songs && songs.map((song: Song, i: number) => {
                     return (
                         <Accordion.Item key={i} eventKey={i.toString()}>
                             <div onClick={onSongClick.bind(null, i)}>
@@ -79,12 +81,14 @@ const PlaylistAccordion = (props: PlaylistAccordionProps) => {
                     );
                 })}
             </Accordion>
-            <div className={styles.audioPlayer}>
+            {song && song.name != "" &&
+                <div className={styles.audioPlayer}>
                 <AudioPlayer
                     song={song}
                     onSongEnded={onSongEnded}
                 />
             </div>
+            }
         </>
     );
 };
