@@ -2,7 +2,6 @@
     --primary-color: #121F26;
     --secondary-color: #355a6e;
     --tertiary-color: #5ae7ff;
-    --white: whitesmoke;
 }
 
 html, nav, body {
@@ -10,18 +9,23 @@ html, nav, body {
     color: var(--tertiary-color) !important;
 }
 
-a {
-    color: var(--tertiary-color) !important;
-    text-decoration: none !important;
-    padding: 4vh 5vw !important;
-}
-
-a:hover {
-    color: black !important;
+ul {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: calc(100% - 30px);
+    max-width: 500px;
 }
 
 li {
+    display: inline-block;
     list-style: none;
+    padding: 0;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-size: 3rem;
+    margin: 2vh 0;
+    background-color: var(--secondary-color);
+    width: 100%
 }
 
 li:hover
@@ -29,9 +33,22 @@ li:hover
     opacity: 0.6 !important;
 }
 
+a {
+    display: block;
+    color: var(--tertiary-color) !important;
+    text-decoration: none !important;
+    padding: calc((20vh - 100px) / 4);
+    overflow-wrap: break-word;
+}
+
+a:hover {
+    color: black !important;
+}
+
 .title {
     text-align: center;
     padding: 5vh;
+    height: 100px;
 }
 
 .audioPlayer { 
@@ -46,4 +63,10 @@ li:hover
     right: 0;
     height: 100px;
     z-index: 1000;
+}
+
+.playlists {
+    max-width: 100%;
+    justify-content: center;
+    display: flex;
 }

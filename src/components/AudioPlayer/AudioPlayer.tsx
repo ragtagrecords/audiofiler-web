@@ -6,7 +6,6 @@ import { BsArrowLeftCircle } from "react-icons/bs";
 import { BsArrowRightCircle } from "react-icons/bs";
 import { BsPlayCircle } from "react-icons/bs";
 import { BsPauseCircle } from "react-icons/bs";
-import { updateTypeOperatorNode } from 'typescript';
 
 type Song = {
     name: string,
@@ -172,7 +171,6 @@ const AudioPlayer = (props: AudioPlayerProps) => {
                 {durationText ? durationText : '00:00'}
             </div>
         </div>
-
     );
 }
 

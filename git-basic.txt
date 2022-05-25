@@ -5,6 +5,12 @@ commit changes
 git add -A
 git commit -m "messaage"
 
+fetch main branch
+git fetch origin main
+
+rebase
+git rebase -i <remote>/<branch>
+git rebase -i origin/main
 
 see branches
 git branch
@@ -14,3 +20,11 @@ git branch -D branchName
 
 create a new branch
 git checkout -b branchName
+
+** replace vim
+    To save a file in Vim and exit, press Esc > Shift + ZZ.
+    To exit Vim without saving, press Esc > Shift + ZX.
+
+
+git push origin "branchName"
+

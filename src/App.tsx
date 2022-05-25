@@ -7,17 +7,16 @@ import PlaylistView from './routes/PlaylistView';
 import PlaylistsView from './routes/PlaylistsView';
 import EditPlaylistView from './routes/EditPlaylistView';
 
-import styles from './globalstyle.module.css';
-
 export default function App() {
   return (
     <Router>
       <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<PlaylistsView />} />
           <Route path='/playlists/' element={<PlaylistsView />} />
           <Route path='/playlists/:playlistID' element={<PlaylistView />} />
-          <Route path='/manager/*' element={<ManagerView />} />
+          <Route path='/playlists/:playlistID/:playlistName' element={<PlaylistView />} />
           <Route path='/edit/playlist/' element={<EditPlaylistView />} />
+          <Route path='/manager/*' element={<ManagerView />} />
         </Routes>
     </Router>
   );
