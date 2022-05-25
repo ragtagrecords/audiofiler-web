@@ -4,7 +4,7 @@ h2 {
 
 button {
   color: whitesmoke;
-  padding: 0 10%;
+  padding: 0 10px;
 }
 
 .audioPlayer {
@@ -28,15 +28,36 @@ button {
   padding: 0 2%;
 }
 
-@media screen and (max-width: 600px) {
+.audioPlayerUI.name {
+  width: 20%;
+  overflow-wrap: break-word;
+}
+
+.audioPlayerUI.slider {
+  width: 40%;
+}
+
+.audioPlayerUI.controls {
+  width: 20%;
+}
+
+@media screen and (max-width: 1080px) {
   .audioPlayer {
-    display: block;
+    flex-direction: column;
     height: 200px;
   }
 
   .audioPlayerUI {
     text-align: center;
     padding: 0;
+  }
+
+  .audioPlayerUI.name {
+    width: 60%;
+  }
+
+  .audioPlayerUI.slider {
+    width: 80%;
   }
 
   .audioPlayerUI h2 {
