@@ -6,20 +6,21 @@ import '../globalstyle.module.css';
 import styles from '../globalstyle.module.css';
 
 type PlaylistViewParams = {
-    playlistID: string;
+  playlistID: string;
+  playlistName: string;
 }
 
 const PlaylistView = () => {
-    let { playlistID } = useParams<PlaylistViewParams>();
-    if (playlistID == undefined) {
-        playlistID = '1';
-    }
-    return (
-        <>
-            <h1 className={styles.title}>Name of Playlist</h1>
-            <PlaylistAccordion playlistID={playlistID}/>
-        </>
-    );
+  let { playlistID, playlistName } = useParams<PlaylistViewParams>();
+  if (playlistID == undefined) {
+    playlistID = '1';
+  }
+  return (
+    <>
+      <h1 className={styles.title}>{playlistName}</h1>
+      <PlaylistAccordion playlistID={playlistID}/>
+    </>
+  );
 }
     
 export default PlaylistView;
