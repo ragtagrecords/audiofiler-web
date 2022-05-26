@@ -1,0 +1,24 @@
+.accordion {
+    height: 105vh;
+    overflow: auto;
+}
+
+@media screen and (max-width: 600px) {
+    .accordion {
+        height: calc(100vh - 300px);
+    }
+}
+
+.accordion-button {
+    background-color: var(--secondary-color) !important;
+    color: var(--tertiary-color) !important;
+}
+
+.accordion-item {
+    background-color: whitesmoke !important;
+    color: var(--primary-color) !important;
+}
+
+.accordion-button:not(.collapsed) {
+    color: whitesmoke !important;
+}

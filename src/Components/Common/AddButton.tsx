@@ -1,6 +1,6 @@
 import React from 'react';
+import plusButton from 'Assets/blue-plus.png';
 import './AddButton.scss';
-import plusButton from '../Assets/blue-plus.png';
 
 type AddButtonProps = {
     href: string
