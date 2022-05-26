@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactEventHandler, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Playlist, Song } from 'Types';
 import styles from 'global.module.scss';
+import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import PlaylistAccordion from './PlaylistAccordion';
 
 type PlaylistRouteParams = {
@@ -24,10 +25,38 @@ const PlaylistRoute = () => {
   const [playlist, setPlaylist] = useState<Playlist>(defaultPlaylist);
   const [songs, setSongs] = useState<Array<Song>>([defaultSong]);
   const [song, setSong] = useState<Song>(defaultSong);
-  const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
 
-  const onSongClick = (i: number): void => {
-    setCurrentSongIndex(i);
+  const findSongByID = (id: number) => {
+    let match = null;
+    songs.forEach((song) => {
+      if (song.id === id) {
+        match = song;
+      }
+    });
+    return match;
+  };
+
+  const findIndexBySongID = (id: number) => {
+    let index = null;
+    for (let i = 0; i < songs.length; i += 1) {
+      if (songs[i].id === id) {
+        index = i;
+      }
+    }
+    return index;
+  };
+
+  // TODO: figure out how to tell which song was clicked
+  const onSongClick = (songID: number): void => {
+    if (!songID) {
+      console.log('Failed to change song');
+    }
+
+    const songToPlay = findSongByID(songID);
+    if (!songToPlay) {
+      return;
+    }
+    setSong(songToPlay);
   };
 
   const loadPlaylist = () => {
@@ -49,16 +78,24 @@ const PlaylistRoute = () => {
       .then((data) => setSongs(data));
   };
 
-  const onSongEnded = () => {
-    setCurrentSongIndex(currentSongIndex + 1);
-  };
-
   const skipSong = () => {
-    setCurrentSongIndex(currentSongIndex + 1);
+    const currentSongIndex = findIndexBySongID(song.id);
+    if (!currentSongIndex) {
+      return;
+    }
+    setSong(songs[currentSongIndex + 1]);
   };
 
   const prevSong = () => {
-    setCurrentSongIndex(currentSongIndex - 1);
+    const currentSongIndex = findIndexBySongID(song.id);
+    if (!currentSongIndex) {
+      return;
+    }
+    setSong(songs[currentSongIndex - 1]);
+  };
+
+  const onSongEnded = () => {
+    skipSong();
   };
 
   // load new playlist when ID changes
@@ -67,13 +104,10 @@ const PlaylistRoute = () => {
     loadSongs();
   }, [playlistID]);
 
+  // load first song if songs change
   useEffect(() => {
-    setSong(songs[currentSongIndex]);
+    setSong(songs[0]);
   }, [songs]);
-
-  useEffect(() => {
-    setSong(songs[currentSongIndex]);
-  }, [currentSongIndex]);
 
   return (
     <>
@@ -83,14 +117,7 @@ const PlaylistRoute = () => {
         songs={songs}
         onSongClick={onSongClick}
       />
-    </>
-  );
-};
-
-export default PlaylistRoute;
-
-/*
-{song && song.name !== ''
+      {song && song.name !== ''
         && (
         <div className={styles.audioPlayer}>
           <AudioPlayer
@@ -101,4 +128,8 @@ export default PlaylistRoute;
           />
         </div>
         )}
-        */
+    </>
+  );
+};
+
+export default PlaylistRoute;

@@ -33,9 +33,16 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     'react/function-component-definition': [0],
     'react/jsx-one-expression-per-line': [0],
+    'react/jsx-no-bind': [0],
     'arrow-body-style': [0],
+    'no-console': [0],
     'react/destructuring-assignment': [0],
     'no-unused-vars': [1],
+    'jsx-a11y/media-has-caption': [0],
+    'jsx-a11y/no-static-element-interactions': [0],
+    'jsx-a11y/click-events-have-key-events': [0],
+    'jsx-a11y/no-noninteractive-element-interactions': [0],
+    'no-shadow': [0],
   },
   settings: {
     'import/resolver': {
