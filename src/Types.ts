@@ -6,7 +6,7 @@ export type Playlist = {
 export type Song = {
     id: number;
     name: string;
-    path?: string;
+    path: string;
     tempo?: number;
     artist?: string;
 };

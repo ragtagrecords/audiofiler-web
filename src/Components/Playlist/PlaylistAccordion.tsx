@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-// import AudioPlayer from './AudioPlayer';
 import PlaylistAccordionItem from './PlaylistAccordionItem';
 import { Song } from '../../Types';
 import './PlaylistAccordion.scss';
@@ -15,16 +14,11 @@ const PlaylistAccordion = (props: PlaylistAccordionProps) => {
     <Accordion defaultActiveKey="0" flush>
       {props.songs && props.songs.map((song: Song) => {
         return (
-          <Accordion.Item key={song.name} eventKey={song.name}>
-            <div>
-              <Accordion.Header onClick={props.onSongClick}>{song.name}</Accordion.Header>
-            </div>
-            <Accordion.Body>
-              <p>id: {song.id}</p>
-              <p>artist: {song.artist}</p>
-              <p>tempo: {song.tempo}</p>
-            </Accordion.Body>
-          </Accordion.Item>
+          <PlaylistAccordionItem
+            key={song.id}
+            song={song}
+            onSongClick={props.onSongClick}
+          />
         );
       })}
     </Accordion>

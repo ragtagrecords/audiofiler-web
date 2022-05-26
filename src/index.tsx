@@ -6,9 +6,9 @@ import {
 } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import './index.scss';
+import PlaylistRoute from 'Components/Playlist/PlaylistRoute';
+import PlaylistsRoute from 'Components/Playlists/PlaylistsRoute';
 import reportWebVitals from './reportWebVitals';
-import PlaylistRoute from './Components/Playlist/PlaylistRoute';
-import PlaylistsRoute from './Components/Playlists/PlaylistsRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const rootElement = document.getElementById('root');

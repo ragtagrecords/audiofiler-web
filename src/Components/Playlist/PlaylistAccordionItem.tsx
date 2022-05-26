@@ -11,9 +11,11 @@ type PlaylistAccordionItemProps = {
 const PlaylistAccordionItem = (props: PlaylistAccordionItemProps) => {
   return (
     <Accordion.Item key={props.song.name} eventKey={props.song.name}>
-      <div>
-        <Accordion.Header onClick={props.onSongClick}>{props.song.name}</Accordion.Header>
-      </div>
+      <Accordion.Header
+        id={`song-${props.song.id}`}
+        onClick={props.onSongClick.bind(null, props.song.id)}
+      >{props.song.name}
+      </Accordion.Header>
       <Accordion.Body>
         <p>
           id:
