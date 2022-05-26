@@ -1,6 +1,0 @@
-button {
-    background: var(--primary-color);
-    color: var(--tertiary-color);
-    border: 2px solid var(--tertiary-color);
-    border-radius: 5px !important;
-}
