@@ -1,23 +1,28 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import logo from './logo.svg';
+import './App.scss';
 
-import Home from './routes/Home';
-import ManagerView from './routes/ManagerView';
-import PlaylistView from './routes/PlaylistView';
-import PlaylistsView from './routes/PlaylistsView';
-import EditPlaylistView from './routes/EditPlaylistView';
-
-export default function App() {
+function App() {
   return (
-    <Router>
-      <Routes>
-          <Route path='/' element={<PlaylistsView />} />
-          <Route path='/playlists/' element={<PlaylistsView />} />
-          <Route path='/playlists/:playlistID' element={<PlaylistView />} />
-          <Route path='/playlists/:playlistID/:playlistName' element={<PlaylistView />} />
-          <Route path='/edit/playlist/' element={<EditPlaylistView />} />
-          <Route path='/manager/*' element={<ManagerView />} />
-        </Routes>
-    </Router>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit
+          <code>src/App.tsx</code>
+          and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
+
+export default App;
