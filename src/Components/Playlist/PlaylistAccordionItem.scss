@@ -1,0 +1,13 @@
+.accordion-button {
+    background-color: var(--secondary-color) !important;
+    color: var(--tertiary-color) !important;
+}
+
+.accordion-item {
+    background-color: whitesmoke !important;
+    color: var(--primary-color) !important;
+}
+
+.accordion-button:not(.collapsed) {
+    color: whitesmoke !important;
+}

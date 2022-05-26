@@ -32,8 +32,10 @@ module.exports = {
     ],
     'linebreak-style': ['error', 'unix'],
     'react/function-component-definition': [0],
+    'react/jsx-one-expression-per-line': [0],
     'arrow-body-style': [0],
     'react/destructuring-assignment': [0],
+    'no-unused-vars': [1],
   },
   settings: {
     'import/resolver': {

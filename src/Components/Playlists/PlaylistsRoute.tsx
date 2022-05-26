@@ -1,8 +1,7 @@
 import React from 'react';
+import styles from 'global.module.scss';
 import Playlists from './Playlists';
 import AddButton from '../Common/AddButton';
-
-import styles from '../global.module.scss';
 
 const PlaylistsRoute = () => {
   return (
