@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Playlist, Song } from 'Types';
-import styles from 'global.module.scss';
+import styles from 'Styles/main.module.scss';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import PlaylistAccordion from './PlaylistAccordion';
 
