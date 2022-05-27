@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import styles from '../../global.module.scss';
+import 'Styles/main.module.scss';
+import './Playlists.scss';
 import { Playlist } from '../../Types';
 
 const Playlists = () => {
@@ -27,7 +28,7 @@ const Playlists = () => {
   }, []);
 
   return (
-    <div className={styles.playlists}>
+    <div className="playlists">
       <ul>
         {playlists && playlists[0].name
             && playlists.map((playlist: Playlist) => {

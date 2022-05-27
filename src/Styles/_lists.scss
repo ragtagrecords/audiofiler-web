@@ -1,0 +1,34 @@
+@import 'variables';
+
+ul {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: calc(100% - 30px);
+    max-width: 500px;
+}
+
+li {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-size: 3rem;
+    margin: 2vh 0;
+    background-color: $secondary-color;
+    width: 100%;
+    &:hover{
+        opacity: 0.6 !important;
+    }
+}
+
+a {
+    display: block;
+    color: $tertiary-color !important;
+    text-decoration: none !important;
+    padding: calc((20vh - 100px) / 4);
+    overflow-wrap: break-word;
+    &:hover {
+        color: black !important;
+    }
+}

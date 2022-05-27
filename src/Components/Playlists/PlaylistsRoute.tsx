@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from 'global.module.scss';
+import styles from 'Styles/main.module.scss';
 import Playlists from './Playlists';
 import AddButton from '../Common/AddButton';
 
