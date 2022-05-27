@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Playlist, Song } from 'Types';
 import styles from 'global.module.scss';
