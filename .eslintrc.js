@@ -30,7 +30,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': [0],
     'react/function-component-definition': [0],
     'react/jsx-one-expression-per-line': [0],
     'react/jsx-no-bind': [0],
@@ -43,6 +43,7 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': [0],
     'jsx-a11y/no-noninteractive-element-interactions': [0],
     'no-shadow': [0],
+    'jsx-a11y/label-has-associated-control': [0],
   },
   settings: {
     'import/resolver': {
