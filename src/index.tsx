@@ -5,7 +5,6 @@ import {
   Route,
 } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
-import './index.scss';
 import PlaylistRoute from 'Components/Playlist/PlaylistRoute';
 import PlaylistsRoute from 'Components/Playlists/PlaylistsRoute';
 import SignupRoute from 'Components/Auth/SignupRoute';
