@@ -26,7 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/ && react-scripts start",
+    "start:dev": "export REACT_APP_API_BASE_URL=http://localhost:3000/ && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
