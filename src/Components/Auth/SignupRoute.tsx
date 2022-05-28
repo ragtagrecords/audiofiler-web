@@ -43,8 +43,9 @@ const SignupRoute = () => {
 
     // post files and info to API
     try {
+      const baseUrl = process.env.REACT_APP_API_BASE_URL;
       const res = await axios.post(
-        'http://api.ragtagrecords.com/public/signup',
+        `${baseUrl}public/signup`,
         formData,
       );
       console.log(res);

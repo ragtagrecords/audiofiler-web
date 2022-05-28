@@ -35,8 +35,9 @@ const LoginRoute = () => {
 
     // post files and info to API
     try {
+      const baseUrl = process.env.REACT_APP_API_BASE_URL;
       const res = await axios.post(
-        'http://api.ragtagrecords.com/public/login',
+        `${baseUrl}public/login`,
         formData,
       );
       console.log(res);
