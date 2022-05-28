@@ -60,7 +60,8 @@ const PlaylistRoute = () => {
   };
 
   const loadPlaylist = () => {
-    fetch('http://api.ragtagrecords.com/public/playlists')
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    fetch(`${baseUrl}public/playlists`)
       .then((response) => response.json())
       .then((data) => {
         data.forEach((playlistInfo: Playlist) => {
@@ -73,9 +74,12 @@ const PlaylistRoute = () => {
   };
 
   const loadSongs = () => {
-    fetch(`http://api.ragtagrecords.com/public/playlists/${playlistID}`)
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    fetch(`${baseUrl}public/playlists/${playlistID}`)
       .then((response) => response.json())
-      .then((data) => setSongs(data));
+      .then((data) => {
+        setSongs(data);
+      });
   };
 
   const skipSong = () => {
