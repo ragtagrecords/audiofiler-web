@@ -15,9 +15,9 @@ const Playlists = () => {
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
 
   const getPlaylists = (): void => {
-    // TODO: handle error
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     axios
-      .get('http://api.ragtagrecords.com/public/playlists')
+      .get(`${baseUrl}public/playlists`)
       .then((response) => {
         setPlaylists(response.data);
       });
