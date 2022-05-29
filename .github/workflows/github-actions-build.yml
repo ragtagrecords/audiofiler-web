@@ -1,0 +1,50 @@
+name: Build and deploy audiofiler-web
+
+on:
+  push:
+    branches: 
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.2]
+    steps:
+      - run: echo "Job triggered by ${{ github.event_name }} on ${{ github.repository }}."
+
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: echo "Build completed"
+
+      - name: Compress the build folder
+        run: tar -cvf build.tar ./build/
+
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+      - name: Copy build.tar to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "build.tar"
+          target: "/home/mjarvis/Apps/audiofiler-web"
+
+      - name: Extract build.tar
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: rm -rf ~/Apps/audiofiler-web/build && tar -xvf ~/Apps/audiofiler-web/build.tar -C ~/Apps/audiofiler-web/ && rm -rf ~/Apps/audiofiler-web/build.tar
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
