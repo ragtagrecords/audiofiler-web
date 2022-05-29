@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AuthForm.scss';
+import { useNavigate } from 'react-router-dom';
 
 const SignupRoute = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleChange = (e: any) => {
     if (!e || !e.target || !e.target.className) {
@@ -48,6 +51,7 @@ const SignupRoute = () => {
         `${baseUrl}public/signup`,
         formData,
       );
+      navigate('/playlists');
       console.log(res);
       return true;
     } catch (ex) {
@@ -56,40 +60,42 @@ const SignupRoute = () => {
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <label> Username
-        <input
-          type="text"
-          value={username}
-          className="usernameInput"
-          name="username"
-          onChange={handleChange}
-        />
-      </label>
-      <label> Password
-        <input
-          type="text"
-          value={password}
-          className="passwordInput"
-          name="password"
-          onChange={handleChange}
-        />
-      </label>
-      <label> Confirm Password
-        <input
-          type="text"
-          value={confirmPassword}
-          className="confirmPasswordInput"
-          name="confirmPassword"
-          onChange={handleChange}
-        />
-      </label>
-      <button
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+    <div className="container">
+      <form onSubmit={handleSubmit}>
+        <label> Username
+          <input
+            type="text"
+            value={username}
+            className="usernameInput"
+            name="username"
+            onChange={handleChange}
+          />
+        </label>
+        <label> Password
+          <input
+            type="password"
+            value={password}
+            className="passwordInput"
+            name="password"
+            onChange={handleChange}
+          />
+        </label>
+        <label> Confirm Password
+          <input
+            type="password"
+            value={confirmPassword}
+            className="confirmPasswordInput"
+            name="confirmPassword"
+            onChange={handleChange}
+          />
+        </label>
+        <button
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 

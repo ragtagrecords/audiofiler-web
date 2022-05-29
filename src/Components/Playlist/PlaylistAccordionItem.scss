@@ -5,6 +5,11 @@
     color: vars.$tertiaryColor !important;
 }
 
+.accordion-button:hover {
+    outline: 5px solid vars.$secondaryColor;
+    background-color: #fff;
+    transition: vars.$transition;
+}
 .accordion-item {
     background-color: rgba(vars.$gray, 0.3) !important;
     color: vars.$white !important;

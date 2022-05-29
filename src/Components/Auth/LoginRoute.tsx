@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './LoginRoute.scss';
+import './AuthForm.scss';
+import { useNavigate } from 'react-router-dom';
 
 const LoginRoute = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
   const handleChange = (e: any) => {
     if (!e || !e.target || !e.target.className) {
       console.log('Error saving inputs');
@@ -45,6 +47,7 @@ const LoginRoute = () => {
       );
       console.log(res);
       setError('Logged In!');
+      navigate('/playlists');
       return true;
     } catch (ex) {
       setError('Failed to login!');

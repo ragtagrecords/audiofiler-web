@@ -1,0 +1,67 @@
+@use 'Styles/vars';
+@use 'Styles/funcs';
+
+div.container {
+    height: 100vh;
+    @include funcs.flexCenter();
+    form {
+        @include funcs.flexCenter();
+        flex-direction: vars.$flexDirection;
+        background-color: #25272e;
+        width: 375px;
+        border-radius: vars.$roundCorners;
+        padding: vars.$formPad;
+        outline: vars.$outlineTransition;
+        .error {
+            max-height: min-content;
+            color: red;
+        }
+        label {
+            @include funcs.flexCenter();
+            flex-direction: vars.$flexDirection;
+            color: vars.$test-color;
+            padding: vars.$formChildPad;
+            width: 100%;
+            font-weight: 500;
+            font-size: 20px;
+            font-smooth: auto;
+            input {
+                border: none;
+                color: vars.$test-color;
+                background-color: vars.$primaryColor;
+                padding: vars.$formChildPad;
+                width: 100%;
+                border-radius: vars.$roundCorners;
+                &:hover {
+                    transition: 1s;
+                    background-color: vars.$secondaryColor;
+                    outline: vars.$outlineTransition;
+                }
+
+                &:focus{
+                    background-color: vars.$secondaryColor;
+                    outline: vars.$outlineTransition;
+                    color: vars.$primaryColor;
+                }
+            }
+        }
+        button {
+            border: none;
+            padding: vars.$formChildPad;
+            background-color: vars.$secondaryColor;
+            width: 250px;
+            border-radius: vars.$roundCorners;
+            margin: 20px 0px 0px 0px;
+            &:hover {
+                background-color: rgba(vars.$tertiaryColor, 0.5);
+                color: rgba(vars.$secondaryColor, 0.0);
+                // outline: vars.$outlineTransition;
+            }
+            &:hover:after {
+                content: "Lets go!";
+                color: vars.$tertiaryColor;
+                padding-right: 50px;
+            }
+        }
+    }
+}
