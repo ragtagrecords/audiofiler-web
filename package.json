@@ -6,17 +6,13 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/bootstrap": "^5.1.12",
     "@types/jest": "^27.5.1",
     "@types/node": "^16.11.36",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
     "@types/sass": "^1.43.1",
     "axios": "^0.27.2",
-    "bootstrap": "^5.1.3",
-    "patch-package": "^6.4.7",
     "react": "^18.1.0",
-    "react-bootstrap": "^2.4.0",
     "react-dom": "^18.1.0",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.3.0",
@@ -30,8 +26,7 @@
     "start:dev": "export REACT_APP_API_BASE_URL=http://localhost:3000/ || set REACT_APP_API_BASE_URL=http://localhost:3000/&& react-scripts start",
     "build": "export REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/ || set REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/&& react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "postinstall": "patch-package"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

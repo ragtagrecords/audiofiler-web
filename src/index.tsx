@@ -11,7 +11,6 @@ import PlaylistRoute from 'Components/Playlist/PlaylistRoute';
 import PlaylistsRoute from 'Components/Playlists/PlaylistsRoute';
 import LoginRoute from 'Components/Auth/LoginRoute';
 import SignupRoute from 'Components/Auth/SignupRoute';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement!);

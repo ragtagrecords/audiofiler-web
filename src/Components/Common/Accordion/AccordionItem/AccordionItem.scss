@@ -1,0 +1,15 @@
+li.accordionItem    {
+    width: 60%;
+
+    button {
+        width: 100%;
+    }
+}
+
+div.accordionBody {
+    display: none;
+
+    &.show {
+        display: block;
+    }
+}
