@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'vars';
 
 ul {
     padding: 0 !important;
@@ -15,7 +15,7 @@ li {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     font-size: 3rem;
     margin: 2vh 0;
-    background-color: $secondary-color;
+    background-color: vars.$secondaryColor;
     width: 100%;
     &:hover{
         opacity: 0.6 !important;
@@ -24,7 +24,7 @@ li {
 
 a {
     display: block;
-    color: $tertiary-color !important;
+    color: vars.$tertiaryColor !important;
     text-decoration: none !important;
     padding: calc((20vh - 100px) / 4);
     overflow-wrap: break-word;

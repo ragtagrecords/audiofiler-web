@@ -1,11 +1,18 @@
-button.addPlaylist {
-    background: var(--primary-color);
-}
+@use "Styles/vars";
 
 img {
-    background-color: --primary-color;
-    width: 8%;
-    position: fixed;
-    top: 10px;
-    right: 10px;
+  width: 6%;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: vars.$floatingZ + 10;
+
+  &.filterBlue {
+    filter: invert(71%) sepia(35%) saturate(764%) hue-rotate(156deg)
+      brightness(106%) contrast(101%);
+    &:hover {
+      filter: invert(35%) sepia(5%) saturate(3822%) hue-rotate(157deg)
+        brightness(86%) contrast(89%);
+    }
+  }
 }

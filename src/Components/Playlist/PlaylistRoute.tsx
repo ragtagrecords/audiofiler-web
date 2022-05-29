@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Playlist, Song } from 'Types';
-import styles from 'Styles/main.module.scss';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import PlaylistAccordion from './PlaylistAccordion';
+import './PlaylistRoute.scss';
 
 type PlaylistRouteParams = {
   playlistID: string;
@@ -116,21 +116,19 @@ const PlaylistRoute = () => {
   return (
     <>
       {playlist && playlist.name
-        && <h1 className={styles.title}>{playlist.name}</h1>}
+        && <h1 className="title">{playlist.name}</h1>}
       <PlaylistAccordion
         songs={songs}
         onSongClick={onSongClick}
       />
       {song && song.name !== ''
         && (
-        <div className={styles.audioPlayer}>
           <AudioPlayer
             song={song}
             onSongEnded={onSongEnded}
             skipSong={skipSong}
             prevSong={prevSong}
           />
-        </div>
         )}
     </>
   );

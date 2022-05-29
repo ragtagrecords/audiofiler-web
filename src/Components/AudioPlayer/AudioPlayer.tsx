@@ -132,9 +132,9 @@ const AudioPlayer = (props: AudioPlayerProps) => {
         <h2>{song.name}</h2>
       </span>
 
-      <span className="audioPlayerUI slider">
+      <span className="audioPlayerUI currentPosition">
         <div className="currentTime">{currentTimeText}</div>
-        <div>
+        <div className="slider">
           <input
             type="range"
             defaultValue="0"
@@ -159,7 +159,7 @@ const AudioPlayer = (props: AudioPlayerProps) => {
         <button type="button" className="playPause" onClick={isPlaying ? pause : play}>
           {isPlaying
             ? <BsPauseCircle />
-            : <BsPlayCircle className="play" />}
+            : <BsPlayCircle />}
         </button>
         <button
           type="button"
