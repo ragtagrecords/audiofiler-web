@@ -1,8 +1,15 @@
+@use 'Styles/funcs';
+@use 'Styles/vars';
+
 li.accordionItem    {
     width: 60%;
-
     button {
         width: 100%;
+        margin-bottom: 20px;
+    }
+    &.show {
+        border: 5px vars.$tertiaryColor solid;
+        border-radius: vars.$roundCorners;
     }
 }
 
@@ -11,5 +18,21 @@ div.accordionBody {
 
     &.show {
         display: block;
+    }
+}
+
+li {
+    border-radius: vars.$roundCorners;
+    color: vars.$tertiaryColor;
+    .button{
+        display: flex;
+        height: 100%;
+    }
+    &:hover {
+        transition: vars.$transition;
+        border: 5px vars.$tertiaryColor solid; 
+    }
+    &.notShow {
+        border: 5px vars.$test-color solid;
     }
 }

@@ -11,7 +11,7 @@ type AccordionItemProps = {
 const AccordionItem = (props: AccordionItemProps) => {
   return (
     <li
-      className="accordionItem"
+      className={`accordionItem  ${props.show ? 'show' : ''}`}
     >
       <button
         type="button"
