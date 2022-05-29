@@ -1,23 +1,12 @@
 @use 'Styles/vars';
-
-
-@mixin shadows {
-    box-shadow: vars.$buttonHoverShadow;
-}
-
-@mixin flexStuff {
-    display: vars.$flexDisplay;
-    flex-direction: vars.$flexDirection;
-    justify-content: vars.$justify;
-    align-items: vars.$alignItems;
-}
+@use 'Styles/funcs';
 
 div.container {
     height: 100vh;
-    width: 100%;
-    @include flexStuff;
+    @include funcs.flexCenter();
     form {
-        @include flexStuff;
+        @include funcs.flexCenter();
+        flex-direction: vars.$flexDirection;
         background-color: #25272e;
         width: 375px;
         border-radius: vars.$roundCorners;
@@ -28,7 +17,8 @@ div.container {
             color: red;
         }
         label {
-            @include flexStuff;
+            @include funcs.flexCenter();
+            flex-direction: vars.$flexDirection;
             color: vars.$test-color;
             padding: vars.$formChildPad;
             width: 100%;
