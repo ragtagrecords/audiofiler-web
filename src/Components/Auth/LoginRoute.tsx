@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './LoginRoute.scss';
 
 const LoginRoute = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
+  const [error, setError] = useState<string>('');
   const handleChange = (e: any) => {
     if (!e || !e.target || !e.target.className) {
       console.log('Error saving inputs');
     }
-
     const { className } = e.target;
-
     if (className === 'usernameInput') {
       setUsername(e.target.value);
     } else if (className === 'passwordInput') {
@@ -22,11 +21,15 @@ const LoginRoute = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (!username || !password) {
-      console.log('Necessary info not found');
+    if (!username) {
+      setError('Username is not valid!');
       return false;
     }
-
+    if (!password) {
+      setError('Password is not valid!');
+      return false;
+    }
+    setError('');
     const formData = new FormData();
 
     // add songs to form data
@@ -41,38 +44,46 @@ const LoginRoute = () => {
         formData,
       );
       console.log(res);
+      setError('Logged In!');
       return true;
     } catch (ex) {
+      setError('Failed to login!');
       console.log(ex);
       return false;
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <label> Username
-        <input
-          type="text"
-          value={username}
-          className="usernameInput"
-          name="username"
-          onChange={handleChange}
-        />
-      </label>
-      <label> Password
-        <input
-          type="text"
-          value={password}
-          className="passwordInput"
-          name="password"
-          onChange={handleChange}
-        />
-      </label>
-      <button
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+    <div className="container">
+      <form onSubmit={handleSubmit}>
+        <div
+          className="error"
+        >{error}
+        </div>
+        <label>Username
+          <input
+            type="text"
+            value={username}
+            className="usernameInput"
+            name="username"
+            onChange={handleChange}
+          />
+        </label>
+        <label>Password
+          <input
+            type="password"
+            value={password}
+            className="passwordInput"
+            name="password"
+            onChange={handleChange}
+          />
+        </label>
+        <button
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 

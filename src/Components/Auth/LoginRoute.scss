@@ -1,0 +1,56 @@
+@import 'Styles/variables';
+$roundCorners: 5px !important;
+$flexDisplay: flex !important;
+$flexDirection: column !important;
+$formChildPad: 5px 10px 5px 10px !important;
+$formPad: 20px 40px 30px 40px;
+$uniformWidth: 200px;
+$justify: center;
+$alignItems: center;
+
+@mixin flexStuff {
+    display: $flexDisplay;
+    flex-direction: $flexDirection;
+    justify-content: $justify;
+    align-items: $alignItems;
+}
+
+div.container {
+    height: 100vh;
+    width: 100%;
+    @include flexStuff;
+    form {
+        @include flexStuff;
+        background-color: #25272e;
+        width: 375px;
+        border-radius: $roundCorners;
+        padding: $formPad;
+        .error {
+            max-height: min-content;
+        }
+        label {
+            @include flexStuff;
+            color: $tertiary-color;
+            padding: $formChildPad;
+            width: 100%;
+            font-weight: 600;
+            font-size: 20px;
+            input {
+                border: none;
+                color: $tertiary-color;
+                background-color: $primary-color;
+                padding: $formChildPad;
+                width: $uniformWidth;
+                width: 100%;
+                border-radius: $roundCorners;
+            }
+        }
+        button {
+            padding: $formChildPad;
+            background-color: $secondary-color;
+            width: 84%;
+            border-radius: $roundCorners;
+            margin: 20px 0px 0px 0px;
+        }
+    }
+}
