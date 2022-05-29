@@ -1,17 +1,18 @@
-@use "Styles/main";
+@use "Styles/vars";
+@use "Styles/funcs";
 
 .audioPlayer {
-  @include main.flexCenter();
-  background-color: main.$primaryColor;
+  @include funcs.flexCenter();
+  background-color: vars.$primaryColor;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 150px;
-  z-index: main.$floatingZ;
+  z-index: vars.$floatingZ;
 
   .audioPlayerUI {
-    @include main.flexCenter();
+    @include funcs.flexCenter();
     padding: 0 2%;
 
     &.name {
@@ -23,8 +24,123 @@
       width: 30%;
       padding: 10px;
 
+      .currentTime,
+      .duration {
+        font-size: 1.2rem;
+        padding: 0 2%;
+      }
+    
+      .currentTime {
+        margin-left: 25px;
+      }
+
       .slider {
         width: 100%;
+
+        .progressBar {
+          $bar-bg: #74b0d6d5;
+          $seek-before-width: 0;
+          $seek-before-color: #54809cd5;
+          $knob: black;
+          $selected-knob: rgb(66, 65, 65);
+      
+          appearance: none;
+          background: $bar-bg;
+          border-radius: 10px;
+          position: relative;
+          width: 100%;
+          height: 11px;
+          outline: none;
+      
+          /* firefox */
+          &::-moz-range-track {
+            background: $bar-bg;
+            border-radius: 10px;
+            position: relative;
+            width: 100%;
+            height: 11px;
+            outline: none;
+          }
+      
+          &::-moz-focus-outer {
+            border: 0;
+          }
+      
+          /* safari */
+          &::-webkit-slider-runnable-track {
+            background: $bar-bg;
+            border-radius: 10px;
+            position: relative;
+            width: 100%;
+            height: 11px;
+            outline: none;
+          }
+      
+          /* chrome safari progress bar */
+          &::before {
+            content: "";
+            height: 11px;
+            width: $seek-before-width;
+            background-color: $seek-before-color;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            cursor: pointer;
+          }
+      
+          /* firefox progress bar */
+          &::-moz-range-progress {
+            background-color: $seek-before-color;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            height: 11px;
+          }
+      
+          /* chrome safari knob */
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            border: 2px solid vars.$secondaryColor;
+            background-color: $knob;
+            cursor: pointer;
+            position: relative;
+            margin: -2px 0 0 0;
+            z-index: 3;
+            box-sizing: border-box;
+          }
+      
+          /* chrome safari knob while dragging */
+          &:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+            background: $selected-knob;
+            border: 1px solid vars.$white;
+          }
+      
+          /* firefox knob */
+          &::-moz-range-thumb {
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            border: 2px solid vars.$secondaryColor;
+            background-color: $knob;
+            cursor: pointer;
+            position: relative;
+            z-index: 3;
+            box-sizing: border-box;
+          }
+      
+          /* firefox knob while dragging */
+          &:active::-moz-range-thumb {
+            transform: scale(1.2);
+            background: $selected-knob;
+            border: 2px solid rgba(vars.$white, 0.5);
+          }
+        }
       }
     }
 
@@ -32,145 +148,29 @@
       width: 20%;
 
       .forwardBackward {
-        @include main.flexCenter();
-        color: main.$tertiaryColor;
+        @include funcs.flexCenter();
+        color: vars.$tertiaryColor;
         background: none;
         border: none;
         font-family: monospace;
         font-size: 2rem;
         cursor: pointer;
         &:hover {
-          color: main.$secondaryColor;
+          color: vars.$secondaryColor;
         }
       }
 
       .playPause {
-        @include main.flexCenter();
-        background-color: main.$primaryColor;
+        @include funcs.flexCenter();
+        background-color: vars.$primaryColor;
         border: none;
         border-radius: 50%;
         font-size: 4rem;
-        color: main.$white;
+        color: vars.$white;
         &:hover {
-          color: main.$secondaryColor;
+          color: vars.$secondaryColor;
         }
       }
-    }
-  }
-
-  .currentTime,
-  .duration {
-    font-family: monospace;
-    font-size: 16px;
-    padding: 0 2%;
-  }
-
-  .currentTime {
-    margin-left: 25px;
-  }
-
-  .progressBar {
-    --bar-bg: #74b0d6d5;
-    --seek-before-width: 0;
-    --seek-before-color: #54809cd5;
-    --knob: black;
-    --selected-knob: rgb(66, 65, 65);
-
-    appearance: none;
-    background: var(--bar-bg);
-    border-radius: 10px;
-    position: relative;
-    width: 100%;
-    height: 11px;
-    outline: none;
-
-    /* firefox */
-    &::-moz-range-track {
-      background: var(--bar-bg);
-      border-radius: 10px;
-      position: relative;
-      width: 100%;
-      height: 11px;
-      outline: none;
-    }
-
-    &::-moz-focus-outer {
-      border: 0;
-    }
-
-    /* safari */
-    &::-webkit-slider-runnable-track {
-      background: var(--bar-bg);
-      border-radius: 10px;
-      position: relative;
-      width: 100%;
-      height: 11px;
-      outline: none;
-    }
-
-    /* chrome safari progress bar */
-    &::before {
-      content: "";
-      height: 11px;
-      width: var(--seek-before-width);
-      background-color: var(--seek-before-color);
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      cursor: pointer;
-    }
-
-    /* firefox progress bar */
-    &::-moz-range-progress {
-      background-color: var(--seek-before-color);
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
-      height: 11px;
-    }
-
-    /* chrome safari knob */
-    &::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 25px;
-      width: 25px;
-      border-radius: 50%;
-      border: none;
-      background-color: var(--knob);
-      cursor: pointer;
-      position: relative;
-      margin: -2px 0 0 0;
-      z-index: 3;
-      box-sizing: border-box;
-    }
-
-    /* chrome safari knob while dragging */
-    &:active::-webkit-slider-thumb {
-      transform: scale(1.2);
-      background: var(--selected-knob);
-      border: 1px solid main.$white;
-    }
-
-    /* firefox knob */
-    &::-moz-range-thumb {
-      height: 25px;
-      width: 25px;
-      border-radius: 50%;
-      border: transparent;
-      background-color: var(--knob);
-      cursor: pointer;
-      position: relative;
-      z-index: 3;
-      box-sizing: border-box;
-    }
-
-    /* firefox knob while dragging */
-    &:active::-moz-range-thumb {
-      transform: scale(1.2);
-      background: var(--selected-knob);
-      border: 2px solid rgba(main.$white, 0.5);
     }
   }
 }
@@ -179,7 +179,7 @@
   media queries
 ----------------- */
 
-@media screen and (max-width: main.$tabletBreakpoint) {
+@media screen and (max-width: vars.$tabletBreakpoint) {
   .audioPlayer {
     flex-direction: column;
     height: 245px;
@@ -212,7 +212,7 @@
   }
 }
 
-@media screen and (max-width: main.$phoneBreakpoint) {
+@media screen and (max-width: vars.$phoneBreakpoint) {
   .audioPlayer {
     .audioPlayerUI {
       &.currentPosition {

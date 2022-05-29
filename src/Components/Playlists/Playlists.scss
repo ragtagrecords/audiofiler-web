@@ -1,7 +1,9 @@
-@use 'Styles/main';
+@use 'Styles/funcs';
+@use 'Styles/lists';
+@use 'Styles/doc';
 
 .playlists {
-    @include main.flexCenter();
+    @include funcs.flexCenter();
     max-width: 100%;
     margin-top: 150px;
 }
