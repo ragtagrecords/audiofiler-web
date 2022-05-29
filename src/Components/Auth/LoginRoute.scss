@@ -1,12 +1,9 @@
-@use 'Styles/vars';
-$roundCorners: 5px !important;
-$flexDisplay: flex !important;
-$flexDirection: column !important;
-$formChildPad: 5px 10px 5px 10px !important;
-$formPad: 20px 40px 30px 40px;
-$uniformWidth: 200px;
-$justify: center;
-$alignItems: center;
+@import 'Styles/variables';
+
+
+@mixin shadows {
+    box-shadow: $buttonHoverShadow;
+}
 
 @mixin flexStuff {
     display: $flexDisplay;
@@ -25,33 +22,52 @@ div.container {
         width: 375px;
         border-radius: $roundCorners;
         padding: $formPad;
+        outline: 5px solid $secondary-color;
         .error {
             max-height: min-content;
+            color: red;
         }
         label {
             @include flexStuff;
-            color: vars.$tertiaryColor;
+            color: $test-color;
             padding: $formChildPad;
             width: 100%;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 20px;
+            font-smooth: auto;
             input {
                 border: none;
-                color: vars.$tertiaryColor;
-                background-color: vars.$primaryColor;
+                color: $test-color;
+                background-color: $primary-color;
                 padding: $formChildPad;
-                width: $uniformWidth;
                 width: 100%;
                 border-radius: $roundCorners;
+                &:hover {
+                    transition: 1s;
+                    background-color: #fff;
+                    outline: 5px solid $secondary-color;
+                }
+
+                &:focus{
+                    background-color: #fff;
+                    outline: 5px solid $secondary-color;
+                    color: $primary-color;
+                }
             }
         }
         button {
             border: none;
             padding: $formChildPad;
-            background-color: vars.$secondaryColor;
-            width: 84%;
+            background-color: $secondary-color;
+            width: 250px;
             border-radius: $roundCorners;
             margin: 20px 0px 0px 0px;
+            transition: $transition;
+        }
+        button:hover {
+            background-color: #fff;
+            color: $secondary-color;
+            outline: 5px solid $secondary-color;
         }
     }
 }

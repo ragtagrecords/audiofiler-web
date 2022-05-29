@@ -66,3 +66,25 @@ $light-tertiary-color: #0b0b0b;
 //     @each $theme, $map in $themes {
 //     }
 // }
+
+
+//Masood's stuff
+//colors
+$test-color: #ff8000;
+
+//$header-text: ;
+//$list-test
+
+//login page variables
+$roundCorners: 5px !important;
+$flexDisplay: flex !important;
+$flexDirection: column !important;
+$formChildPad: 5px 10px 5px 10px !important;
+$formPad: 20px 40px 30px 40px;
+$uniformWidth: 200px;
+$justify: center;
+$alignItems: center;
+
+//button variables
+$buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
+$transition: .5s;
