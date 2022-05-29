@@ -1,15 +1,17 @@
-@import 'Styles/variables';
+@use 'Styles/vars';
 
 .accordion-button {
-    background-color: $secondary-color !important;
-    color: $tertiary-color !important;
+    background-color: vars.$secondaryColor !important;
+    color: vars.$tertiaryColor !important;
 }
 
 .accordion-item {
-    background-color: whitesmoke !important;
-    color: $primary-color !important;
+    background-color: rgba(vars.$gray, 0.3) !important;
+    color: vars.$white !important;
 }
 
-.accordion-button:not(.collapsed) {
-    color: whitesmoke !important;
+.accordion-button {
+    &:not(.collapsed) {
+        color: vars.$white !important;
+    }
 }

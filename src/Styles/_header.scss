@@ -1,8 +1,13 @@
-@import 'variables';
+@use 'vars';
+@use 'funcs';
 
 .title {
-    text-align: center;
-    padding: 5vh;
-    height: 100px;
-    color: $tertiary-color;
+    @include funcs.flexCenter();
+    width: 100%;
+    position: fixed;
+    height: 150px;
+    top: 0;
+    background-color: vars.$primaryColor;
+    color: vars.$tertiaryColor;
+    z-index: vars.$floatingZ;
 }

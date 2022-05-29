@@ -1,5 +1,7 @@
+@use 'Styles/main';
+
 .playlists {
+    @include main.flexCenter();
     max-width: 100%;
-    justify-content: center;
-    display: flex;
+    margin-top: 150px;
 }
