@@ -1,4 +1,4 @@
-@import 'Styles/variables';
+@use 'Styles/vars';
 $roundCorners: 5px !important;
 $flexDisplay: flex !important;
 $flexDirection: column !important;
@@ -30,15 +30,15 @@ div.container {
         }
         label {
             @include flexStuff;
-            color: $tertiary-color;
+            color: vars.$tertiaryColor;
             padding: $formChildPad;
             width: 100%;
             font-weight: 600;
             font-size: 20px;
             input {
                 border: none;
-                color: $tertiary-color;
-                background-color: $primary-color;
+                color: vars.$tertiaryColor;
+                background-color: vars.$primaryColor;
                 padding: $formChildPad;
                 width: $uniformWidth;
                 width: 100%;
@@ -48,7 +48,7 @@ div.container {
         button {
             border: none;
             padding: $formChildPad;
-            background-color: $secondary-color;
+            background-color: vars.$secondaryColor;
             width: 84%;
             border-radius: $roundCorners;
             margin: 20px 0px 0px 0px;

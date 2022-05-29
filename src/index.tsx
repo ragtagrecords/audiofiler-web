@@ -24,7 +24,7 @@ root.render(
         <Route path="/playlists/:playlistID" element={<PlaylistRoute />} />
         <Route path="/playlists/add" element={<AddPlaylistRoute />} />
         <Route path="/songs/add" element={<AddSongsRoute />} />
-        <Route path="/edit" element={<SignupRoute />} />
+        <Route path="/signup" element={<SignupRoute />} />
         <Route path="/login" element={<LoginRoute />} />
       </Routes>
     </BrowserRouter>
