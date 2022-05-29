@@ -5,11 +5,12 @@ import {
   Route,
 } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
+import AddSongsRoute from 'Components/AddSongs/AddSongsRoute';
+import AddPlaylistRoute from 'Components/AddPlaylist/AddPlaylistRoute';
 import PlaylistRoute from 'Components/Playlist/PlaylistRoute';
 import PlaylistsRoute from 'Components/Playlists/PlaylistsRoute';
-import SignupRoute from 'Components/Auth/SignupRoute';
 import LoginRoute from 'Components/Auth/LoginRoute';
-import reportWebVitals from './reportWebVitals';
+import SignupRoute from 'Components/Auth/SignupRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const rootElement = document.getElementById('root');
@@ -21,7 +22,9 @@ root.render(
         <Route path="/" element={<PlaylistsRoute />} />
         <Route path="/playlists" element={<PlaylistsRoute />} />
         <Route path="/playlists/:playlistID" element={<PlaylistRoute />} />
-        <Route path="/signup" element={<SignupRoute />} />
+        <Route path="/playlists/add" element={<AddPlaylistRoute />} />
+        <Route path="/songs/add" element={<AddSongsRoute />} />
+        <Route path="/edit" element={<SignupRoute />} />
         <Route path="/login" element={<LoginRoute />} />
       </Routes>
     </BrowserRouter>
@@ -31,4 +34,5 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// import reportWebVitals from './reportWebVitals';
+// reportWebVitals();

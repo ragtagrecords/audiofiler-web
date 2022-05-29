@@ -44,6 +44,7 @@ module.exports = {
     'jsx-a11y/no-noninteractive-element-interactions': [0],
     'no-shadow': [0],
     'jsx-a11y/label-has-associated-control': [0],
+    'no-param-reassign': [0],
   },
   settings: {
     'import/resolver': {
