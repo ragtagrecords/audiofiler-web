@@ -73,7 +73,7 @@ const SignupRoute = () => {
         </label>
         <label> Password
           <input
-            type="text"
+            type="password"
             value={password}
             className="passwordInput"
             name="password"
@@ -82,7 +82,7 @@ const SignupRoute = () => {
         </label>
         <label> Confirm Password
           <input
-            type="text"
+            type="password"
             value={confirmPassword}
             className="confirmPasswordInput"
             name="confirmPassword"
