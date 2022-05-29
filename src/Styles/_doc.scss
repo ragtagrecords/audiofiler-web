@@ -1,0 +1,6 @@
+@use 'vars';
+
+html, body {
+    background: vars.$primaryColor !important;
+    color: vars.$tertiaryColor !important;
+}

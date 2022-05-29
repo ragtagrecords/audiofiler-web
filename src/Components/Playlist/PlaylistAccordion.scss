@@ -1,10 +1,15 @@
+@use 'Styles/vars';
+
 .accordion {
-    height: 105vh;
+    height: 1100px; // => calc(listItem.height * numberOfSongs)) 
     overflow: auto;
+    margin-top: 150px;
+    padding: 0 10%;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: vars.$tabletBreakpoint) {
     .accordion {
-        height: calc(100vh - 300px);
+        padding: 0;
+        height: 1200px;
     }
 }

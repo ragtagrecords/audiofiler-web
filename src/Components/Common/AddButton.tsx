@@ -1,5 +1,5 @@
 import React from 'react';
-import plusButton from 'Assets/blue-plus.png';
+import plusButton from 'Assets/blue-plus.svg';
 import './AddButton.scss';
 
 type AddButtonProps = {
@@ -9,7 +9,7 @@ type AddButtonProps = {
 const AddButton = (props: AddButtonProps) => {
   return (
     <a href={props.href}>
-      <img alt="addButton" src={plusButton} />
+      <img alt="addButton" src={plusButton} className="filterBlue" />
     </a>
   );
 };
