@@ -1,8 +1,8 @@
 @use 'vars';
 
 ul {
-    padding: 0 !important;
-    margin: 0 !important;
+    padding: 0;
+    margin: 0;
     width: calc(100% - 30px);
     max-width: 500px;
 }
@@ -18,17 +18,17 @@ li {
     background-color: vars.$secondaryColor;
     width: 100%;
     &:hover{
-        opacity: 0.6 !important;
+        opacity: 0.6;
     }
 }
 
 a {
     display: block;
-    color: vars.$tertiaryColor !important;
-    text-decoration: none !important;
+    color: vars.$tertiaryColor;
+    text-decoration: none;
     padding: calc((20vh - 100px) / 4);
     overflow-wrap: break-word;
     &:hover {
-        color: black !important;
+        color: black;
     }
 }
