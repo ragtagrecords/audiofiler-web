@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Playlist, Song } from 'Types';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
-import PlaylistAccordion from './PlaylistAccordion';
+import Accordion from '../Common/Accordion/Accordion';
 import './PlaylistRoute.scss';
 
 type PlaylistRouteParams = {
@@ -117,9 +117,10 @@ const PlaylistRoute = () => {
     <>
       {playlist && playlist.name
         && <h1 className="title">{playlist.name}</h1>}
-      <PlaylistAccordion
+      <Accordion
+        newItemID={song.id}
         songs={songs}
-        onSongClick={onSongClick}
+        onItemClick={onSongClick}
       />
       {song && song.name !== ''
         && (

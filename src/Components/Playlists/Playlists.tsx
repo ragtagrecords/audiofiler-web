@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './Playlists.scss';
-import { Playlist } from '../../Types';
+import { Playlist } from 'Types';
 
 const Playlists = () => {
   const defaultPlaylist = {
