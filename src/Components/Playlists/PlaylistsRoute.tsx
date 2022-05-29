@@ -8,7 +8,7 @@ const PlaylistsRoute = () => {
     <>
       <h1 className="title">Playlists</h1>
       <Playlists />
-      <AddButton href="/edit/playlist" />
+      <AddButton href="/playlists/add" />
     </>
   );
 };
