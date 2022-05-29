@@ -76,7 +76,7 @@ $test-color: #ff8000;
 //$list-test
 
 //login page variables
-$roundCorners: 5px !important;
+$roundCorners: 10px !important;
 $flexDisplay: flex !important;
 $flexDirection: column !important;
 $formChildPad: 5px 10px 5px 10px !important;
@@ -85,6 +85,7 @@ $uniformWidth: 200px;
 $justify: center;
 $alignItems: center;
 
-//button variables
+//button and input variables
 $buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
 $transition: .5s;
+$outlineTransition: 5px solid #355a6e;

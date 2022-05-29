@@ -1,23 +1,16 @@
 @use 'Styles/vars';
 
 .accordion-button {
-<<<<<<< HEAD
     background-color: vars.$secondaryColor !important;
     color: vars.$tertiaryColor !important;
-=======
-    background-color: $secondary-color !important;
-    color: $tertiary-color !important;
-    border-radius: $roundCorners;
->>>>>>> 477014c (Trying new styles)
 }
 
 .accordion-button:hover {
-    outline: 5px solid $secondary-color;
+    outline: 5px solid vars.$secondaryColor;
     background-color: #fff;
-    transition: $transition;
+    transition: vars.$transition;
 }
 .accordion-item {
-<<<<<<< HEAD
     background-color: rgba(vars.$gray, 0.3) !important;
     color: vars.$white !important;
 }
@@ -26,16 +19,4 @@
     &:not(.collapsed) {
         color: vars.$white !important;
     }
-=======
-    background-color: $primary-color !important;
-    color: $test-color !important;
-}
-
-.accordion-item:hover {
-    transition: $transition;
-}
-
-.accordion-button:not(.collapsed) {
-    color: $test-color !important; 
->>>>>>> 477014c (Trying new styles)
 }
