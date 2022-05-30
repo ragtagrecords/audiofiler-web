@@ -83,7 +83,7 @@ const LoginRoute = () => {
         <button
           type="submit"
         >
-          Submit
+          <span>Submit</span>
         </button>
       </form>
     </div>

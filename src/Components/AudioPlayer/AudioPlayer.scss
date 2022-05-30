@@ -13,6 +13,11 @@
   height: $playerHeight;
   z-index: vars.$floatingZ;
   box-shadow: rgba(vars.$primaryColor, 0.8) 5px 5px 15px;
+  background: rgb(18,31,38);
+  background: -moz-linear-gradient(180deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
+  background: -webkit-linear-gradient(180deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
+  background: linear-gradient(180deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121f26",endColorstr="#121f26",GradientType=1); 
 
   .audioPlayerUI {
     @include funcs.flexCenter();
