@@ -7,7 +7,10 @@
     position: fixed;
     height: 150px;
     top: 0;
+    left: 0;
+    font-size: 3rem;
     background-color: vars.$primaryColor;
     color: vars.$tertiaryColor;
     z-index: vars.$floatingZ;
+    box-shadow: rgba(vars.$primaryColor, 0.8) 3px 3px 15px;
 }

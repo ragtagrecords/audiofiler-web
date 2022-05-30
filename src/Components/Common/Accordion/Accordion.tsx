@@ -32,18 +32,20 @@ const Accordion = (props: AccordionProps) => {
   }, [props.newItemID]);
 
   return (
-    <ul className="accordion">
-      {props.songs && props.songs.map((song: Song) => {
-        return (
-          <AccordionItem
-            show={currentItem === song.id}
-            key={song.id}
-            item={song}
-            onItemClick={handleClick}
-          />
-        );
-      })}
-    </ul>
+    <div className="accordionContainer">
+      <ul className="accordion">
+        {props.songs && props.songs.map((song: Song) => {
+          return (
+            <AccordionItem
+              show={currentItem === song.id}
+              key={song.id}
+              item={song}
+              onItemClick={handleClick}
+            />
+          );
+        })}
+      </ul>
+    </div>
   );
 };
 

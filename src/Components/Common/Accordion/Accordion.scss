@@ -1,11 +1,36 @@
-@use 'Styles/funcs';
+@use "Styles/vars";
+@use "Styles/funcs";
 
 ul {
+  &.accordion {
+    @include funcs.flexCenter;
+    flex-direction: column;
+    max-width: 65%;
+    border-radius: vars.$roundCorners;
+  }
+}
+
+.accordionContainer {
+  @include funcs.flexCenter();
+  margin: 150px 0 275px;
+}
+
+/* -------------
+  media queries
+----------------- */
+
+@media screen and (max-width: vars.$tabletBreakpoint) {
+  ul {
     &.accordion {
-        width: 100vw;
-        max-width: 100vw;
-        @include funcs.flexCenter;
-        flex-direction: column;
-        margin: 150px 0 150px 0;
+      max-width: 90%;
     }
+  }
+}
+
+@media screen and (max-width: vars.$phoneBreakpoint) {
+  ul {
+    &.accordion {
+      max-width: 100%;
+    }
+  }
 }

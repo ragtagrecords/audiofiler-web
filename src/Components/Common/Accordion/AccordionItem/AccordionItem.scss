@@ -1,38 +1,53 @@
-@use 'Styles/funcs';
-@use 'Styles/vars';
-
-li.accordionItem    {
-    width: 60%;
-    button {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-    &.show {
-        border: 5px vars.$tertiaryColor solid;
-        border-radius: vars.$roundCorners;
-    }
-}
+@use "Styles/funcs";
+@use "Styles/vars";
 
 div.accordionBody {
-    display: none;
+  display: none;
 
-    &.show {
-        display: block;
-    }
+  &.show {
+    display: block;
+  }
 }
 
 li {
-    border-radius: vars.$roundCorners;
-    color: vars.$tertiaryColor;
-    .button{
-        display: flex;
-        height: 100%;
+  $depth: 4px;
+  border-radius: vars.$roundCorners;
+  color: vars.$tertiaryColor;
+
+  @mixin inset($color) {
+    -webkit-box-shadow: inset 0px 0px 0px $depth $color;
+    -moz-box-shadow: inset 0px 0px 0px $depth $color;
+    box-shadow: inset 0px 0px 0px $depth $color;
+  }
+
+  button {
+    height: 60px;
+    font-size: 2rem;
+  }
+  &:hover {
+    @include inset(vars.$tertiaryColor);
+    background-color: rgba(vars.$gray, 0.4);
+  }
+  &.notShow {
+    @include inset(vars.$test-color);
+  }
+
+  &.accordionItem {
+    width: 99%;
+    button {
+      width: 100%;
     }
-    &:hover {
-        transition: vars.$transition;
-        border: 5px vars.$tertiaryColor solid; 
+    &.show {
+      @include inset(rgba(vars.$tertiaryColor, 0.5));
+      border-radius: vars.$roundCorners;
+      background-color: rgba(vars.$gray, 0.1);
+      p {
+        color: vars.$white;
+      }
+      &:hover {
+        opacity: 1;
+      }
     }
-    &.notShow {
-        border: 5px vars.$test-color solid;
-    }
+  }
 }
+
