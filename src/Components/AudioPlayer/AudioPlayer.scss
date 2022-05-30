@@ -10,12 +10,14 @@
   right: 0;
   height: 150px;
   z-index: vars.$floatingZ;
+  box-shadow: rgba(vars.$primaryColor, 0.8) 5px 5px 15px;
 
   .audioPlayerUI {
     @include funcs.flexCenter();
     padding: 0 2%;
 
     &.name {
+      font-size: 1.5rem;
       width: 20%;
       overflow-wrap: break-word;
     }
@@ -26,7 +28,7 @@
 
       .currentTime,
       .duration {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         padding: 0 2%;
       }
     
@@ -146,6 +148,7 @@
 
     &.controls {
       width: 20%;
+      padding-bottom: 20px;
 
       .forwardBackward {
         @include funcs.flexCenter();
@@ -153,7 +156,7 @@
         background: none;
         border: none;
         font-family: monospace;
-        font-size: 2rem;
+        font-size: 3.5rem;
         cursor: pointer;
         &:hover {
           color: vars.$secondaryColor;
@@ -165,7 +168,7 @@
         background-color: vars.$primaryColor;
         border: none;
         border-radius: 50%;
-        font-size: 4rem;
+        font-size: 5.5rem;
         color: vars.$white;
         &:hover {
           color: vars.$secondaryColor;
@@ -183,7 +186,6 @@
   .audioPlayer {
     flex-direction: column;
     height: 245px;
-    padding: 15px;
 
     .audioPlayerUI {
       padding-bottom: 0 0 15px;
@@ -216,7 +218,7 @@
   .audioPlayer {
     .audioPlayerUI {
       &.currentPosition {
-        width: 100%;
+        width: 90%;
       }
     }
   }

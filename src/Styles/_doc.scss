@@ -1,7 +1,7 @@
 @use 'vars';
 
 html, body {
-    background: vars.$primaryColor !important;
-    color: vars.$tertiaryColor !important;
-    font-family: vars.$font !important;
+    background: vars.$primaryColor;
+    color: vars.$tertiaryColor;
+    font-family: vars.$font;
 }
