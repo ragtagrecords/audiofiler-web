@@ -24,6 +24,9 @@
       font-size: 1.5rem;
       width: 20%;
       overflow-wrap: break-word;
+      h2 {
+        margin: 0;
+      }
     }
 
     &.currentPosition {
@@ -214,8 +217,6 @@
       &.name {
         width: 60%;
         height: $nameHeight;
-        align-items: start;
-
       }
 
       &.currentPosition {
