@@ -77,6 +77,7 @@ $test-color: #f17602;
 
 //$header-text: ;
 //$list-test
+$boxShadow: 0px 0px 15px 5px $tertiaryColor;
 
 //login page variables
 $roundCorners: 25px;
@@ -91,4 +92,4 @@ $alignItems: center;
 //button and input variables
 $buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
 $transition: .5s;
-$outlineTransition: 5px solid #355a6e;
+$outlineTransition: 5px solid $tertiaryColor;

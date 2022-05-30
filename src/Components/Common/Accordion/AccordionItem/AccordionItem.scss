@@ -27,6 +27,8 @@ li {
   &:hover {
     @include inset(vars.$tertiaryColor);
     background-color: rgba(vars.$gray, 0.4);
+    transition: 0.3s;
+    box-shadow: vars.$boxShadow;
   }
   &.notShow {
     @include inset(vars.$test-color);
@@ -50,4 +52,5 @@ li {
     }
   }
 }
+
 

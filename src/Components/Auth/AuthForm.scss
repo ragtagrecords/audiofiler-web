@@ -4,10 +4,11 @@
 div.container {
     height: 100vh;
     @include funcs.flexCenter();
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     form {
         @include funcs.flexCenter();
         flex-direction: vars.$flexDirection;
-        background-color: #25272e;
+        background-color: vars.$secondaryColor;
         width: 375px;
         border-radius: vars.$roundCorners;
         padding: vars.$formPad;
@@ -19,7 +20,7 @@ div.container {
         label {
             @include funcs.flexCenter();
             flex-direction: vars.$flexDirection;
-            color: vars.$test-color;
+            color: vars.$tertiaryColor;
             padding: vars.$formChildPad;
             width: 100%;
             font-weight: 500;
@@ -27,40 +28,45 @@ div.container {
             font-smooth: auto;
             input {
                 border: none;
-                color: vars.$test-color;
+                color: vars.$tertiaryColor;
                 background-color: vars.$primaryColor;
                 padding: vars.$formChildPad;
                 width: 100%;
                 border-radius: vars.$roundCorners;
                 &:hover {
-                    transition: 1s;
-                    background-color: vars.$secondaryColor;
+                    background-color: vars.$gray;
                     outline: vars.$outlineTransition;
+                    transition: vars.$transition;
                 }
 
                 &:focus{
-                    background-color: vars.$secondaryColor;
+                    background-color: vars.$gray;
                     outline: vars.$outlineTransition;
-                    color: vars.$primaryColor;
+                    color: vars.$tertiaryColor;
                 }
             }
         }
         button {
             border: none;
             padding: vars.$formChildPad;
-            background-color: vars.$secondaryColor;
+            background-color: rgba(vars.$tertiaryColor, 0.25);
             width: 250px;
             border-radius: vars.$roundCorners;
             margin: 20px 0px 0px 0px;
+            font-size: 20px;
             &:hover {
                 background-color: rgba(vars.$tertiaryColor, 0.5);
                 color: rgba(vars.$secondaryColor, 0.0);
-                // outline: vars.$outlineTransition;
+                outline: vars.$outlineTransition;
+                transition: vars.$transition;
             }
             &:hover:after {
                 content: "Lets go!";
                 color: vars.$tertiaryColor;
-                padding-right: 50px;
+            }
+            &:hover span {
+                transition: vars.$transition;
+                display: none;
             }
         }
     }

@@ -1,3 +1,6 @@
+@use 'Styles/vars';
+@use 'Styles/funcs';
+
 button {
     background: var(--primary-color);
     color: var(--tertiary-color);
