@@ -2,13 +2,15 @@
 @use "Styles/funcs";
 
 .audioPlayer {
+  $playerHeight: 150px;
+
   @include funcs.flexCenter();
   background-color: vars.$primaryColor;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 150px;
+  height: $playerHeight;
   z-index: vars.$floatingZ;
   box-shadow: rgba(vars.$primaryColor, 0.8) 5px 5px 15px;
 
@@ -17,6 +19,8 @@
     padding: 0 2%;
 
     &.name {
+      width: 20%;
+      height: $playerHeight;
       font-size: 1.5rem;
       width: 20%;
       overflow-wrap: break-word;
@@ -24,6 +28,7 @@
 
     &.currentPosition {
       width: 30%;
+      height: $playerHeight;
       padding: 10px;
 
       .currentTime,
@@ -31,7 +36,7 @@
         font-size: 1.5rem;
         padding: 0 2%;
       }
-    
+
       .currentTime {
         margin-left: 25px;
       }
@@ -43,104 +48,115 @@
           $bar-bg: #74b0d6d5;
           $seek-before-width: 0;
           $seek-before-color: #54809cd5;
-          $knob: black;
+          $knob: rgb(17, 17, 17);
           $selected-knob: rgb(66, 65, 65);
-      
+          $thumbRadius: 40px;
+          $sliderHeight: 20px;
+
+          @mixin thumb {
+            height: $thumbRadius;
+            width: $thumbRadius;
+            border-radius: 50%;
+            border: 2px solid vars.$tertiaryColor;
+            background-color: $knob;
+            cursor: pointer;
+            position: relative;
+            z-index: 3;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 1px rgba(vars.$tertiaryColor, 0.5), 0px 0px 1px rgba(vars.$tertiaryColor, 0.2);
+          }
+
+          @mixin activeThumb {
+            transform: scale(1.15);
+            background: $selected-knob;
+            border: 2px solid rgba(vars.$white, 0.5);
+          }
+
+          input[type=range] {
+            -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+            width: 100%; /* Specific width is required for Firefox. */
+            background: transparent; /* Otherwise white in Chrome */
+          }
+          
+          input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+          }
+
           appearance: none;
-          background: $bar-bg;
-          border-radius: 10px;
+          background: $bar-bg;  
+          border-radius: $thumbRadius;
           position: relative;
           width: 100%;
-          height: 11px;
+          height: 20px;
           outline: none;
-      
+
           /* firefox */
           &::-moz-range-track {
             background: $bar-bg;
-            border-radius: 10px;
+            border-radius: $thumbRadius;
             position: relative;
             width: 100%;
-            height: 11px;
+            height: $sliderHeight;
             outline: none;
           }
-      
+
           &::-moz-focus-outer {
             border: 0;
           }
-      
+
           /* safari */
           &::-webkit-slider-runnable-track {
             background: $bar-bg;
-            border-radius: 10px;
+            border-radius: $thumbRadius;
             position: relative;
             width: 100%;
-            height: 11px;
+            height: $sliderHeight;
             outline: none;
           }
-      
+
           /* chrome safari progress bar */
           &::before {
             content: "";
-            height: 11px;
+            height: $sliderHeight;
             width: $seek-before-width;
             background-color: $seek-before-color;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
+            border-top-left-radius: $thumbRadius;
+            border-bottom-left-radius: $thumbRadius;
             position: absolute;
             top: 0;
             left: 0;
             z-index: 2;
             cursor: pointer;
           }
-      
+
           /* firefox progress bar */
           &::-moz-range-progress {
             background-color: $seek-before-color;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-            height: 11px;
+            border-top-left-radius: $thumbRadius;
+            border-bottom-left-radius: $thumbRadius;
+            height: $sliderHeight;
           }
-      
+
           /* chrome safari knob */
           &::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 25px;
-            width: 25px;
-            border-radius: 50%;
-            border: 2px solid vars.$secondaryColor;
-            background-color: $knob;
-            cursor: pointer;
-            position: relative;
             margin: -2px 0 0 0;
-            z-index: 3;
-            box-sizing: border-box;
+            @include thumb();
           }
-      
+
           /* chrome safari knob while dragging */
           &:active::-webkit-slider-thumb {
-            transform: scale(1.2);
-            background: $selected-knob;
-            border: 1px solid vars.$white;
+            @include activeThumb();
           }
-      
+
           /* firefox knob */
           &::-moz-range-thumb {
-            height: 25px;
-            width: 25px;
-            border-radius: 50%;
-            border: 2px solid vars.$secondaryColor;
-            background-color: $knob;
-            cursor: pointer;
-            position: relative;
-            z-index: 3;
-            box-sizing: border-box;
+            @include thumb();
           }
-      
+
           /* firefox knob while dragging */
           &:active::-moz-range-thumb {
-            transform: scale(1.2);
-            background: $selected-knob;
-            border: 2px solid rgba(vars.$white, 0.5);
+            @include activeThumb();
           }
         }
       }
@@ -148,8 +164,8 @@
 
     &.controls {
       width: 20%;
-      padding-bottom: 20px;
-
+      height: $playerHeight;
+      
       .forwardBackward {
         @include funcs.flexCenter();
         color: vars.$tertiaryColor;
@@ -183,24 +199,32 @@
 ----------------- */
 
 @media screen and (max-width: vars.$tabletBreakpoint) {
+  $playerHeight: 280px;
+  $nameHeight: (0.2 * $playerHeight);
+  $positionHeight: (0.2 * $playerHeight);
+  $controlsHeight: (0.3 * $playerHeight);
+
   .audioPlayer {
     flex-direction: column;
-    height: 245px;
+    height: $playerHeight;
 
     .audioPlayerUI {
       padding-bottom: 0 0 15px;
 
       &.name {
         width: 60%;
+        height: $nameHeight;
+        align-items: start;
+
       }
 
       &.currentPosition {
         width: 65%;
+        height: $positionHeight;
       }
 
-      & h2 {
-        padding: 2vh 0;
-        display: block;
+      &.controls {
+        height: $controlsHeight;
       }
 
       & button {
