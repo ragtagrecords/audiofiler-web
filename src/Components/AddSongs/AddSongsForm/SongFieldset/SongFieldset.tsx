@@ -1,10 +1,6 @@
 import React, { ChangeEventHandler } from 'react';
 import './SongFieldset.scss';
-
-type Playlist = {
-    id: string,
-    name: string,
-}
+import { Playlist } from 'Types';
 
 type SongFieldsetProps = {
   fileName: string,

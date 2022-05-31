@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Playlist } from 'Types';
 import axios from 'axios';
 import UploadButton from 'Components/Common/UploadButton/UploadButton';
 import SongFieldset from './SongFieldset/SongFieldset';
@@ -11,30 +12,31 @@ type SongInputInfo = {
     playlistIDs?: Array<string>,
 }
 
-type Playlist = {
-    id: string,
-    name: string,
+type AddSongFormProps = {
+  playlist?: Playlist;
 }
 
 const defaultSong = {
-  name: 'defaultName',
-  tempo: 'defaultTempo',
-  fileName: 'defaultFileName.mp3',
+  name: '',
+  tempo: '',
+  fileName: '',
   playlistIDs: [],
 };
 
-const defaultPlaylist = {
-  id: '0',
-  name: 'defaultPlaylist',
+const defaultPlaylist: Playlist = {
+  id: 0,
+  name: '',
 };
 
-const AddSongForm = () => {
+const AddSongForm = (props: AddSongFormProps) => {
   const [songs, setSongs] = useState<Array<SongInputInfo>>([defaultSong]);
   const [files, setFiles] = useState<FileList>();
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
+  const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
 
   const getPlaylists = () => {
-    fetch('http://api.ragtagrecords.com/public/playlists/')
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    fetch(`${baseUrl}public/playlists/`)
       .then((response) => response.json())
       .then((data) => setPlaylists(data));
   };
@@ -42,6 +44,12 @@ const AddSongForm = () => {
   useEffect(() => {
     getPlaylists();
   }, []);
+
+  useEffect(() => {
+    if (props.playlist) {
+      setGlobalPlaylist(props.playlist.id);
+    }
+  }, [props.playlist]);
 
   const updateSongName = (fileName: string, newSongName: string) => {
     const newSongInfo = songs;
@@ -120,14 +128,17 @@ const AddSongForm = () => {
     }
 
     // save raw files to state
+    const cls = e.target.className;
     if (e.target.type === 'file') {
       saveFiles(e);
-    } else if (e.target.className.includes('songNameInput')) {
+    } else if (cls.includes('songNameInput')) {
       updateSongName(e.target.id, e.target.value);
-    } else if (e.target.className.includes('songTempoInput')) {
+    } else if (cls.includes('songTempoInput')) {
       updateSongTempo(e.target.id, e.target.value);
-    } else if (e.target.className.includes('songPlaylistInput')) {
+    } else if (cls.includes('songPlaylistInput')) {
       updateSongPlaylistIDs(e.target.id, e.target.options);
+    } else if (cls === 'globalPlaylistIDInput') {
+      setGlobalPlaylist(e.target.value);
     } else {
       console.log('Unexpected event in AddSongsForm::handleChange()');
       return false;
@@ -142,6 +153,18 @@ const AddSongForm = () => {
     if (!files || !songs) {
       console.log('songs info or files not found for upload');
       return false;
+    }
+
+    // add selected global playlistID
+    if (globalPlaylistID !== -1) {
+      songs.forEach((song) => {
+        if (song.playlistIDs && song.playlistIDs[0]) {
+          song.playlistIDs.push(globalPlaylistID.toString());
+        } else if (song) {
+          song.playlistIDs = [];
+          song.playlistIDs[0] = globalPlaylistID.toString();
+        }
+      });
     }
 
     // add files to form data
@@ -170,6 +193,30 @@ const AddSongForm = () => {
     <form className="addSongsForm" onSubmit={handleSubmit} key="addSongsForm">
       <UploadButton handleChange={handleChange} />
 
+      <label>
+        Playlist
+        <select
+          className="globalPlaylistIDInput"
+          onChange={handleChange}
+          value={globalPlaylistID}
+        >
+          <option
+            key={-1}
+            value={-1}
+          > -
+          </option>
+          {playlists && playlists[0].name !== '' && playlists.map((playlist : Playlist) => {
+            return (
+              <option
+                key={playlist.id}
+                value={playlist.id}
+              > {playlist.name}
+              </option>
+            );
+          })}
+        </select>
+      </label>
+
       {files && songs && songs.map((song : SongInputInfo, i) => {
         return (
           <SongFieldset
@@ -189,6 +236,10 @@ const AddSongForm = () => {
       )}
     </form>
   );
+};
+
+AddSongForm.defaultProps = {
+  playlist: null,
 };
 
 export default AddSongForm;
