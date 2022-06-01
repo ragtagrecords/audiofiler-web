@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: "build.tar"
-          target: "/home/mjarvis/Apps/audiofiler-web"
+          target: "~/Apps/audiofiler-web"
 
       - name: Extract build.tar
         uses: appleboy/ssh-action@master
