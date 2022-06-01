@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './AuthForm.scss';
 import { useNavigate } from 'react-router-dom';
+import BackButton from 'Components/Common/BackButton/BackButton';
 
 const SignupRoute = () => {
   const [username, setUsername] = useState<string>('');
@@ -60,42 +61,45 @@ const SignupRoute = () => {
     }
   };
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit}>
-        <label> Username
-          <input
-            type="text"
-            value={username}
-            className="usernameInput"
-            name="username"
-            onChange={handleChange}
-          />
-        </label>
-        <label> Password
-          <input
-            type="password"
-            value={password}
-            className="passwordInput"
-            name="password"
-            onChange={handleChange}
-          />
-        </label>
-        <label> Confirm Password
-          <input
-            type="password"
-            value={confirmPassword}
-            className="confirmPasswordInput"
-            name="confirmPassword"
-            onChange={handleChange}
-          />
-        </label>
-        <button
-          type="submit"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+    <>
+      <BackButton />
+      <div className="container">
+        <form onSubmit={handleSubmit}>
+          <label> Username
+            <input
+              type="text"
+              value={username}
+              className="usernameInput"
+              name="username"
+              onChange={handleChange}
+            />
+          </label>
+          <label> Password
+            <input
+              type="password"
+              value={password}
+              className="passwordInput"
+              name="password"
+              onChange={handleChange}
+            />
+          </label>
+          <label> Confirm Password
+            <input
+              type="password"
+              value={confirmPassword}
+              className="confirmPasswordInput"
+              name="confirmPassword"
+              onChange={handleChange}
+            />
+          </label>
+          <button
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Playlist, Song } from 'Types';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from '../Common/Accordion/Accordion';
+import BackButton from '../Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
 
 type PlaylistRouteParams = {
@@ -115,6 +116,7 @@ const PlaylistRoute = () => {
 
   return (
     <>
+      <BackButton />
       {playlist && playlist.name
         && <h1 className="title">{playlist.name}</h1>}
       <Accordion

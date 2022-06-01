@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './AuthForm.scss';
 import { useNavigate } from 'react-router-dom';
+import BackButton from 'Components/Common/BackButton/BackButton';
 
 const LoginRoute = () => {
   const [username, setUsername] = useState<string>('');
@@ -56,37 +57,40 @@ const LoginRoute = () => {
     }
   };
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit}>
-        <div
-          className="error"
-        >{error}
-        </div>
-        <label>Username
-          <input
-            type="text"
-            value={username}
-            className="usernameInput"
-            name="username"
-            onChange={handleChange}
-          />
-        </label>
-        <label>Password
-          <input
-            type="password"
-            value={password}
-            className="passwordInput"
-            name="password"
-            onChange={handleChange}
-          />
-        </label>
-        <button
-          type="submit"
-        >
-          <span>Submit</span>
-        </button>
-      </form>
-    </div>
+    <>
+      <BackButton />
+      <div className="container">
+        <form onSubmit={handleSubmit}>
+          <div
+            className="error"
+          >{error}
+          </div>
+          <label>Username
+            <input
+              type="text"
+              value={username}
+              className="usernameInput"
+              name="username"
+              onChange={handleChange}
+            />
+          </label>
+          <label>Password
+            <input
+              type="password"
+              value={password}
+              className="passwordInput"
+              name="password"
+              onChange={handleChange}
+            />
+          </label>
+          <button
+            type="submit"
+          >
+            <span>Submit</span>
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

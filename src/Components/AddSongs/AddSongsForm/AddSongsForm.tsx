@@ -190,51 +190,52 @@ const AddSongForm = (props: AddSongFormProps) => {
   };
 
   return (
-    <form className="addSongsForm" onSubmit={handleSubmit} key="addSongsForm">
-      <UploadButton handleChange={handleChange} />
+    <div className="container">
+      <form className="addSongsForm" onSubmit={handleSubmit} key="addSongsForm">
+        <UploadButton handleChange={handleChange} />
+        <label>
+          Playlist
+          <select
+            className="globalPlaylistIDInput"
+            onChange={handleChange}
+            value={globalPlaylistID}
+          >
+            <option
+              key={-1}
+              value={-1}
+            > -
+            </option>
+            {playlists && playlists[0].name !== '' && playlists.map((playlist : Playlist) => {
+              return (
+                <option
+                  key={playlist.id}
+                  value={playlist.id}
+                > {playlist.name}
+                </option>
+              );
+            })}
+          </select>
+        </label>
 
-      <label>
-        Playlist
-        <select
-          className="globalPlaylistIDInput"
-          onChange={handleChange}
-          value={globalPlaylistID}
-        >
-          <option
-            key={-1}
-            value={-1}
-          > -
-          </option>
-          {playlists && playlists[0].name !== '' && playlists.map((playlist : Playlist) => {
-            return (
-              <option
-                key={playlist.id}
-                value={playlist.id}
-              > {playlist.name}
-              </option>
-            );
-          })}
-        </select>
-      </label>
-
-      {files && songs && songs.map((song : SongInputInfo, i) => {
-        return (
-          <SongFieldset
-            key={song.fileName}
-            index={i.toString()}
-            fileName={song.name}
-            playlists={playlists}
-            handleChange={handleChange}
-          />
-        );
-      })}
-      {files && songs && (
+        {files && songs && songs.map((song : SongInputInfo, i) => {
+          return (
+            <SongFieldset
+              key={song.fileName}
+              index={i.toString()}
+              fileName={song.name}
+              playlists={playlists}
+              handleChange={handleChange}
+            />
+          );
+        })}
+        {files && songs && (
         <input
           type="submit"
           value="Add Songs"
         />
-      )}
-    </form>
+        )}
+      </form>
+    </div>
   );
 };
 
