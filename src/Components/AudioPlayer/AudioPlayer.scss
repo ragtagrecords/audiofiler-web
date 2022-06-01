@@ -49,7 +49,7 @@
       }
 
       .slider {
-        width: 100%;
+        @include funcs.flexCenter();
 
         .progressBar {
           $bar-bg: #74b0d6d5;
@@ -77,16 +77,6 @@
             transform: scale(1.15);
             background: $selected-knob;
             border: 2px solid rgba(vars.$white, 0.5);
-          }
-
-          input[type=range] {
-            -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-            width: 100%; /* Specific width is required for Firefox. */
-            background: transparent; /* Otherwise white in Chrome */
-          }
-          
-          input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
           }
 
           appearance: none;
@@ -147,7 +137,6 @@
           /* chrome safari knob */
           &::-webkit-slider-thumb {
             -webkit-appearance: none;
-            margin: -2px 0 0 0;
             @include thumb();
           }
 

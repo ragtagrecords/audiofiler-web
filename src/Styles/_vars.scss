@@ -17,13 +17,12 @@ $floatingZ : 1000;
 $phoneBreakpoint: 600px;
 $tabletBreakpoint: 1080px;
 
-
-
-
-
 $light-primary-color: whitesmoke;
 $light-secondary-color: #51626c;
 $light-tertiary-color: #0b0b0b;
+
+// bubble styles
+$roundCorners: 25px;
 
 //$header-text: ;
 //$list-test
@@ -69,27 +68,3 @@ $light-tertiary-color: #0b0b0b;
 //     @each $theme, $map in $themes {
 //     }
 // }
-
-
-//Masood's stuff
-//colors
-$test-color: #f17602;
-
-//$header-text: ;
-//$list-test
-$boxShadow: 0px 0px 15px 5px $tertiaryColor;
-
-//login page variables
-$roundCorners: 25px;
-$flexDisplay: flex;
-$flexDirection: column;
-$formChildPad: 5px 10px 5px 10px;
-$formPad: 20px 40px 30px 40px;
-$uniformWidth: 200px;
-$justify: center;
-$alignItems: center;
-
-//button and input variables
-$buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
-$transition: .5s;
-$outlineTransition: 5px solid $tertiaryColor;

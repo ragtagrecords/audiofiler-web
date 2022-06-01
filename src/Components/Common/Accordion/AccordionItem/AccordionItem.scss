@@ -31,7 +31,7 @@ li {
     box-shadow: vars.$boxShadow;
   }
   &.notShow {
-    @include inset(vars.$test-color);
+    @include inset(vars.$tertiaryColor);
   }
 
   &.accordionItem {
