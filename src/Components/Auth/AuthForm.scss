@@ -1,73 +1,84 @@
-@use 'Styles/vars';
-@use 'Styles/funcs';
+@use "Styles/vars";
+@use "Styles/funcs";
 
-div.container {
-    height: 100vh;
+//Masood's stuff
+//colors
+$test-color: #f17602;
+
+//$header-text: ;
+//$list-test
+
+//login page variable
+$flexDisplay: flex;
+$flexDirection: column;
+$formChildPad: 5px 10px 5px 10px;
+$formPad: 20px 40px 30px 40px;
+$justify: center;
+$alignItems: center;
+
+//button and input variables
+$buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
+$transition: 0.4s;
+$outlineTransition: 3px solid #355a6e;
+
+.container {
+  height: 100vh;
+  @include funcs.flexCenter();
+  form {
     @include funcs.flexCenter();
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    form {
-        @include funcs.flexCenter();
-        flex-direction: vars.$flexDirection;
-        background-color: vars.$secondaryColor;
-        width: 375px;
-        border-radius: vars.$roundCorners;
-        padding: vars.$formPad;
-        outline: vars.$outlineTransition;
-        .error {
-            max-height: min-content;
-            color: red;
-        }
-        label {
-            @include funcs.flexCenter();
-            flex-direction: vars.$flexDirection;
-            color: vars.$tertiaryColor;
-            padding: vars.$formChildPad;
-            width: 100%;
-            font-weight: 500;
-            font-size: 20px;
-            font-smooth: auto;
-            input {
-                border: none;
-                color: vars.$tertiaryColor;
-                background-color: vars.$primaryColor;
-                padding: vars.$formChildPad;
-                width: 100%;
-                border-radius: vars.$roundCorners;
-                &:hover {
-                    background-color: vars.$gray;
-                    outline: vars.$outlineTransition;
-                    transition: vars.$transition;
-                }
-
-                &:focus{
-                    background-color: vars.$gray;
-                    outline: vars.$outlineTransition;
-                    color: vars.$tertiaryColor;
-                }
-            }
-        }
-        button {
-            border: none;
-            padding: vars.$formChildPad;
-            background-color: rgba(vars.$tertiaryColor, 0.25);
-            width: 250px;
-            border-radius: vars.$roundCorners;
-            margin: 20px 0px 0px 0px;
-            font-size: 20px;
-            &:hover {
-                background-color: rgba(vars.$tertiaryColor, 0.5);
-                color: rgba(vars.$secondaryColor, 0.0);
-                outline: vars.$outlineTransition;
-                transition: vars.$transition;
-            }
-            &:hover:after {
-                content: "Lets go!";
-                color: vars.$tertiaryColor;
-            }
-            &:hover span {
-                transition: vars.$transition;
-                display: none;
-            }
-        }
+    flex-direction: $flexDirection;
+    background-color: rgba(vars.$gray, 0.3);
+    width: 375px;
+    border-radius: vars.$roundCorners;
+    padding: $formPad;
+    .error {
+      max-height: min-content;
+      color: red;
     }
+    label {
+      @include funcs.flexCenter();
+      flex-direction: $flexDirection;
+      color: vars.$tertiaryColor;
+      padding: $formChildPad;
+      width: 100%;
+      font-weight: 500;
+      font-size: 1.5rem;
+      input {
+        border: none;
+        color: vars.$tertiaryColor;
+        background-color: rgba(vars.$gray, 0.9);
+        font-size: 1.2rem;
+        padding: $formChildPad;
+        width: 100%;
+        border-radius: vars.$roundCorners;
+        &:hover {
+          transition: 1s;
+          background-color: vars.$secondaryColor;
+          outline: $outlineTransition;
+        }
+
+        &:focus {
+          background-color: vars.$secondaryColor;
+          color: vars.$primaryColor;
+        }
+      }
+    }
+    button {
+      border: none;
+      padding: $formChildPad;
+      background-color: vars.$secondaryColor;
+      width: 250px;
+      border-radius: vars.$roundCorners;
+      margin: 20px 0px 0px 0px;
+      &:hover {
+        background-color: rgba(vars.$tertiaryColor, 0.5);
+        color: rgba(vars.$secondaryColor, 0);
+      }
+      &:hover:after {
+        content: "Lets go!";
+        color: vars.$tertiaryColor;
+        padding-right: 50px;
+      }
+    }
+  }
 }
