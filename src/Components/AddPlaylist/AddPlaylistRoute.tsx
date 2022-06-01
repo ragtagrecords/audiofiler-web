@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AddPlaylistRoute.scss';
+import BackButton from 'Components/Common/BackButton/BackButton';
 
 const AddPlaylistRoute = () => {
   const [playlistName, setPlaylistName] = useState<string>('');
-  const [isAddingSongs, setIsAddingSongs] = useState<string>('');
+  const [isAddingSongs, setIsAddingSongs] = useState<boolean>(false);
   const navigate = useNavigate();
 
   // Whenever inputs change the events are directed here
@@ -16,7 +17,7 @@ const AddPlaylistRoute = () => {
     } else if (e.target.className === 'playlistNameInput') {
       setPlaylistName(e.target.value);
     } else if (e.target.className === 'addSongsCheckbox') {
-      setIsAddingSongs(e.target.value);
+      setIsAddingSongs(e.target.checked);
     }
   };
 
@@ -52,26 +53,30 @@ const AddPlaylistRoute = () => {
 
   return (
     <>
-      <label> Playlist Name
-        <input
-          onChange={handleChange}
-          type="text"
-          className="playlistNameInput"
-        />
-      </label>
-      <label> Add songs?
-        <input
-          onChange={handleChange}
-          type="checkbox"
-          className="addSongsCheckbox"
-        />
-      </label>
-      <button
-        type="submit"
-        onClick={handleSubmit}
-      >
-        Submit
-      </button>
+      <BackButton />
+      <div className="container">
+        <form onSubmit={handleSubmit}>
+          <label> Playlist Name
+            <input
+              onChange={handleChange}
+              type="text"
+              className="playlistNameInput"
+              value={playlistName}
+            />
+          </label>
+          <label> Add songs?
+            <input
+              onChange={handleChange}
+              type="checkbox"
+              className="addSongsCheckbox"
+              checked={isAddingSongs}
+            />
+          </label>
+          <button type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
     </>
   );
 };

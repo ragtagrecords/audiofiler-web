@@ -9,7 +9,7 @@ type AddButtonProps = {
 const AddButton = (props: AddButtonProps) => {
   return (
     <a href={props.href}>
-      <img alt="addButton" src={plusButton} className="filterBlue" />
+      <img alt="addButton" src={plusButton} className="addButton filterBlue" />
     </a>
   );
 };

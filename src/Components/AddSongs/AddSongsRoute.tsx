@@ -1,6 +1,7 @@
 import React from 'react';
 import { Playlist } from 'Types';
 import { useLocation } from 'react-router-dom';
+import BackButton from 'Components/Common/BackButton/BackButton';
 import AddSongsForm from './AddSongsForm/AddSongsForm';
 
 type LocationState = {
@@ -14,14 +15,15 @@ const AddSongsRoute = () => {
   if (state && state.playlist) {
     return (
       <>
-        <h1>Manager</h1>
-        <AddSongsForm playlist={state.playlist} />
+        <BackButton href="/playlists/add" />
+        <AddSongsForm playlist={state.playlist ? state.playlist : undefined} />
       </>
     );
   }
+
   return (
     <>
-      <h1>Manager</h1>
+      <BackButton href="/playlists/add" />
       <AddSongsForm />
     </>
   );
