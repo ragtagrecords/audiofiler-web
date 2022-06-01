@@ -28,7 +28,7 @@ li {
     @include inset(vars.$tertiaryColor);
     background-color: rgba(vars.$gray, 0.4);
     transition: 0.3s;
-    box-shadow: vars.$boxShadow;
+    box-shadow: 0px 0px 15px 5px vars.$tertiaryColor;
   }
   &.notShow {
     @include inset(vars.$tertiaryColor);
