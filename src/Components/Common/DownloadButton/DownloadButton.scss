@@ -1,0 +1,10 @@
+$width: 25px;
+
+.downloadButton {
+    cursor: pointer;
+    width: $width;
+
+    img {
+        width: $width;
+    }
+}

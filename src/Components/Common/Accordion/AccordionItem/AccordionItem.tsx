@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import DownloadButton from 'Components/Common/DownloadButton/DownloadButton';
 import { Song } from 'Types';
 import './AccordionItem.scss';
 
@@ -13,13 +14,29 @@ const AccordionItem = (props: AccordionItemProps) => {
     <li
       className={`accordionItem  ${props.show ? 'show' : ''}`}
     >
-      <button
-        type="button"
-        className="accordionButton"
-        id={`item-${props.item.id}`}
-        onClick={props.onItemClick.bind(null, props.item.id)}
-      >{props.item.name}
-      </button>
+      <div className="accordionHeader">
+        <div className="accordionHeaderSection left" />
+        {/* button to select the accordion item */}
+        <div className="accordionHeaderSection center">
+          <button
+            type="button"
+            className="accordionButton"
+            id={`item-${props.item.id}`}
+            onClick={props.onItemClick.bind(null, props.item.id)}
+          >{props.item.name}
+          </button>
+        </div>
+        <div className="accordionHeaderSection right">
+          {/* show download button if item is selected */}
+          {props.show && (
+          <DownloadButton
+            href={props.item.path}
+            fileName={props.item.path.split('/')[5]}
+            key={`download-item-${props.item.id}`}
+          />
+          )}
+        </div>
+      </div>
       <div
         className={`accordionBody ${props.show ? 'show' : ''}`}
       >

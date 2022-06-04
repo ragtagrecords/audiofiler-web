@@ -38,7 +38,7 @@ const Accordion = (props: AccordionProps) => {
           return (
             <AccordionItem
               show={currentItem === song.id}
-              key={song.id}
+              key={`accordion-item-${song.id}`}
               item={song}
               onItemClick={handleClick}
             />
