@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Playlist } from 'Types';
 import axios from 'axios';
+import authenticate from 'Services/AuthSvc';
 import UploadButton from 'Components/Common/UploadButton/UploadButton';
 import SongFieldset from './SongFieldset/SongFieldset';
 import './AddSongsForm.scss';
@@ -33,6 +34,7 @@ const AddSongForm = (props: AddSongFormProps) => {
   const [files, setFiles] = useState<FileList>();
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
   const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const getPlaylists = () => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -41,7 +43,13 @@ const AddSongForm = (props: AddSongFormProps) => {
       .then((data) => setPlaylists(data));
   };
 
+  const auth = async () => {
+    const isAuthed = await authenticate();
+    setIsAuthenticated(isAuthed);
+  };
+
   useEffect(() => {
+    auth();
     getPlaylists();
   }, []);
 
@@ -188,6 +196,12 @@ const AddSongForm = (props: AddSongFormProps) => {
       return false;
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div>Must be logged in to view this page</div>
+    );
+  }
 
   return (
     <div className="container">
