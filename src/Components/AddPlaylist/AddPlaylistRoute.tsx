@@ -56,7 +56,8 @@ const AddPlaylistRoute = () => {
       <BackButton />
       <div className="container">
         <form onSubmit={handleSubmit}>
-          <label> Playlist Name
+          <label>
+            <h4>Playlist Name</h4>
             <input
               onChange={handleChange}
               type="text"
@@ -64,7 +65,8 @@ const AddPlaylistRoute = () => {
               value={playlistName}
             />
           </label>
-          <label> Add songs?
+          <label className="flexLabel">
+            <h4>Add songs?</h4>
             <input
               onChange={handleChange}
               type="checkbox"

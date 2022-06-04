@@ -3,7 +3,7 @@ import plusButton from 'Assets/blue-plus.svg';
 import './AddButton.scss';
 
 type AddButtonProps = {
-    href: string
+    href: string,
 }
 
 const AddButton = (props: AddButtonProps) => {

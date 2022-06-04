@@ -69,7 +69,8 @@ const LoginRoute = () => {
             className="message"
           >{message}
           </div>
-          <label>Username
+          <label>
+            <h4>Username</h4>
             <input
               type="text"
               value={username}
@@ -78,7 +79,8 @@ const LoginRoute = () => {
               onChange={handleChange}
             />
           </label>
-          <label>Password
+          <label>
+            <h4>Password</h4>
             <input
               type="password"
               value={password}

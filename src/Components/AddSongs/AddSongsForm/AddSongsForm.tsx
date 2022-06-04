@@ -208,27 +208,30 @@ const AddSongForm = (props: AddSongFormProps) => {
       <form className="addSongsForm" onSubmit={handleSubmit} key="addSongsForm">
         <UploadButton handleChange={handleChange} />
         <label>
-          Playlist
-          <select
-            className="globalPlaylistIDInput"
-            onChange={handleChange}
-            value={globalPlaylistID}
-          >
-            <option
-              key={-1}
-              value={-1}
-            > -
-            </option>
-            {playlists && playlists[0].name !== '' && playlists.map((playlist : Playlist) => {
-              return (
-                <option
-                  key={playlist.id}
-                  value={playlist.id}
-                > {playlist.name}
-                </option>
-              );
-            })}
-          </select>
+          <h4>Playlist</h4>
+          <div className="selectContainer">
+            <select
+              className="globalPlaylistIDInput"
+              onChange={handleChange}
+              value={globalPlaylistID}
+            >
+              <option
+                key={-1}
+                value={-1}
+              > -
+              </option>
+              {playlists && playlists[0].name !== '' && playlists.map((playlist : Playlist) => {
+                return (
+                  <option
+                    key={playlist.id}
+                    value={playlist.id}
+                  > {playlist.name}
+                  </option>
+                );
+              })}
+            </select>
+            <span className="arrow" />
+          </div>
         </label>
 
         {files && songs && songs.map((song : SongInputInfo, i) => {

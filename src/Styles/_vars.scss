@@ -9,6 +9,7 @@ $tertiaryColor: #5ae7ff;
 
 // font
 $font: monospace;
+$defaultFontSize: 0.9rem;
 
 // layers seperated with z-indices
 $floatingZ : 1000;
@@ -23,48 +24,3 @@ $light-tertiary-color: #0b0b0b;
 
 // bubble styles
 $roundCorners: 25px;
-
-//$header-text: ;
-//$list-test
-
-// @mixin theme($theme: DarkGray) {
-//   background: $theme;
-//   box-shadow: 0 0 1px rgba($theme, .25);
-//   color: #fff;
-// }
-
-// .info {
-//   @include theme;
-// }
-// .alert {
-//   @include theme($theme: DarkRed);
-// }
-// .success {
-//   @include theme($theme: DarkGreen);
-// }
-
-
-
-
-
-// // themes config
-// $themes: (
-//     dark: (
-//         $primary-color: $dark-primary-color,
-//         $secondary-color: $dark-secondary-color,
-//         $tertiary-color: $dark-tertiary-color,
-//     ),
-
-//     light:(
-//         $primary-color: $light-primary-color,
-//         $secondary-color: $light-secondary-color,
-//         $tertiary-color: $light-tertiary-color,
-//     ),
-// );
-
-
-// // themes mixin
-// @mixin themify ($themes) {
-//     @each $theme, $map in $themes {
-//     }
-// }

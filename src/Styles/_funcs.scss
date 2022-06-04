@@ -6,11 +6,3 @@
   justify-content: center;
   align-items: center;
 }
-
-@mixin form {
-  background-color: #25272e;
-  width: 375px;
-  border-radius: vars.$roundCorners;
-  padding: vars.$formPad;
-  outline: vars.$outlineTransition;
-}
