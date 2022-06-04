@@ -4,4 +4,6 @@ html, body {
     background: vars.$primaryColor;
     color: vars.$tertiaryColor;
     font-family: vars.$font;
+    font-size: vars.$defaultFontSize;
+    margin: 0;
 }

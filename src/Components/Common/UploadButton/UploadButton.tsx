@@ -7,7 +7,7 @@ type UploadButtonProps = {
 const UploadButton = (props:UploadButtonProps) => {
   return (
     <label>
-      Choose songs to upload
+      <h4>Choose songs to upload</h4>
       <input
         id="uploadedSongs"
         name="uploadedSongs"

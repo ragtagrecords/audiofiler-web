@@ -1,0 +1,134 @@
+@use "vars";
+@use "funcs";
+
+// login page variable
+$flexDirection: column;
+$formChildPad: 15px 10px;
+$formPad: 0 40px 35px;
+
+// button and input variables
+$buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
+$transition: 0.1s;
+$outlineTransition: 2px solid #355a6e;
+
+form {
+  @include funcs.flexCenter();
+  flex-direction: $flexDirection;
+  background-color: rgba(vars.$gray, 0.3);
+  width: 375px;
+  border-radius: vars.$roundCorners;
+  padding: $formPad;
+  .error {
+    max-height: min-content;
+    color: red;
+  }
+  label {
+    @include funcs.flexCenter();
+    flex-direction: $flexDirection;
+    color: vars.$tertiaryColor;
+    padding: $formChildPad;
+    width: 100%;
+    font-weight: 500;
+    font-size: 1.5rem;
+    input {
+      border: none;
+      color: vars.$tertiaryColor;
+      background-color: rgba(vars.$gray, 0.9);
+      font-size: 1.2rem;
+      padding: $formChildPad;
+      width: 100%;
+      border-radius: vars.$roundCorners;
+      &:hover {
+        transition: 1s;
+        background-color: vars.$secondaryColor;
+        outline: $outlineTransition;
+      }
+
+      &:focus {
+        background-color: vars.$secondaryColor;
+        color: vars.$primaryColor;
+      }
+    }
+    .selectContainer {
+      position: relative;
+      select {
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        font-size: 1.2rem;
+        padding: 1em 4em 1em 1em;
+        background-color: rgba(vars.$gray, 0.9);
+        color: vars.$tertiaryColor;
+        border: 0;
+      }
+      .arrow {
+        $size: 0.5em;
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        background: vars.$secondaryColor;
+        height: 100%;
+        width: 2em;
+        pointer-events: none;
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 0;
+          height: 0;
+
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        &::before {
+          border-left: $size solid transparent;
+          border-right: $size solid transparent;
+          border-bottom: $size solid rgba(vars.$tertiaryColor, 0.5);
+
+          top: 35%;
+        }
+
+        &::after {
+          border-left: $size solid transparent;
+          border-right: $size solid transparent;
+          border-top: $size solid rgba(vars.$tertiaryColor, 0.5);
+
+          top: 65%;
+        }
+      }
+    }
+  }
+  .flexLabel {
+    flex-direction: row;
+
+    input {
+      width: 20%;
+      &:active, &:hover {
+        outline: none !important;
+        background: transparent;
+      }
+    }
+  }
+  button {
+    font-size: 1rem;
+    border: none;
+    padding: $formChildPad;
+    background-color: rgba(vars.$secondaryColor, 0.5);
+    width: 250px;
+    height: 50px;
+    border-radius: vars.$roundCorners;
+    margin-top: 20px;
+    &:hover {
+      background-color: vars.$secondaryColor;
+      color: rgba(vars.$secondaryColor, 0);
+    }
+    &:hover:after {
+      content: "Lets go!";
+      color: vars.$tertiaryColor;
+      padding-right: 50px;
+    }
+  }
+}

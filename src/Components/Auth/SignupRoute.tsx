@@ -65,7 +65,8 @@ const SignupRoute = () => {
       <BackButton />
       <div className="container">
         <form onSubmit={handleSubmit}>
-          <label> Username
+          <label>
+            <h4>Username</h4>
             <input
               type="text"
               value={username}
@@ -74,7 +75,8 @@ const SignupRoute = () => {
               onChange={handleChange}
             />
           </label>
-          <label> Password
+          <label>
+            <h4>Password</h4>
             <input
               type="password"
               value={password}
@@ -83,7 +85,8 @@ const SignupRoute = () => {
               onChange={handleChange}
             />
           </label>
-          <label> Confirm Password
+          <label>
+            <h4>Confirm Password</h4>
             <input
               type="password"
               value={confirmPassword}
