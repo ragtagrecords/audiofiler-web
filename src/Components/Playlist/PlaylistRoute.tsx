@@ -111,7 +111,9 @@ const PlaylistRoute = () => {
 
   // load first song if songs change
   useEffect(() => {
-    setSong(songs[0]);
+    if (songs[0]) {
+      setSong(songs[0]);
+    }
   }, [songs]);
 
   return (

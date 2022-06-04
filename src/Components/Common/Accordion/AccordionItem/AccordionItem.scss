@@ -36,16 +36,40 @@ li {
 
   &.accordionItem {
     width: 99%;
-    button {
+
+    .accordionHeader {
       width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .accordionHeaderSection {
+        &.left {
+          width: 10%;
+        }
+        &.center {
+          width: 80%;
+
+          .accordionButton {
+            width: 100%;
+            cursor: pointer;
+          }
+        }
+
+        &.right {
+          width: 10%;
+        }
+      }
     }
+
     &.show {
       @include inset(rgba(vars.$tertiaryColor, 0.5));
       border-radius: vars.$roundCorners;
       background-color: rgba(vars.$gray, 0.1);
+
       p {
         color: vars.$white;
       }
+
       &:hover {
         opacity: 1;
       }
