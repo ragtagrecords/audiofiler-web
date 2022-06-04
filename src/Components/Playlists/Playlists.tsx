@@ -15,11 +15,6 @@ const Playlists = () => {
 
   const getPlaylists = (): void => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    const accessToken = localStorage.getItem('token');
-    if (!accessToken) {
-      console.log('No access token found in local storage, try logging in again');
-      return;
-    }
     axios
       .get(`${baseUrl}public/playlists`)
       .then((response) => {
