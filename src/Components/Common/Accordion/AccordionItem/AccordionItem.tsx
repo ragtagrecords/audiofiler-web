@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import DownloadButton from 'Components/Common/DownloadButton/DownloadButton';
 import { Song } from 'Types';
 import './AccordionItem.scss';
