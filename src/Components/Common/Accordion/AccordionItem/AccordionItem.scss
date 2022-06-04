@@ -40,23 +40,19 @@ li {
     .accordionHeader {
       width: 100%;
       display: flex;
-      justify-content: space-between;
 
       .accordionHeaderSection {
-        &.left {
-          width: 10%;
+        &.left, &.right {
+          width: 0%;
+
         }
         &.center {
-          width: 80%;
+          width: 100%;
 
           .accordionButton {
             width: 100%;
             cursor: pointer;
           }
-        }
-
-        &.right {
-          width: 10%;
         }
       }
     }
@@ -72,6 +68,27 @@ li {
 
       &:hover {
         opacity: 1;
+      }
+
+      .accordionHeaderSection {
+        &.left {
+          width: 10%;
+
+        }
+        &.center {
+          width: 80%;
+
+          .accordionButton {
+            width: 100%;
+            cursor: pointer;
+          }
+        }
+
+        &.right {
+          width: 10%;
+          display: flex;
+          justify-content: flex-end;
+        }
       }
     }
   }
