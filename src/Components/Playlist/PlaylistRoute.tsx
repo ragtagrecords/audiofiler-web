@@ -107,7 +107,6 @@ const PlaylistRoute = () => {
   useEffect(() => {
     loadPlaylist();
     loadSongs();
-    console.log(playlistID);
   }, [playlistID]);
 
   // load first song if songs change
