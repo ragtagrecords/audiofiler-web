@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './AuthForm.scss';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,9 @@ import BackButton from 'Components/Common/BackButton/BackButton';
 const LoginRoute = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
   const navigate = useNavigate();
+
   const handleChange = (e: any) => {
     if (!e || !e.target || !e.target.className) {
       console.log('Error saving inputs');
@@ -25,14 +26,14 @@ const LoginRoute = () => {
     e.preventDefault();
 
     if (!username) {
-      setError('Username is not valid!');
+      setMessage('Username is not valid!');
       return false;
     }
     if (!password) {
-      setError('Password is not valid!');
+      setMessage('Password is not valid!');
       return false;
     }
-    setError('');
+    setMessage('');
     const formData = new FormData();
 
     // add songs to form data
@@ -46,13 +47,16 @@ const LoginRoute = () => {
         `${baseUrl}public/login`,
         formData,
       );
-      console.log(res);
-      setError('Logged In!');
+      if (!res.data.auth || !res.data.token) {
+        setMessage('Failed to login!');
+        return false;
+      }
+      setMessage('Logged In!');
+      localStorage.setItem('token', res.data.token);
       navigate('/playlists');
       return true;
     } catch (ex) {
-      setError('Failed to login!');
-      console.log(ex);
+      setMessage('Failed to login!');
       return false;
     }
   };
@@ -62,8 +66,8 @@ const LoginRoute = () => {
       <div className="container">
         <form onSubmit={handleSubmit}>
           <div
-            className="error"
-          >{error}
+            className="message"
+          >{message}
           </div>
           <label>Username
             <input
