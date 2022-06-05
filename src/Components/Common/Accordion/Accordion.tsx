@@ -32,7 +32,7 @@ const Accordion = (props: AccordionProps) => {
   }, [props.newItemID]);
 
   return (
-    <div className="accordionContainer">
+    <div className="accordionContainer listContainer">
       <ul className="accordion">
         {props.songs && props.songs.map((song: Song) => {
           return (

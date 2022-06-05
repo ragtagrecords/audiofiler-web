@@ -1,32 +1,35 @@
 @use 'vars';
 
-ul {
-    padding: 0;
-    margin: 0;
-    width: calc(100% - 30px);
-    max-width: 500px;
-    background-color: vars.$primaryColor;
-}
 
-li {
-    display: inline-block;
-    list-style: none;
-    padding: 0;
-    text-align: center;
-    box-shadow: rgba(vars.$secondaryColor, 0.8) 2px 2px 5px;
-    font-size: 3rem;
-    margin: 1vh 0;
-    background-color: rgba(vars.$secondaryColor, 0.2);
-    width: 100%;
-    &:hover{
-        opacity: 0.6;
+.listContainer {
+    ul {
+        padding: 0;
+        margin: 0;
+        width: calc(100% - 30px);
+        max-width: 500px;
+        background-color: vars.$primaryColor;
     }
-}
+    
+    li {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        text-align: center;
+        box-shadow: rgba(vars.$secondaryColor, 0.8) 2px 2px 5px;
+        font-size: 3rem;
+        margin: 1vh 0;
+        background-color: rgba(vars.$secondaryColor, 0.2);
+        width: 100%;
+        &:hover{
+            opacity: 0.6;
+        }
+    }
 
-a {
-    display: block;
-    color: vars.$tertiaryColor;
-    text-decoration: none;
-    padding: calc((20vh - 100px) / 4);
-    overflow-wrap: break-word;
+    a {
+        display: block;
+        color: vars.$tertiaryColor;
+        text-decoration: none;
+        padding: calc((20vh - 100px) / 4);
+        overflow-wrap: break-word;
+    }
 }

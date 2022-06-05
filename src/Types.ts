@@ -10,3 +10,9 @@ export type Song = {
     tempo?: number;
     artist?: string;
 };
+
+export type MenuOption = {
+    href: string;
+    text: string;
+    state?: any;
+  }

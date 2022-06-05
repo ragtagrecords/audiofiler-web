@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const authenticate = async () => {
+export const authenticate = async (): Promise<number> => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const accessToken = localStorage.getItem('token');
   if (!accessToken) {
     console.log('No access token found in local storage, try logging in again');
-    return false;
+    return 0;
   }
 
   let res;
@@ -20,13 +20,15 @@ const authenticate = async () => {
       },
     );
   } catch (e) {
-    return false;
+    return 0;
   }
 
   if (res.data.auth) {
     return res.data.userID;
   }
-  return false;
+  return 0;
 };
 
-export default authenticate;
+export const logout = () => {
+  localStorage.removeItem('token');
+};

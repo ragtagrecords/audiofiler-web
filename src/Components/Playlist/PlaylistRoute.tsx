@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Playlist, Song } from 'Types';
+import UserMenu from 'Components/Common/UserMenu/UserMenu';
+import { MenuOption, Playlist, Song } from 'Types';
+import { authenticate } from 'Services/AuthSvc';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from '../Common/Accordion/Accordion';
-import AddButton from '../Common/AddButton';
 import BackButton from '../Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
 
@@ -27,6 +28,24 @@ const PlaylistRoute = () => {
   const [playlist, setPlaylist] = useState<Playlist>(defaultPlaylist);
   const [songs, setSongs] = useState<Array<Song>>([defaultSong]);
   const [song, setSong] = useState<Song>(defaultSong);
+  const [userID, setUserID] = useState<number>(0);
+
+  const auth = async () => {
+    const userID = await authenticate();
+    setUserID(userID);
+  };
+
+  useEffect(() => {
+    auth();
+  }, []);
+
+  const menuOptions: MenuOption[] = [
+    {
+      href: '/songs/add',
+      text: 'Upload songs',
+      state: { playlist },
+    },
+  ];
 
   const findSongByID = (id: number) => {
     let match = null;
@@ -120,7 +139,8 @@ const PlaylistRoute = () => {
   return (
     <>
       <BackButton />
-      <AddButton href="/songs/add" />
+      <UserMenu userID={userID} options={menuOptions} />
+
       {playlist && playlist.name
         && <h1 className="title">{playlist.name}</h1>}
       <Accordion

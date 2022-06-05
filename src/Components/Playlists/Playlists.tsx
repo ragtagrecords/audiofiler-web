@@ -31,7 +31,7 @@ const Playlists = () => {
   }, []);
 
   return (
-    <div className="playlists">
+    <div className="playlists listContainer">
       <ul>
         {playlists && playlists[0].name
             && playlists.map((playlist: Playlist) => {
