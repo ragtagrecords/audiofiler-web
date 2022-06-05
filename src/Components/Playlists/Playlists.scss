@@ -1,9 +1,14 @@
 @use 'Styles/funcs';
 @use 'Styles/lists';
 @use 'Styles/doc';
+@use 'Styles/vars';
 
 .playlists {
     @include funcs.flexCenter();
     max-width: 100%;
     margin-top: 150px;
+
+    li {
+      border-radius: vars.$roundCorners;
+    }
 }

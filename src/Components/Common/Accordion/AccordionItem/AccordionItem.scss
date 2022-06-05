@@ -9,7 +9,7 @@ div.accordionBody {
   }
 }
 
-li {
+li.accordionItem {
   $depth: 4px;
   border-radius: vars.$roundCorners;
   color: vars.$tertiaryColor;
@@ -34,61 +34,59 @@ li {
     @include inset(vars.$tertiaryColor);
   }
 
-  &.accordionItem {
-    width: 99%;
+  width: 99%;
 
-    .accordionHeader {
-      width: 100%;
-      display: flex;
+  .accordionHeader {
+    width: 100%;
+    display: flex;
 
-      .accordionHeaderSection {
-        &.left, &.right {
-          width: 0%;
+    .accordionHeaderSection {
+      &.left, &.right {
+        width: 0%;
 
-        }
-        &.center {
+      }
+      &.center {
+        width: 100%;
+
+        .accordionButton {
           width: 100%;
-
-          .accordionButton {
-            width: 100%;
-            cursor: pointer;
-          }
+          cursor: pointer;
         }
       }
     }
+  }
 
-    &.show {
-      @include inset(rgba(vars.$tertiaryColor, 0.5));
-      border-radius: vars.$roundCorners;
-      background-color: rgba(vars.$gray, 0.1);
+  &.show {
+    @include inset(rgba(vars.$tertiaryColor, 0.5));
+    border-radius: vars.$roundCorners;
+    background-color: rgba(vars.$gray, 0.1);
 
-      p {
-        color: vars.$white;
+    p {
+      color: vars.$white;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .accordionHeaderSection {
+      &.left {
+        width: 10%;
+
+      }
+      &.center {
+        width: 80%;
+
+        .accordionButton {
+          width: 100%;
+          cursor: pointer;
+        }
       }
 
-      &:hover {
-        opacity: 1;
-      }
-
-      .accordionHeaderSection {
-        &.left {
-          width: 10%;
-
-        }
-        &.center {
-          width: 80%;
-
-          .accordionButton {
-            width: 100%;
-            cursor: pointer;
-          }
-        }
-
-        &.right {
-          width: 10%;
-          display: flex;
-          justify-content: flex-end;
-        }
+      &.right {
+        width: 10%;
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }
