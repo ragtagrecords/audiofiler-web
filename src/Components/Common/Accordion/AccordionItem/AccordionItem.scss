@@ -1,6 +1,8 @@
 @use "Styles/funcs";
 @use "Styles/vars";
 
+$height: 60px;
+
 div.accordionBody {
   display: none;
 
@@ -21,8 +23,11 @@ li.accordionItem {
   }
 
   button {
-    height: 60px;
+    height: $height;
     font-size: 2rem;
+    background: transparent;
+    color: vars.$tertiaryColor;
+    border: none;
   }
   &:hover {
     @include inset(vars.$tertiaryColor);
@@ -37,8 +42,8 @@ li.accordionItem {
   width: 99%;
 
   .accordionHeader {
-    width: 100%;
-    display: flex;
+    @include funcs.flexCenter();
+    height: $height;
 
     .accordionHeaderSection {
       &.left, &.right {
@@ -60,6 +65,7 @@ li.accordionItem {
     @include inset(rgba(vars.$tertiaryColor, 0.5));
     border-radius: vars.$roundCorners;
     background-color: rgba(vars.$gray, 0.1);
+    height: auto;
 
     p {
       color: vars.$white;

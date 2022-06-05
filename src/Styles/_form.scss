@@ -11,184 +11,189 @@ $buttonHoverShadow: 2px 2px 4px rgb(58, 58, 57) inset;
 $transition: 0.1s;
 $outlineTransition: 2px solid #355a6e;
 
-form {
+.formContainer {
   @include funcs.flexCenter();
-  flex-direction: $flexDirection;
-  background-color: rgba(vars.$gray, 0.3);
-  width: 375px;
-  border-radius: vars.$roundCorners;
-  padding: $formPad;
-  .error {
-    max-height: min-content;
-    color: red;
-  }
-  label {
+  height: 90vh;
+  form {
     @include funcs.flexCenter();
     flex-direction: $flexDirection;
-    color: vars.$tertiaryColor;
-    padding: $formChildPad;
-    width: 100%;
-    font-weight: 500;
-    font-size: 1.5rem;
-    input {
-      border: none;
+    background-color: rgba(vars.$gray, 0.3);
+    width: 375px;
+    border-radius: vars.$roundCorners;
+    padding: $formPad;
+    .error {
+      max-height: min-content;
+      color: red;
+    }
+    label {
+      @include funcs.flexCenter();
+      flex-direction: $flexDirection;
       color: vars.$tertiaryColor;
-      background-color: rgba(vars.$gray, 0.9);
-      font-size: 1.2rem;
       padding: $formChildPad;
       width: 100%;
-      border-radius: vars.$roundCorners;
-      &:hover {
-        transition: 1s;
-        background-color: vars.$secondaryColor;
-        outline: $outlineTransition;
-      }
-
-      &:focus {
-        background-color: vars.$secondaryColor;
-        color: vars.$primaryColor;
-      }
-    }
-    .selectContainer {
-      position: relative;
-      select {
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-        font-size: 1.2rem;
-        padding: 1em 4em 1em 1em;
-        background-color: rgba(vars.$gray, 0.9);
-        color: vars.$tertiaryColor;
-        border: 0;
-      }
-      .arrow {
-        $size: 0.5em;
-        position: absolute;
-        top: 0;
-        right: 0;
-        display: block;
-        background: vars.$secondaryColor;
-        height: 100%;
-        width: 2em;
-        pointer-events: none;
-
-        &::before,
-        &::after {
-          content: "";
-          position: absolute;
-          width: 0;
-          height: 0;
-
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-
-        &::before {
-          border-left: $size solid transparent;
-          border-right: $size solid transparent;
-          border-bottom: $size solid rgba(vars.$tertiaryColor, 0.5);
-
-          top: 35%;
-        }
-
-        &::after {
-          border-left: $size solid transparent;
-          border-right: $size solid transparent;
-          border-top: $size solid rgba(vars.$tertiaryColor, 0.5);
-
-          top: 65%;
-        }
-      }
-    }
-  }
-
-  .flexLabel {
-    flex-direction: row;
-
-    /* Customize the label (the container) */
-    .checkboxContainer {
-      position: relative;
-      cursor: pointer;
+      font-weight: 500;
       font-size: 1.5rem;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-
-      /* On selected, keep white color */
-      &:active input ~ .checkmark {
-        background-color: rgb(208, 205, 205);
-      }
-
-      /* On mouse-over, add a grey background color */
-      &:hover input ~ .checkmark {
-        background-color: rgb(208, 205, 205);
-      }
-
-      /* Hide the browser's default checkbox */
       input {
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-
-        /* When the checkbox is checked, add a blue background */
-        &:checked ~ .checkmark {
+        border: none;
+        color: vars.$tertiaryColor;
+        background-color: rgba(vars.$gray, 0.9);
+        font-size: 1.2rem;
+        padding: $formChildPad;
+        width: 100%;
+        border-radius: vars.$roundCorners;
+        &:hover {
+          transition: 1s;
           background-color: vars.$secondaryColor;
+          outline: $outlineTransition;
         }
 
-        /* Show the checkmark when checked */
-        &:checked ~ .checkmark:after {
-          display: block;
+        &:focus {
+          background-color: vars.$secondaryColor;
+          color: vars.$primaryColor;
         }
       }
-
-      /* Create a custom checkbox */
-      .checkmark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 25px;
-        width: 25px;
-        background-color: vars.$white;
-
-        /* Style the checkmark/indicator */
-        &:after {
-          content: "";
+      .selectContainer {
+        position: relative;
+        select {
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+            rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+            rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+          font-size: 1.2rem;
+          padding: 1em 4em 1em 1em;
+          background-color: rgba(vars.$gray, 0.9);
+          color: vars.$tertiaryColor;
+          border: 0;
+        }
+        .arrow {
+          $size: 0.5em;
           position: absolute;
-          display: none;
-          
-          left: 9px;
-          top: 5px;
-          width: 5px;
-          height: 10px;
-          border: solid white;
-          border-width: 0 3px 3px 0;
-          -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
+          top: 0;
+          right: 0;
+          display: block;
+          background: vars.$secondaryColor;
+          height: 100%;
+          width: 2em;
+          pointer-events: none;
+
+          &::before,
+          &::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+
+          &::before {
+            border-left: $size solid transparent;
+            border-right: $size solid transparent;
+            border-bottom: $size solid rgba(vars.$tertiaryColor, 0.5);
+
+            top: 35%;
+          }
+
+          &::after {
+            border-left: $size solid transparent;
+            border-right: $size solid transparent;
+            border-top: $size solid rgba(vars.$tertiaryColor, 0.5);
+
+            top: 65%;
+          }
         }
       }
     }
-  }
 
-  button {
-    font-size: 1rem;
-    border: none;
-    padding: $formChildPad;
-    background-color: rgba(vars.$secondaryColor, 0.5);
-    width: 250px;
-    height: 50px;
-    border-radius: vars.$roundCorners;
-    margin-top: 20px;
-    &:hover {
-      background-color: vars.$secondaryColor;
-      color: rgba(vars.$secondaryColor, 0);
+    .flexLabel {
+      flex-direction: row;
+
+      /* Customize the label (the container) */
+      .checkboxContainer {
+        position: relative;
+        cursor: pointer;
+        font-size: 1.5rem;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        /* On selected, keep white color */
+        &:active input ~ .checkmark {
+          background-color: rgb(208, 205, 205);
+        }
+
+        /* On mouse-over, add a grey background color */
+        &:hover input ~ .checkmark {
+          background-color: rgb(208, 205, 205);
+        }
+
+        /* Hide the browser's default checkbox */
+        input {
+          opacity: 0;
+          cursor: pointer;
+          height: 0;
+          width: 0;
+
+          /* When the checkbox is checked, add a blue background */
+          &:checked ~ .checkmark {
+            background-color: vars.$secondaryColor;
+          }
+
+          /* Show the checkmark when checked */
+          &:checked ~ .checkmark:after {
+            display: block;
+          }
+        }
+
+        /* Create a custom checkbox */
+        .checkmark {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 25px;
+          width: 25px;
+          background-color: vars.$white;
+
+          /* Style the checkmark/indicator */
+          &:after {
+            content: "";
+            position: absolute;
+            display: none;
+
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+          }
+        }
+      }
     }
-    &:hover:after {
-      content: "Lets go!";
+
+    button {
+      font-size: 1rem;
       color: vars.$tertiaryColor;
-      padding-right: 50px;
+      border: none;
+      padding: $formChildPad;
+      background-color: rgba(vars.$secondaryColor, 0.5);
+      width: 250px;
+      height: 50px;
+      border-radius: vars.$roundCorners;
+      margin-top: 20px;
+      &:hover {
+        background-color: vars.$secondaryColor;
+        color: rgba(vars.$secondaryColor, 0);
+      }
+      &:hover:after {
+        content: "Let's go!";
+        color: vars.$tertiaryColor;
+        padding-right: 50px;
+      }
     }
   }
 }

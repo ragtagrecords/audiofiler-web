@@ -3,6 +3,7 @@
 
 .title {
     @include funcs.flexCenter();
+    flex-direction: column;
     margin: 0;
     position: fixed;
     height: 150px;
@@ -11,7 +12,6 @@
     font-size: 3rem;
     color: vars.$tertiaryColor;
     z-index: vars.$floatingZ;
-    margin: 0px;
     background: rgb(18,31,38);
     background: -moz-linear-gradient(0deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
     background: -webkit-linear-gradient(0deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);

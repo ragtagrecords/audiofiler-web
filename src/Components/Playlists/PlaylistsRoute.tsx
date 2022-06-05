@@ -26,12 +26,9 @@ const PlaylistsRoute = () => {
 
   return (
     <>
-      {/* header */}
-      <h1 className="title">Playlists</h1>
-      {/* }
-      <AddButton href="/playlists/add" />
-      <LoginButton />
-      */}
+      <div className="title">
+        <h4>Playlists</h4>
+      </div>
       <UserMenu userID={userID} options={menuOptions} />
       {/* body */}
       <Playlists />

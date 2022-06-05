@@ -1,14 +1,22 @@
-@use 'Styles/funcs';
-@use 'Styles/lists';
-@use 'Styles/doc';
-@use 'Styles/vars';
+@use "Styles/vars";
+@use "Styles/funcs";
+@use "Styles/lists";
+@use "Styles/doc";
 
 .playlists {
-    @include funcs.flexCenter();
-    max-width: 100%;
-    margin-top: 150px;
+  @include funcs.flexCenter();
+  max-width: 100%;
+  margin-top: 150px;
 
-    li {
-      border-radius: vars.$roundCorners;
+  li {
+    border-radius: vars.$roundCorners;
+
+    &.searchItem {
+      @include funcs.flexCenter();
     }
+
+    .bar {
+      width: 60%;
+    }
+  }
 }

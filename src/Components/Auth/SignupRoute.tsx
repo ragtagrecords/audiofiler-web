@@ -74,7 +74,7 @@ const SignupRoute = () => {
   return (
     <>
       <BackButton />
-      <div className="container">
+      <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <label>
             <h4>Username</h4>

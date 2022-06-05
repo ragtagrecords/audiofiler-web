@@ -62,7 +62,7 @@ const LoginRoute = () => {
   return (
     <>
       <BackButton />
-      <div className="container">
+      <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <div
             className="message"
