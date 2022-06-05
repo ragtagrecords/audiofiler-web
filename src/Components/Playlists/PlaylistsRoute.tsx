@@ -29,7 +29,6 @@ const PlaylistsRoute = () => {
       <div className="title">
         <h4>Playlists</h4>
       </div>
-      <Playlists />
       <UserMenu userID={userID} options={menuOptions} />
       {/* body */}
       <Playlists />

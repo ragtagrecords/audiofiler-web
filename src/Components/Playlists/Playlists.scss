@@ -1,3 +1,4 @@
+@use "Styles/vars";
 @use "Styles/funcs";
 @use "Styles/lists";
 @use "Styles/doc";
@@ -9,13 +10,13 @@
 
   li {
     border-radius: vars.$roundCorners;
-  }
-}
 
-.searchItem {
-  @include funcs.flexCenter();
+    &.searchItem {
+      @include funcs.flexCenter();
+    }
 
-  .bar {
-    width: 60%;
+    .bar {
+      width: 60%;
+    }
   }
 }
