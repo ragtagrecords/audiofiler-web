@@ -51,7 +51,6 @@ const LoginRoute = () => {
         setMessage('Failed to login!');
         return false;
       }
-      setMessage('Logged In!');
       localStorage.setItem('token', res.data.token);
       navigate('/playlists');
       return true;
