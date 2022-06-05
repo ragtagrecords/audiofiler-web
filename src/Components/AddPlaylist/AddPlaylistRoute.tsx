@@ -54,7 +54,7 @@ const AddPlaylistRoute = () => {
   return (
     <>
       <BackButton />
-      <div className="container">
+      <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <label>
             <h4>Playlist Name</h4>

@@ -62,14 +62,13 @@ const LoginRoute = () => {
   return (
     <>
       <BackButton />
-      <div className="container">
+      <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <div
             className="message"
           >{message}
           </div>
-          <label>
-            <h4>Username</h4>
+          <label>Username
             <input
               type="text"
               value={username}
@@ -78,8 +77,7 @@ const LoginRoute = () => {
               onChange={handleChange}
             />
           </label>
-          <label>
-            <h4>Password</h4>
+          <label>Password
             <input
               type="password"
               value={password}

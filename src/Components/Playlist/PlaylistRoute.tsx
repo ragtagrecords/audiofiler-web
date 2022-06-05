@@ -4,8 +4,8 @@ import UserMenu from 'Components/Common/UserMenu/UserMenu';
 import { MenuOption, Playlist, Song } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
-import Accordion from '../Common/Accordion/Accordion';
-import BackButton from '../Common/BackButton/BackButton';
+import Accordion from 'Components/Common/Accordion/Accordion';
+import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
 
 type PlaylistRouteParams = {

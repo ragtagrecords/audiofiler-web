@@ -199,12 +199,12 @@ const AddSongForm = (props: AddSongFormProps) => {
 
   if (!userID) {
     return (
-      <div>Must be logged in to view this page</div>
+      <div className="noUser">Must be logged in to view this page</div>
     );
   }
 
   return (
-    <div className="container">
+    <div className="formContainer">
       <form className="addSongsForm" onSubmit={handleSubmit} key="addSongsForm">
         <UploadButton handleChange={handleChange} />
         <label>
