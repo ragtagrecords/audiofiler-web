@@ -67,12 +67,15 @@ const AddPlaylistRoute = () => {
           </label>
           <label className="flexLabel">
             <h4>Add songs?</h4>
-            <input
-              onChange={handleChange}
-              type="checkbox"
-              className="addSongsCheckbox"
-              checked={isAddingSongs}
-            />
+            <figure className="checkboxContainer">
+              <input
+                onChange={handleChange}
+                type="checkbox"
+                className="addSongsCheckbox"
+                checked={isAddingSongs}
+              />
+              <span className="checkmark" />
+            </figure>
           </label>
           <button type="submit">
             Submit
