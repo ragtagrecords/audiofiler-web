@@ -52,11 +52,22 @@ const SignupRoute = () => {
         `${baseUrl}public/signup`,
         formData,
       );
+
+      // user wasnt created
+      if (!res.data.added) {
+        return false;
+      }
+
+      // user created but couldnt login for some reason
+      if (!res.data.token) {
+        navigate('/playlists');
+        return true;
+      }
+
+      await localStorage.setItem('token', res.data.token);
       navigate('/playlists');
-      console.log(res);
       return true;
     } catch (ex) {
-      console.log(ex);
       return false;
     }
   };
