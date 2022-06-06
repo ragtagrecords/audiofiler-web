@@ -27,7 +27,7 @@ const PlaylistRoute = () => {
   const { playlistID } = useParams<PlaylistRouteParams>();
   const [playlist, setPlaylist] = useState<Playlist>(defaultPlaylist);
   const [songs, setSongs] = useState<Array<Song>>([defaultSong]);
-  const [song, setSong] = useState<Song>(defaultSong);
+  const [currentSongID, setCurrentSongID] = useState<number>(0);
   const [userID, setUserID] = useState<number>(0);
 
   const auth = async () => {
@@ -47,14 +47,14 @@ const PlaylistRoute = () => {
     },
   ];
 
-  const findSongByID = (id: number) => {
+  const findSongByID = (id: number): Song | false => {
     let match = null;
     songs.forEach((song) => {
       if (song.id === id) {
         match = song;
       }
     });
-    return match;
+    return match ?? false;
   };
 
   const findIndexBySongID = (id: number) => {
@@ -77,7 +77,7 @@ const PlaylistRoute = () => {
     if (!songToPlay) {
       return;
     }
-    setSong(songToPlay);
+    setCurrentSongID(songToPlay.id);
   };
 
   const loadPlaylist = () => {
@@ -90,7 +90,6 @@ const PlaylistRoute = () => {
             setPlaylist(playlistInfo);
           }
         });
-        // setPlaylist(data);
       });
   };
 
@@ -104,19 +103,19 @@ const PlaylistRoute = () => {
   };
 
   const skipSong = () => {
-    const currentSongIndex = findIndexBySongID(song.id);
+    const currentSongIndex = findIndexBySongID(currentSongID);
     if (!currentSongIndex) {
       return;
     }
-    setSong(songs[currentSongIndex + 1]);
+    setCurrentSongID(songs[currentSongIndex + 1].id);
   };
 
   const prevSong = () => {
-    const currentSongIndex = findIndexBySongID(song.id);
+    const currentSongIndex = findIndexBySongID(currentSongID);
     if (!currentSongIndex) {
       return;
     }
-    setSong(songs[currentSongIndex - 1]);
+    setCurrentSongID(songs[currentSongIndex - 1].id);
   };
 
   const onSongEnded = () => {
@@ -132,7 +131,7 @@ const PlaylistRoute = () => {
   // load first song if songs change
   useEffect(() => {
     if (songs[0]) {
-      setSong(songs[0]);
+      setCurrentSongID(songs[0].id);
     }
   }, [songs]);
 
@@ -143,18 +142,23 @@ const PlaylistRoute = () => {
 
       {playlist && playlist.name
         && <h1 className="title">{playlist.name}</h1>}
+      {songs && songs[0].name
+      && (
       <Accordion
-        newItemID={song.id}
+        newItemID={songs[currentSongID].id}
         songs={songs}
         onItemClick={onSongClick}
       />
-      {song && song.name !== ''
+      )}
+      {songs && songs[currentSongID].name !== ''
         && (
           <AudioPlayer
-            song={song}
+            songs={songs}
+            index={findIndexBySongID(currentSongID) ?? 0}
             onSongEnded={onSongEnded}
             skipSong={skipSong}
             prevSong={prevSong}
+            playlistName={playlist.name}
           />
         )}
     </>
