@@ -6,7 +6,8 @@
   ul {
     padding: 0;
     margin: 0;
-    max-width: 500px;
+    max-width: 90%;
+    width: 450px;
     background-color: vars.$primaryColor;
   }
   
@@ -14,10 +15,9 @@
     display: inline-block;
     list-style: none;
     padding: 0;
-    height: 100px;
     text-align: center;
     box-shadow: rgba(vars.$secondaryColor, 0.8) 2px 2px 5px;
-    font-size: 3rem;
+    font-size: 2.8rem;
     margin: 10px 0;
     background-color: rgba(vars.$secondaryColor, 0.2);
     width: 100%;
@@ -27,15 +27,19 @@
   }
   
   a {
-    height: 100px;
+    height: 80px;
     display: block;
     color: vars.$tertiaryColor;
     text-decoration: none;
     overflow-wrap: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   
   .nameContainer {
     @include funcs.flexCenter();
     height: 100%;
+    overflow-wrap: break-word;
   }
 }

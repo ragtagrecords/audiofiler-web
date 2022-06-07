@@ -5,10 +5,10 @@
 
 .playlists {
   @include funcs.flexCenter();
-  max-width: 100%;
   margin-top: 150px;
 
   li {
+    height: 80px;
     border-radius: vars.$roundCorners;
 
     &.searchItem {
@@ -16,7 +16,8 @@
     }
 
     .bar {
-      width: 60%;
+      width: 500px;
+      max-width: 90%;
     }
   }
 }

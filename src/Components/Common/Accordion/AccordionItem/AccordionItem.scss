@@ -15,6 +15,8 @@ li.accordionItem {
   $depth: 4px;
   border-radius: vars.$roundCorners;
   color: vars.$tertiaryColor;
+  height: $height;
+  width: 99%;
 
   @mixin inset($color) {
     -webkit-box-shadow: inset 0px 0px 0px $depth $color;
@@ -24,10 +26,14 @@ li.accordionItem {
 
   button {
     height: $height;
-    font-size: 2rem;
+    font-size: 1.5rem;
+    padding: 20px;
     background: transparent;
     color: vars.$tertiaryColor;
     border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   &:hover {
     @include inset(vars.$tertiaryColor);
@@ -39,22 +45,20 @@ li.accordionItem {
     @include inset(vars.$tertiaryColor);
   }
 
-  width: 99%;
-
   .accordionHeader {
     @include funcs.flexCenter();
     height: $height;
 
     .accordionHeaderSection {
-      &.left, &.right {
+      &.left,
+      &.right {
         width: 0%;
-
       }
       &.center {
         width: 100%;
 
         .accordionButton {
-          width: 100%;
+          width: 75%;
           cursor: pointer;
         }
       }
@@ -67,6 +71,12 @@ li.accordionItem {
     background-color: rgba(vars.$gray, 0.1);
     height: auto;
 
+    button {
+      overflow: visible;
+      white-space: normal;
+      text-overflow: clip;
+    }
+
     p {
       color: vars.$white;
     }
@@ -78,7 +88,6 @@ li.accordionItem {
     .accordionHeaderSection {
       &.left {
         width: 10%;
-
       }
       &.center {
         width: 80%;
@@ -97,5 +106,3 @@ li.accordionItem {
     }
   }
 }
-
-

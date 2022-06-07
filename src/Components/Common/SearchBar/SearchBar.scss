@@ -5,14 +5,14 @@ $transition: all 0.3s ease;
 
 .searchContainer {
   @include funcs.flexCenter();
-  height: 100px;
+  height: 80px;
   position: relative;
   overflow: hidden;
 
   input {
     height: 50px;
-    width: 100%;
-    font-size: 3rem;
+    width: 90%;
+    font-size: 2.8rem;
     color: vars.$tertiaryColor;
     background: transparent;
     border: none;
@@ -20,26 +20,27 @@ $transition: all 0.3s ease;
 
     &:focus + .labelName,
     &:valid + .labelName {
-        .contentName {
-            content: "";
-            display: none;
-            transform: translateX(150%);
-        }
+      .contentName {
+        content: "";
+        display: none;
+        transform: translateX(150%);
+      }
 
-        &::after{
-            transform: translateX(0%);
-        }
+      &::after {
+        transform: translateX(0%);
+      }
     }
   }
 
   label {
     position: absolute;
     bottom: 15px;
-    left: 0;
-    width: 100%;
-    height: 50px;
+    left: 5%;
+    width: 90%;
+    height: 40px;
     pointer-events: none;
     border-bottom: 1px solid vars.$white;
+    overflow: hidden;
 
     &:after {
       content: "";
@@ -55,8 +56,10 @@ $transition: all 0.3s ease;
 
     .contentName {
       position: absolute;
-      left: 25%;
+      top: -8px;
+      left: 5.5vw;
       transition: $transition;
+      color: rgba(vars.$tertiaryColor, 0.4);
     }
   }
 }
