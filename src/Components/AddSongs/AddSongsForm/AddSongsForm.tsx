@@ -192,7 +192,7 @@ const AddSongForm = (props: AddSongFormProps) => {
         formData,
       );
       console.log(res);
-      navigate('/playlists');
+      navigate(`/playlists/${globalPlaylistID ?? ''}`);
       return true;
     } catch (ex) {
       console.log(ex);
