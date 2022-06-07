@@ -29,6 +29,7 @@ const PlaylistRoute = () => {
   const [songs, setSongs] = useState<Array<Song>>([defaultSong]);
   const [song, setSong] = useState<Song>(defaultSong);
   const [userID, setUserID] = useState<number>(0);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
   const auth = async () => {
     const userID = await authenticate();
@@ -39,11 +40,20 @@ const PlaylistRoute = () => {
     auth();
   }, []);
 
+  const onSongAddClick = () => {
+    setIsAdding(!isAdding);
+  };
+
   const menuOptions: MenuOption[] = [
     {
       href: '/songs/add',
       text: 'Upload songs',
       state: { playlist },
+    },
+    {
+      href: '/',
+      text: 'Add existing song',
+      onClick: onSongAddClick,
     },
   ];
 
@@ -143,6 +153,8 @@ const PlaylistRoute = () => {
 
       {playlist && playlist.name
         && <h1 className="title">{playlist.name}</h1>}
+      {isAdding
+        && <div>Test Add Song</div>}
       <Accordion
         newItemID={song.id}
         songs={songs}

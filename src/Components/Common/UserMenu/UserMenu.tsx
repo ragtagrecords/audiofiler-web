@@ -52,9 +52,10 @@ const UserOptions = (props: UserMenuProps) => {
       {props.options.map((option: MenuOption) => {
         return (
           <li key={`menu-option-${option.text}`}>
-            <a onClick={handleNavigate.bind(null, option)}>
-              {option.text}
-            </a>
+            {option.onClick
+              ? <a onClick={option.onClick}>{option.text}</a>
+              : <a onClick={handleNavigate.bind(null, option)}>{option.text}</a>}
+
           </li>
         );
       })}
