@@ -3,6 +3,7 @@ import { Playlist } from 'Types';
 import axios from 'axios';
 import { authenticate } from 'Services/AuthSvc';
 import UploadButton from 'Components/Common/UploadButton/UploadButton';
+import { useNavigate } from 'react-router-dom';
 import SongFieldset from './SongFieldset/SongFieldset';
 import './AddSongsForm.scss';
 
@@ -35,6 +36,7 @@ const AddSongForm = (props: AddSongFormProps) => {
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
   const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
   const [userID, setUserID] = useState<number>(0);
+  const navigate = useNavigate();
 
   const getPlaylists = () => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -126,6 +128,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     // update songs in state so map will update
     setSongs(newSongs);
     console.log('SUCCESS: FILE UPLOADED TO FE');
+    navigate('/playlists');
     return true;
   };
 
