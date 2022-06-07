@@ -128,7 +128,6 @@ const AddSongForm = (props: AddSongFormProps) => {
     // update songs in state so map will update
     setSongs(newSongs);
     console.log('SUCCESS: FILE UPLOADED TO FE');
-    navigate('/playlists');
     return true;
   };
 
@@ -193,6 +192,7 @@ const AddSongForm = (props: AddSongFormProps) => {
         formData,
       );
       console.log(res);
+      navigate('/playlists');
       return true;
     } catch (ex) {
       console.log(ex);
