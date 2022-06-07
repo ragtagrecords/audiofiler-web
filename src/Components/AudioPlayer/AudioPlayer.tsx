@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Song } from 'Types';
+import { useMediaSession, HAS_MEDIA_SESSION } from '@mebtte/react-media-session';
 import './AudioPlayer.scss';
+import smallLogo from 'Assets/logo-small.png';
+import logo from 'Assets/logo.png';
 import {
   BsArrowLeftCircle,
   BsArrowRightCircle,
@@ -9,17 +12,13 @@ import {
 } from 'react-icons/bs';
 
 type AudioPlayerProps = {
-    song: Song,
+    songs: Song[],
     onSongEnded: any,
     skipSong: any,
     prevSong: any,
+    playlistName: string;
+    index: number;
 }
-
-const defaultSong = {
-  id: 0,
-  name: '',
-  path: '',
-};
 
 const AudioPlayer = (props: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -27,15 +26,21 @@ const AudioPlayer = (props: AudioPlayerProps) => {
   const [durationText, setDurationText] = useState<string>('00:00');
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [currentTimeText, setCurrentTimeText] = useState<string>('00:00');
-  const [song, setSong] = useState<Song>(defaultSong);
 
   const audioPlayer: React.RefObject<HTMLAudioElement> = useRef(null);
   const progressBar: React.RefObject<HTMLInputElement> = useRef(null);
 
-  useEffect(() => {
-    setSong(props.song);
-  }, [props.song]);
+  const findIndexBySongID = (id: number) => {
+    let index = null;
+    for (let i = 0; i < props.songs.length; i += 1) {
+      if (props.songs[i].id === id) {
+        index = i;
+      }
+    }
+    return index;
+  };
 
+  // i think this is unnecessary or a bit wrong
   useEffect(() => {
     if (!audioPlayer.current) {
       console.log('ERROR: failed to play song');
@@ -92,7 +97,6 @@ const AudioPlayer = (props: AudioPlayerProps) => {
 
   const onTimeSliderChange = () : void => {
     if (audioPlayer.current
-            && audioPlayer.current
             && progressBar.current
             && progressBar.current.value
     ) {
@@ -113,13 +117,48 @@ const AudioPlayer = (props: AudioPlayerProps) => {
     setIsPlaying(true);
   };
 
+  const testSkip = () => {
+    if (audioPlayer.current
+    ) {
+      audioPlayer.current.pause();
+      // audioPlayer.current.src = props.nextSong.path;
+      audioPlayer.current.play();
+    }
+  };
+
+  if (HAS_MEDIA_SESSION) {
+    useMediaSession({
+      title: props.songs[props.index].name,
+      artist: props.songs[props.index].artist !== '' ? props.songs[props.index].artist : '',
+      album: props.playlistName,
+      onPlay: play,
+      onPause: pause,
+      onPreviousTrack: props.prevSong,
+      onNextTrack: testSkip,
+      artwork: [
+        {
+          src: logo,
+          sizes: '256x256,384x384,512x512',
+          type: 'image/png',
+        },
+        {
+          src: smallLogo,
+          sizes: '96x96,128x128,192x192',
+          type: 'image/png',
+        },
+      ],
+      // onSeekBackward:,
+      // onSeekForward:,
+    });
+  }
+
   return (
     <div className="audioPlayer">
-      {song && song.path !== ''
+      {props.songs[props.index] && props.songs[props.index].path !== ''
                 && (
                 <audio
                   ref={audioPlayer}
-                  src={song.path}
+                  src={props.songs[props.index].path}
                   preload="metadata"
                   onTimeUpdate={onAudioPlayerTimeUpdate}
                   onLoadedMetadata={onLoadedSongMetadata}
@@ -129,7 +168,7 @@ const AudioPlayer = (props: AudioPlayerProps) => {
                 />
                 )}
       <span className="audioPlayerUI name">
-        <h2>{song.name}</h2>
+        <h2>{props.songs[props.index].name}</h2>
       </span>
 
       <span className="audioPlayerUI currentPosition">
