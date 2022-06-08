@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import UserMenu from 'Components/Common/UserMenu/UserMenu';
+import Logo from 'Assets/audio-logo-192.png';
 import { MenuOption } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
 import Playlists from './Playlists';
@@ -27,7 +28,7 @@ const PlaylistsRoute = () => {
   return (
     <>
       <div className="title">
-        <h4>Playlists</h4>
+        <img src={Logo} alt="Audiofiler Logo" width="100px" />
       </div>
       <UserMenu userID={userID} options={menuOptions} />
       {/* body */}
