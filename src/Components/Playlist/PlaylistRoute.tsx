@@ -153,12 +153,11 @@ const PlaylistRoute = () => {
 
       {playlist && playlist.name
         && <h1 className="title">{playlist.name}</h1>}
-      {isAdding
-        && <div>Test Add Song</div>}
       <Accordion
         newItemID={song.id}
         songs={songs}
         onItemClick={onSongClick}
+        isAdding={isAdding}
       />
       {song && song.name !== ''
         && (
