@@ -155,7 +155,7 @@ const PlaylistRoute = () => {
         && <h1 className="title">{playlist.name}</h1>}
       <Accordion
         newItemID={song.id}
-        songs={songs}
+        playlistSongs={songs}
         onItemClick={onSongClick}
         isAdding={isAdding}
       />

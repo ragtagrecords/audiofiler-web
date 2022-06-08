@@ -26,19 +26,25 @@ const LoginOptions = () => {
   );
 };
 
-type UserMenuProps = {
+type UserOptionsProps = {
   userID: number;
   options: MenuOption[];
+  openOrCloseMenu: any;
 }
 
 // When logged in
-const UserOptions = (props: UserMenuProps) => {
+const UserOptions = (props: UserOptionsProps) => {
   const navigate = useNavigate();
 
   const handleNavigate = (option: MenuOption) => {
     navigate(option.href, {
       state: option.state,
     });
+  };
+
+  const onClick = (option: MenuOption) => {
+    props.openOrCloseMenu();
+    option.onClick();
   };
 
   const handleLogout = async () => {
@@ -53,7 +59,7 @@ const UserOptions = (props: UserMenuProps) => {
         return (
           <li key={`menu-option-${option.text}`}>
             {option.onClick
-              ? <a onClick={option.onClick}>{option.text}</a>
+              ? <a onClick={onClick.bind(null, option)}>{option.text}</a>
               : <a onClick={handleNavigate.bind(null, option)}>{option.text}</a>}
 
           </li>
@@ -72,6 +78,11 @@ const UserOptions = (props: UserMenuProps) => {
   );
 };
 
+type UserMenuProps = {
+  userID: number;
+  options: MenuOption[];
+}
+
 const UserMenu = (props: UserMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const iconStyles = useMemo(() => ({
@@ -79,8 +90,9 @@ const UserMenu = (props: UserMenuProps) => {
     size: '75px',
   }), []);
 
-  const handleClick = () => {
+  const openOrCloseMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    console.log(isMenuOpen);
   };
 
   return (
@@ -88,7 +100,7 @@ const UserMenu = (props: UserMenuProps) => {
 
       {/* Menu Icon */}
       <IconContext.Provider value={iconStyles}>
-        <button type="button" onClick={handleClick} className="userMenuButton">
+        <button type="button" onClick={openOrCloseMenu} className="userMenuButton">
           <BiDotsVerticalRounded />
         </button>
       </IconContext.Provider>
@@ -96,7 +108,13 @@ const UserMenu = (props: UserMenuProps) => {
       {/* Options that show on click */}
       <div className={`optionsContainer ${isMenuOpen ? 'show' : ''}`}>
         {props.userID
-          ? <UserOptions options={props.options} userID={props.userID} />
+          ? (
+            <UserOptions
+              options={props.options}
+              userID={props.userID}
+              openOrCloseMenu={openOrCloseMenu}
+            />
+          )
           : <LoginOptions />}
       </div>
     </div>
