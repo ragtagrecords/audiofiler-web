@@ -1,0 +1,12 @@
+@use 'Styles/vars';
+$width: 25px;
+
+.addButton {
+    cursor: pointer;
+    width: $width;
+    margin-left: 8px;
+    img {
+        width: $width;
+        filter: invert(89%) sepia(28%) saturate(4598%) hue-rotate(162deg) brightness(105%) contrast(102%);
+    }
+}

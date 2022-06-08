@@ -33,6 +33,7 @@ module.exports = {
     'linebreak-style': [0],
     'react/function-component-definition': [0],
     'react/jsx-one-expression-per-line': [0],
+    'react/jsx-no-useless-fragment': [0],
     'react/no-unused-prop-types': [0],
     'react/jsx-no-bind': [0],
     'arrow-body-style': [0],

@@ -24,7 +24,7 @@ li.accordionItem {
     box-shadow: inset 0px 0px 0px $depth $color;
   }
 
-  button {
+  .accordionButton {
     height: $height;
     font-size: 1.5rem;
     padding: 20px;
@@ -50,15 +50,20 @@ li.accordionItem {
     height: $height;
 
     .accordionHeaderSection {
+      button {
+        background: transparent;
+        border: none;
+      }
+      
       &.left,
       &.right {
-        width: 0%;
+        width: 10%;
       }
       &.center {
-        width: 100%;
+        width: 80%;
 
         .accordionButton {
-          width: 75%;
+          width: 100%;
           cursor: pointer;
         }
       }
@@ -86,8 +91,19 @@ li.accordionItem {
     }
 
     .accordionHeaderSection {
+
+      button {
+        background: transparent;
+        border: none;
+      }
       &.left {
         width: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        a { 
+          height: auto;
+        }
       }
       &.center {
         width: 80%;

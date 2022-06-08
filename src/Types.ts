@@ -15,4 +15,5 @@ export type MenuOption = {
     href: string;
     text: string;
     state?: any;
+    onClick?: any;
   }

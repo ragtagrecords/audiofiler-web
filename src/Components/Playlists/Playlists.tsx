@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import './Playlists.scss';
 import { Playlist } from 'Types';
-import SearchBar from 'Components/Common/SearchBar/SearchBar';
 
 const Playlists = () => {
   const defaultPlaylist = {
@@ -34,11 +33,6 @@ const Playlists = () => {
   return (
     <div className="playlists listContainer">
       <ul>
-        <li className="searchItem">
-          <div className="bar">
-            <SearchBar />
-          </div>
-        </li>
         {playlists && playlists[0].name
             && playlists.map((playlist: Playlist) => {
               return (
