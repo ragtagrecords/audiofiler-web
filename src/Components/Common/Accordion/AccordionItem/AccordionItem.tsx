@@ -13,7 +13,6 @@ type AccordionItemProps = {
 }
 
 const AccordionItem = (props: AccordionItemProps) => {
-  console.log(props);
   return (
     <li
       className={`accordionItem  ${props.show ? 'show' : ''}`}

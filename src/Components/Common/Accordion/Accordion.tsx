@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Song } from 'Types';
+import { Playlist, Song } from 'Types';
 import axios from 'axios';
+import addSongToPlaylist from 'Services/SongSvc';
 import AccordionItem from './AccordionItem/AccordionItem';
 import './Accordion.scss';
 import SearchBar from '../SearchBar/SearchBar';
@@ -17,13 +18,15 @@ type AccordionItemsProps = {
 const AccordionItems = (props: AccordionItemsProps) => {
   let accordionItems = null;
   if (!props.isAdding) {
+    let i = 0;
     accordionItems = (
       <>
         {props.playlistSongs && props.playlistSongs.map((song: Song) => {
+          i += 1;
           return (
             <AccordionItem
               show={props.currentItem === song.id}
-              key={`accordion-item-${song.id}`}
+              key={`accordion-item-${song.id}-${i}`}
               item={song}
               onItemClick={props.onItemClick}
               isAdding={props.isAdding}
@@ -57,10 +60,12 @@ const AccordionItems = (props: AccordionItemsProps) => {
 };
 
 type AccordionProps = {
-    playlistSongs: Song[];
-    onItemClick: any;
-    newItemID: number;
-    isAdding: boolean;
+  playlist: Playlist;
+  playlistSongs: Song[];
+  onItemClick: any;
+  newItemID: number;
+  isAdding: boolean;
+  refreshPlaylistSongs: any;
 }
 
 const Accordion = (props: AccordionProps) => {
@@ -74,33 +79,7 @@ const Accordion = (props: AccordionProps) => {
     setQuery(e.target.value);
   };
 
-  const onItemClick = (id: number) => {
-    if (!id) {
-      console.log('Failed to handle accordion click');
-      return false;
-    }
-    setCurrentItem(id);
-    props.onItemClick(id);
-    return true;
-  };
-
-  const onItemAdd = (id: number) => {
-    // post song ID to API to add to playlist
-    console.log(id);
-  };
-
-  useEffect(() => {
-    setCurrentItem(props.playlistSongs[0].id);
-  }, [props.playlistSongs]);
-
-  useEffect(() => {
-    setCurrentItem(props.newItemID);
-  }, [props.newItemID]);
-
-  useEffect(() => {
-    console.log(filteredSongs);
-  }, [filteredSongs]);
-
+  // Sets filteredSongs based on current query and playlist
   const filterSongs = (songs = null) => {
     // if allSongs not available yet, expect songs to be passed in param
     const tempSongs = allSongs ?? songs;
@@ -108,6 +87,8 @@ const Accordion = (props: AccordionProps) => {
       console.log('Found no songs to filter!');
       return false;
     }
+
+    // new empty array we will use to store our results
     const tempFilteredSongs: Song[] = [];
 
     // check if each song passes filters
@@ -122,9 +103,10 @@ const Accordion = (props: AccordionProps) => {
         }
       });
 
+      // check if song name contains query
       doesSongMatchQuery = song.name.includes(query);
 
-      // add the song to result
+      // if it passes, push it
       if (!isSongInPlaylist && doesSongMatchQuery) {
         tempFilteredSongs.push(song);
       }
@@ -133,13 +115,48 @@ const Accordion = (props: AccordionProps) => {
     setFilteredSongs(tempFilteredSongs);
     return true;
   };
+
+  // when center of accordion header is clicked
+  const onItemClick = (id: number) => {
+    if (!id) {
+      console.log('Failed to handle accordion click');
+      return false;
+    }
+    setCurrentItem(id);
+    props.onItemClick(id);
+    return true;
+  };
+
+  // when add button is clicked for a particular item
+  const onItemAdd = (id: number) => {
+    addSongToPlaylist(id, props.playlist.id);
+    props.refreshPlaylistSongs();
+    filterSongs();
+  };
+
+  // set current item to first song when songs change
+  useEffect(() => {
+    setCurrentItem(props.playlistSongs[0].id);
+
+    // re-filter if currently adding
+    if (props.isAdding) {
+      filterSongs();
+    }
+  }, [props.playlistSongs]);
+
+  // set current item when an item is selected via parent
+  useEffect(() => {
+    setCurrentItem(props.newItemID);
+  }, [props.newItemID]);
+
   useEffect(() => {
     if (props.isAdding) {
       filterSongs();
     }
   }, [query]);
 
-  const fetchSongs = async () => {
+  // grabs JSON info for all songs from API
+  const fetchAllSongs = async () => {
     let res;
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
@@ -162,7 +179,7 @@ const Accordion = (props: AccordionProps) => {
   // fetch songs when the user decides to add songs
   useEffect(() => {
     if (props.isAdding) {
-      fetchSongs();
+      fetchAllSongs();
     }
   }, [props.isAdding]);
 

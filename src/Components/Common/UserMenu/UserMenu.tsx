@@ -92,7 +92,6 @@ const UserMenu = (props: UserMenuProps) => {
 
   const openOrCloseMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    console.log(isMenuOpen);
   };
 
   return (

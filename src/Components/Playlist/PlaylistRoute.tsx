@@ -94,13 +94,12 @@ const PlaylistRoute = () => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
     fetch(`${baseUrl}public/playlists`)
       .then((response) => response.json())
-      .then((data) => {
-        data.forEach((playlistInfo: Playlist) => {
-          if (playlistID && playlistInfo.id === parseInt(playlistID, 10)) {
-            setPlaylist(playlistInfo);
+      .then((playlists) => {
+        playlists.forEach((playlist: Playlist) => {
+          if (playlistID && playlist.id === parseInt(playlistID, 10)) {
+            setPlaylist(playlist);
           }
         });
-        // setPlaylist(data);
       });
   };
 
@@ -108,8 +107,8 @@ const PlaylistRoute = () => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
     fetch(`${baseUrl}public/playlists/${playlistID}`)
       .then((response) => response.json())
-      .then((data) => {
-        setSongs(data);
+      .then((songs) => {
+        setSongs(songs);
       });
   };
 
@@ -155,9 +154,11 @@ const PlaylistRoute = () => {
         && <h1 className="title">{playlist.name}</h1>}
       <Accordion
         newItemID={song.id}
+        playlist={playlist}
         playlistSongs={songs}
         onItemClick={onSongClick}
         isAdding={isAdding}
+        refreshPlaylistSongs={loadSongs}
       />
       {song && song.name !== ''
         && (
