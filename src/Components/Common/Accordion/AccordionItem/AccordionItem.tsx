@@ -2,20 +2,34 @@ import React from 'react';
 import DownloadButton from 'Components/Common/DownloadButton/DownloadButton';
 import { Song } from 'Types';
 import './AccordionItem.scss';
+import AddButton from 'Components/Common/AddButton/AddButton';
 
 type AccordionItemProps = {
     item: Song;
     show: boolean;
     onItemClick: any;
+    isAdding: boolean;
+    onItemAdd: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
 const AccordionItem = (props: AccordionItemProps) => {
+  console.log(props);
   return (
     <li
       className={`accordionItem  ${props.show ? 'show' : ''}`}
     >
       <div className="accordionHeader">
-        <div className="accordionHeaderSection left" />
+        <div className="accordionHeaderSection left">
+          {/* show add button when adding songs */}
+          {props.isAdding
+          && (
+          <AddButton
+            onClick={props.onItemAdd}
+            songID={props.item.id}
+          />
+          )}
+        </div>
+
         {/* button to select the accordion item */}
         <div className="accordionHeaderSection center">
           <button

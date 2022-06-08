@@ -11,6 +11,7 @@ type AccordionItemsProps = {
   isAdding: boolean;
   currentItem: number;
   filteredSongs: Song[] | null;
+  onItemAdd: any;
 }
 
 const AccordionItems = (props: AccordionItemsProps) => {
@@ -25,6 +26,8 @@ const AccordionItems = (props: AccordionItemsProps) => {
               key={`accordion-item-${song.id}`}
               item={song}
               onItemClick={props.onItemClick}
+              isAdding={props.isAdding}
+              onItemAdd={props.onItemAdd}
             />
           );
         })}
@@ -37,9 +40,12 @@ const AccordionItems = (props: AccordionItemsProps) => {
           return (
             <AccordionItem
               show={props.currentItem === song.id}
-              key={`accordion-item-${song.id}`}
+              key={`accordion-item-add-${song.id}`}
               item={song}
               onItemClick={props.onItemClick}
+              isAdding={props.isAdding}
+              onItemAdd={props.onItemAdd}
+
             />
           );
         })}
@@ -78,6 +84,11 @@ const Accordion = (props: AccordionProps) => {
     return true;
   };
 
+  const onItemAdd = (id: number) => {
+    // post song ID to API to add to playlist
+    console.log(id);
+  };
+
   useEffect(() => {
     setCurrentItem(props.playlistSongs[0].id);
   }, [props.playlistSongs]);
@@ -97,18 +108,15 @@ const Accordion = (props: AccordionProps) => {
       console.log('Found no songs to filter!');
       return false;
     }
-    console.log(tempSongs);
     const tempFilteredSongs: Song[] = [];
 
-    console.log(props.playlistSongs);
+    // check if each song passes filters
     tempSongs.forEach((song) => {
       let isSongInPlaylist = false;
       let doesSongMatchQuery = false;
 
+      // check if song is already in playlist
       props.playlistSongs.forEach((playlistSong) => {
-        if (song.id < 120) {
-          // console.log(`songID[${song.id}] | playlistSongID[${playlistSong.id}]`);
-        }
         if (song.id === playlistSong.id) {
           isSongInPlaylist = true;
         }
@@ -116,16 +124,13 @@ const Accordion = (props: AccordionProps) => {
 
       doesSongMatchQuery = song.name.includes(query);
 
+      // add the song to result
       if (!isSongInPlaylist && doesSongMatchQuery) {
         tempFilteredSongs.push(song);
       }
     });
-    console.log('filtered songs');
-    console.log(tempFilteredSongs);
 
-    if (tempFilteredSongs.length > 0) {
-      setFilteredSongs(tempFilteredSongs);
-    }
+    setFilteredSongs(tempFilteredSongs);
     return true;
   };
   useEffect(() => {
@@ -181,6 +186,7 @@ const Accordion = (props: AccordionProps) => {
           isAdding={props.isAdding}
           currentItem={currentItem}
           filteredSongs={filteredSongs}
+          onItemAdd={onItemAdd}
         />
       </ul>
     </div>
