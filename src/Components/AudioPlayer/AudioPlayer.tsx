@@ -31,7 +31,6 @@ const AudioPlayer = (props: AudioPlayerProps) => {
 
   const audioPlayer: React.RefObject<HTMLAudioElement> = useRef(null);
   const progressBar: React.RefObject<HTMLInputElement> = useRef(null);
-  const thumb: React.RefObject<HTMLInputElement> = useRef(null);
 
   useEffect(() => {
     setSong(props.song);
@@ -114,6 +113,12 @@ const AudioPlayer = (props: AudioPlayerProps) => {
     setIsPlaying(true);
   };
 
+  // prevent select box on buttons
+  // instead of user select none
+  const handleTouchStart = (event: React.TouchEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <div className="footer">
       <div className="audioPlayer">
@@ -130,6 +135,7 @@ const AudioPlayer = (props: AudioPlayerProps) => {
                   onPlay={play}
                 />
                 )}
+
         <span className="audioPlayerUI name">
           {song.name}
         </span>
@@ -155,6 +161,8 @@ const AudioPlayer = (props: AudioPlayerProps) => {
           <button
             type="button"
             className="forwardBackward"
+            id="backward"
+            onTouchStart={handleTouchStart}
             onClick={props.prevSong}
           >
             <BsArrowLeftCircle />
@@ -167,6 +175,7 @@ const AudioPlayer = (props: AudioPlayerProps) => {
           <button
             type="button"
             className="forwardBackward"
+            id="forward"
             onClick={props.skipSong}
           >
             <BsArrowRightCircle />

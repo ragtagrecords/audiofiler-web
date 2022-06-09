@@ -1,9 +1,10 @@
-@use 'vars';
+@use "vars";
 
-html, body {
-    background: vars.$primaryColor;
-    color: vars.$tertiaryColor;
-    font-family: vars.$font;
-    font-size: vars.$defaultFontSize;
-    margin: 0;
+html,
+body {
+  background: vars.$primaryColor;
+  color: vars.$tertiaryColor;
+  font-family: vars.$font;
+  font-size: vars.$defaultFontSize;
+  margin: 0;
 }

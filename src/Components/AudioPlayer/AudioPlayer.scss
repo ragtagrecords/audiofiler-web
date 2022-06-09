@@ -2,9 +2,9 @@
 @use "Styles/funcs";
 
 $playerHeight: 200px;
+$uiHeight: $playerHeight / 4;
 
 .footer {
-
   .audioPlayer {
     @include funcs.flexCenter();
     background-color: vars.$primaryColor;
@@ -15,7 +15,9 @@ $playerHeight: 200px;
     height: $playerHeight;
     z-index: vars.$floatingZ;
 
-    background-color: red;
+    pointer-events: none;
+
+    /* transition fade */
     background: rgb(18, 31, 38);
     background: -moz-linear-gradient(
       180deg,
@@ -34,15 +36,17 @@ $playerHeight: 200px;
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121f26",endColorstr="#121f26",GradientType=1);
 
+
+
     .audioPlayerUI {
       @include funcs.flexCenter();
       padding: 0 2%;
+      pointer-events: auto;
 
       &.name {
         width: 10%;
-        height: $playerHeight;
+        height: $uiHeight;
         font-size: 1.2rem;
-        overflow-wrap: break-word;
         h2 {
           margin: 0;
         }
@@ -50,7 +54,7 @@ $playerHeight: 200px;
 
       &.currentPosition {
         width: 30%;
-        height: $playerHeight;
+        height: $uiHeight;
         padding: 10px;
 
         .currentTime,
@@ -187,18 +191,31 @@ $playerHeight: 200px;
 
       &.controls {
         width: 10%;
-        height: $playerHeight;
+        height: $uiHeight;
 
         .forwardBackward {
           @include funcs.flexCenter();
           color: vars.$tertiaryColor;
-          background: none;
+          background-color: transparent;
           border: none;
           font-family: monospace;
           font-size: 2.2rem;
           cursor: pointer;
-          &:hover {
+
+          &:hover, &:active {
             color: vars.$secondaryColor;
+          }
+
+          &:not(&:hover), &:not(&:active) {
+            color: vars.$tertiaryColor;
+          }
+
+          &#forward {
+            justify-content: start;
+          }
+
+          &#backward {
+            justify-content: end;
           }
         }
 
@@ -209,9 +226,11 @@ $playerHeight: 200px;
           border-radius: 50%;
           font-size: 4rem;
           color: vars.$white;
-          &:hover {
+
+          &:hover, &:active {
             color: vars.$secondaryColor;
           }
+         
         }
       }
     }
@@ -223,22 +242,22 @@ $playerHeight: 200px;
 
   @media screen and (max-width: vars.$tabletBreakpoint) {
     $playerHeight: 260px;
-    $nameHeight: (0.1 * $playerHeight);
+    $nameHeight: (0.15 * $playerHeight);
     $positionHeight: (0.15 * $playerHeight);
     $controlsHeight: (0.2 * $playerHeight);
 
     .audioPlayer {
       flex-direction: column;
       justify-content: end;
-      padding-bottom: 30px;
       height: $playerHeight;
 
       .audioPlayerUI {
         padding-bottom: 0 0 15px;
 
         &.name {
-          width: 60%;
+          width: 90%;
           height: $nameHeight;
+          align-items: end;
         }
 
         &.currentPosition {
@@ -246,9 +265,14 @@ $playerHeight: 200px;
           height: $positionHeight;
         }
 
-        &.controls {
+        &.controls {  
           height: $controlsHeight;
-          width: 20%;
+          width: 90%;
+          padding-bottom: 30px;
+
+          button {
+            width: 20px;
+          }
         }
 
         & button {
