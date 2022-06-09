@@ -151,7 +151,7 @@ const PlaylistRoute = () => {
       <UserMenu userID={userID} options={menuOptions} />
 
       {playlist && playlist.name
-        && <h1 className="title">{playlist.name}</h1>}
+        && <div className="title"><h1>{playlist.name}</h1></div>}
       <Accordion
         newItemID={song.id}
         playlist={playlist}

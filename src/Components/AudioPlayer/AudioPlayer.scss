@@ -1,64 +1,75 @@
 @use "Styles/vars";
 @use "Styles/funcs";
 
-.audioPlayer {
-  $playerHeight: 150px;
+$playerHeight: 200px;
 
-  @include funcs.flexCenter();
-  background-color: vars.$primaryColor;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: $playerHeight;
-  z-index: vars.$floatingZ;
-  background: rgb(18,31,38);
-  background: -moz-linear-gradient(180deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
-  background: -webkit-linear-gradient(180deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
-  background: linear-gradient(180deg, rgba(18,31,38,0) 0%, rgba(18,31,38,1) 36%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121f26",endColorstr="#121f26",GradientType=1); 
+.footer {
 
-  .audioPlayerUI {
+  .audioPlayer {
     @include funcs.flexCenter();
-    padding: 0 2%;
+    background-color: vars.$primaryColor;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: $playerHeight;
+    z-index: vars.$floatingZ;
 
-    &.name {
-      width: 20%;
-      height: $playerHeight;
-      font-size: 1.5rem;
-      width: 20%;
-      overflow-wrap: break-word;
-      h2 {
-        margin: 0;
+    background-color: red;
+    background: rgb(18, 31, 38);
+    background: -moz-linear-gradient(
+      180deg,
+      rgba(18, 31, 38, 0) 0%,
+      rgba(18, 31, 38, 1) 36%
+    );
+    background: -webkit-linear-gradient(
+      180deg,
+      rgba(18, 31, 38, 0) 0%,
+      rgba(18, 31, 38, 1) 36%
+    );
+    background: linear-gradient(
+      180deg,
+      rgba(18, 31, 38, 0) 0%,
+      rgba(18, 31, 38, 1) 36%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121f26",endColorstr="#121f26",GradientType=1);
+
+    .audioPlayerUI {
+      @include funcs.flexCenter();
+      padding: 0 2%;
+
+      &.name {
+        width: 10%;
+        height: $playerHeight;
+        font-size: 1.2rem;
+        overflow-wrap: break-word;
+        h2 {
+          margin: 0;
+        }
       }
-    }
 
-    &.currentPosition {
-      width: 30%;
-      height: $playerHeight;
-      padding: 10px;
+      &.currentPosition {
+        width: 30%;
+        height: $playerHeight;
+        padding: 10px;
 
-      .currentTime,
-      .duration {
-        font-size: 1.5rem;
-        padding: 0 2%;
-      }
+        .currentTime,
+        .duration {
+          font-size: 1rem;
+          padding: 0 2%;
+        }
 
-      .currentTime {
-        margin-left: 25px;
-      }
+        .currentTime {
+          margin-left: 25px;
+        }
 
-      .slider {
-        @include funcs.flexCenter();
+        .slider {
+          @include funcs.flexCenter();
 
-        .progressBar {
-          $bar-bg: #74b0d6d5;
-          $seek-before-width: 0;
-          $seek-before-color: #54809cd5;
+          $thumbRadius: 26px;
           $knob: rgb(17, 17, 17);
-          $selected-knob: rgb(66, 65, 65);
-          $thumbRadius: 40px;
-          $sliderHeight: 20px;
+          $selected-knob: rgba(vars.$secondaryColor, 0.8);
+          $progressHeight: $thumbRadius / 10;
 
           @mixin thumb {
             height: $thumbRadius;
@@ -66,177 +77,197 @@
             border-radius: 50%;
             border: 2px solid vars.$tertiaryColor;
             background-color: $knob;
+
             cursor: pointer;
-            position: relative;
             z-index: 3;
             box-sizing: border-box;
-            box-shadow: 1px 1px 1px rgba(vars.$tertiaryColor, 0.5), 0px 0px 1px rgba(vars.$tertiaryColor, 0.2);
+            box-shadow: 1px 1px 1px rgba(vars.$tertiaryColor, 0.5),
+              0px 0px 1px rgba(vars.$tertiaryColor, 0.2);
           }
 
-          @mixin activeThumb {
-            transform: scale(1.15);
-            background: $selected-knob;
-            border: 2px solid rgba(vars.$white, 0.5);
-          }
+          /* custom thumb */
+          // .thumb {
+          //   @include thumb();
+          //   position: absolute;
+          //   pointer-events: none; /* Remove pointer events on thumb so user can click on the actual thumb beaneath it  */
+          //   user-select: none; /*  Prevent Accidentally highlighting the number while sliding the cursor  */
+          // }
 
-          appearance: none;
-          background: $bar-bg;  
-          border-radius: $thumbRadius;
-          position: relative;
-          width: 100%;
-          height: 20px;
-          outline: none;
+          .progressBar {
+            $bar-bg: #74b0d6d5;
+            $seek-before-width: 0;
+            $seek-before-color: rgba(vars.$white, 0.3);
+            position: relative;
 
-          /* firefox */
-          &::-moz-range-track {
+            @mixin activeThumb {
+              transform: scale(1.3);
+              background: $selected-knob;
+              border: 7px solid rgba(vars.$tertiaryColor, 0.1);
+              user-select: none;
+            }
+
+            appearance: none;
             background: $bar-bg;
             border-radius: $thumbRadius;
             position: relative;
             width: 100%;
-            height: $sliderHeight;
+            height: $progressHeight;
             outline: none;
-          }
 
-          &::-moz-focus-outer {
-            border: 0;
-          }
+            /* chrome safari knob */
+            &::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              @include thumb();
+            }
 
-          /* safari */
-          &::-webkit-slider-runnable-track {
-            background: $bar-bg;
-            border-radius: $thumbRadius;
-            position: relative;
-            width: 100%;
-            height: $sliderHeight;
-            outline: none;
-          }
+            /* chrome safari knob while dragging */
+            &:active::-webkit-slider-thumb {
+              @include activeThumb();
+            }
 
-          /* chrome safari progress bar */
-          &::before {
-            content: "";
-            height: $sliderHeight;
-            width: $seek-before-width;
-            background-color: $seek-before-color;
-            border-top-left-radius: $thumbRadius;
-            border-bottom-left-radius: $thumbRadius;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-            cursor: pointer;
-          }
+            /* firefox knob */
+            &::-moz-range-thumb {
+              @include thumb();
+            }
 
-          /* firefox progress bar */
-          &::-moz-range-progress {
-            background-color: $seek-before-color;
-            border-top-left-radius: $thumbRadius;
-            border-bottom-left-radius: $thumbRadius;
-            height: $sliderHeight;
-          }
+            /* firefox knob while dragging */
+            &:active::-moz-range-thumb {
+              @include activeThumb();
+            }
 
-          /* chrome safari knob */
-          &::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            @include thumb();
-          }
+            /* firefox */
+            &::-moz-range-track {
+              background: transparent;
+              border-radius: $thumbRadius;
+              position: relative;
+              width: 100%;
+              height: $thumbRadius;
+              outline: none;
+            }
 
-          /* chrome safari knob while dragging */
-          &:active::-webkit-slider-thumb {
-            @include activeThumb();
-          }
+            &::-moz-focus-outer {
+              border: 0;
+            }
 
-          /* firefox knob */
-          &::-moz-range-thumb {
-            @include thumb();
-          }
+            /* safari */
+            &::-webkit-slider-runnable-track {
+              background: transparent;
+              border-radius: $thumbRadius;
+              position: relative;
+              width: 100%;
+              height: $thumbRadius;
+              outline: none;
+            }
 
-          /* firefox knob while dragging */
-          &:active::-moz-range-thumb {
-            @include activeThumb();
+            /* chrome safari progress bar */
+            &::before {
+              content: "";
+              height: $progressHeight;
+              width: $seek-before-width;
+              background-color: $seek-before-color;
+              border-top-left-radius: $thumbRadius;
+              border-bottom-left-radius: $thumbRadius;
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index: 2;
+              cursor: pointer;
+            }
+
+            /* firefox progress bar */
+            &::-moz-range-progress {
+              background-color: $seek-before-color;
+              border-top-left-radius: $thumbRadius;
+              border-bottom-left-radius: $thumbRadius;
+              height: $progressHeight;
+            }
           }
         }
-      }
-    }
-
-    &.controls {
-      width: 20%;
-      height: $playerHeight;
-      
-      .forwardBackward {
-        @include funcs.flexCenter();
-        color: vars.$tertiaryColor;
-        background: none;
-        border: none;
-        font-family: monospace;
-        font-size: 3.5rem;
-        cursor: pointer;
-        &:hover {
-          color: vars.$secondaryColor;
-        }
-      }
-
-      .playPause {
-        @include funcs.flexCenter();
-        background-color: vars.$primaryColor;
-        border: none;
-        border-radius: 50%;
-        font-size: 5.5rem;
-        color: vars.$white;
-        &:hover {
-          color: vars.$secondaryColor;
-        }
-      }
-    }
-  }
-}
-
-/* -------------
-  media queries
------------------ */
-
-@media screen and (max-width: vars.$tabletBreakpoint) {
-  $playerHeight: 280px;
-  $nameHeight: (0.2 * $playerHeight);
-  $positionHeight: (0.2 * $playerHeight);
-  $controlsHeight: (0.3 * $playerHeight);
-
-  .audioPlayer {
-    flex-direction: column;
-    height: $playerHeight;
-
-    .audioPlayerUI {
-      padding-bottom: 0 0 15px;
-
-      &.name {
-        width: 60%;
-        height: $nameHeight;
-      }
-
-      &.currentPosition {
-        width: 65%;
-        height: $positionHeight;
       }
 
       &.controls {
-        height: $controlsHeight;
-      }
+        width: 10%;
+        height: $playerHeight;
 
-      & button {
-        padding: 1vh;
-      }
-    }
+        .forwardBackward {
+          @include funcs.flexCenter();
+          color: vars.$tertiaryColor;
+          background: none;
+          border: none;
+          font-family: monospace;
+          font-size: 2.2rem;
+          cursor: pointer;
+          &:hover {
+            color: vars.$secondaryColor;
+          }
+        }
 
-    .currentTime {
-      margin: 0 !important;
+        .playPause {
+          @include funcs.flexCenter();
+          background-color: transparent;
+          border: none;
+          border-radius: 50%;
+          font-size: 4rem;
+          color: vars.$white;
+          &:hover {
+            color: vars.$secondaryColor;
+          }
+        }
+      }
     }
   }
-}
 
-@media screen and (max-width: vars.$phoneBreakpoint) {
-  .audioPlayer {
-    .audioPlayerUI {
-      &.currentPosition {
-        width: 90%;
+  /* -------------
+    media queries
+  ----------------- */
+
+  @media screen and (max-width: vars.$tabletBreakpoint) {
+    $playerHeight: 260px;
+    $nameHeight: (0.1 * $playerHeight);
+    $positionHeight: (0.15 * $playerHeight);
+    $controlsHeight: (0.2 * $playerHeight);
+
+    .audioPlayer {
+      flex-direction: column;
+      justify-content: end;
+      padding-bottom: 30px;
+      height: $playerHeight;
+
+      .audioPlayerUI {
+        padding-bottom: 0 0 15px;
+
+        &.name {
+          width: 60%;
+          height: $nameHeight;
+        }
+
+        &.currentPosition {
+          width: 65%;
+          height: $positionHeight;
+        }
+
+        &.controls {
+          height: $controlsHeight;
+          width: 20%;
+        }
+
+        & button {
+          padding: 1vh;
+        }
+      }
+
+      .currentTime {
+        margin: 0 !important;
+      }
+    }
+  }
+
+  @media screen and (max-width: vars.$phoneBreakpoint) {
+    .audioPlayer {
+      .audioPlayerUI {
+        &.currentPosition {
+          width: 90%;
+        }
       }
     }
   }
