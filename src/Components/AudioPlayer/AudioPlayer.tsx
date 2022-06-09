@@ -113,9 +113,16 @@ const AudioPlayer = (props: AudioPlayerProps) => {
     setIsPlaying(true);
   };
 
+  // prevent select box on buttons
+  // instead of user select none
+  const handleTouchStart = (event: React.TouchEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="audioPlayer">
-      {song && song.path !== ''
+    <div className="footer">
+      <div className="audioPlayer">
+        {song && song.path !== ''
                 && (
                 <audio
                   ref={audioPlayer}
@@ -128,47 +135,53 @@ const AudioPlayer = (props: AudioPlayerProps) => {
                   onPlay={play}
                 />
                 )}
-      <span className="audioPlayerUI name">
-        <h2>{song.name}</h2>
-      </span>
 
-      <span className="audioPlayerUI currentPosition">
-        <div className="currentTime">{currentTimeText}</div>
-        <div className="slider">
-          <input
-            type="range"
-            defaultValue="0"
-            className="progressBar"
-            ref={progressBar}
-            onChange={onTimeSliderChange}
-          />
-        </div>
-        <div className="duration">
-          {durationText || '00:00'}
-        </div>
-      </span>
+        <span className="audioPlayerUI name">
+          {song.name}
+        </span>
 
-      <span className="audioPlayerUI controls">
-        <button
-          type="button"
-          className="forwardBackward"
-          onClick={props.prevSong}
-        >
-          <BsArrowLeftCircle />
-        </button>
-        <button type="button" className="playPause" onClick={isPlaying ? pause : play}>
-          {isPlaying
-            ? <BsPauseCircle />
-            : <BsPlayCircle />}
-        </button>
-        <button
-          type="button"
-          className="forwardBackward"
-          onClick={props.skipSong}
-        >
-          <BsArrowRightCircle />
-        </button>
-      </span>
+        <span className="audioPlayerUI currentPosition">
+          <div className="currentTime">{currentTimeText}</div>
+          <div className="slider">
+            <div className="thumb" />
+            <input
+              type="range"
+              defaultValue="0"
+              className="progressBar"
+              ref={progressBar}
+              onChange={onTimeSliderChange}
+            />
+          </div>
+          <div className="duration">
+            {durationText || '00:00'}
+          </div>
+        </span>
+
+        <span className="audioPlayerUI controls">
+          <button
+            type="button"
+            className="forwardBackward"
+            id="backward"
+            onTouchStart={handleTouchStart}
+            onClick={props.prevSong}
+          >
+            <BsArrowLeftCircle />
+          </button>
+          <button type="button" className="playPause" onClick={isPlaying ? pause : play}>
+            {isPlaying
+              ? <BsPauseCircle />
+              : <BsPlayCircle />}
+          </button>
+          <button
+            type="button"
+            className="forwardBackward"
+            id="forward"
+            onClick={props.skipSong}
+          >
+            <BsArrowRightCircle />
+          </button>
+        </span>
+      </div>
     </div>
   );
 };
