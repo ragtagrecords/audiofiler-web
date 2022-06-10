@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './AuthForm.scss';
+import { signup } from 'Services/AuthSvc';
 import { useNavigate } from 'react-router-dom';
 import BackButton from 'Components/Common/BackButton/BackButton';
 
@@ -8,6 +9,8 @@ const SignupRoute = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  // TODO: Actually use the message in form
+  const [message, setMessage] = useState<string>('');
   const navigate = useNavigate();
 
   const handleChange = (e: any) => {
@@ -26,50 +29,43 @@ const SignupRoute = () => {
     }
   };
 
+  const hasSpecialCharAndNumber = (str: string) => {
+    const hasSpecialChar = !/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(str);
+    const hasNumber = /\d/.test(str);
+    return hasSpecialChar && hasNumber;
+  };
+
+  const validateForm = () => {
+    let message = '';
+    if (!username || !password || !confirmPassword) {
+      message = 'All field required!';
+    } else if (username.length < 6) {
+      message = 'Username must be at least 6 characters';
+    } else if (password !== confirmPassword) {
+      console.log('Passwords dont match');
+    } else if (password.length < 15 || !hasSpecialCharAndNumber) {
+      message = 'Password must use a special character and a number, or be at least 15 characters';
+    } else if (password.length < 8) {
+      message = 'Password must be at least 8 characters';
+    }
+    setMessage(message);
+    return message === '';
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    validateForm();
 
-    if (!username || !password || !confirmPassword) {
-      console.log('Necessary info not found');
+    const wasUserCreated = signup(username, password);
+
+    if (!wasUserCreated) {
+      setMessage('Failed to create user :( Please try again or reach out');
       return false;
     }
 
-    if (password !== confirmPassword) {
-      console.log('Passwords dont match');
-      return false;
-    }
-
-    const formData = new FormData();
-
-    // add songs to form data
-    formData.append('username', username);
-    formData.append('password', password);
-
-    // post files and info to API
-    try {
-      const baseUrl = process.env.REACT_APP_API_BASE_URL;
-      const res = await axios.post(
-        `${baseUrl}public/signup`,
-        formData,
-      );
-
-      // user wasnt created
-      if (!res.data.added) {
-        return false;
-      }
-
-      // user created but couldnt login for some reason
-      if (!res.data.token) {
-        navigate('/playlists');
-        return true;
-      }
-
-      await localStorage.setItem('token', res.data.token);
-      navigate('/playlists');
-      return true;
-    } catch (ex) {
-      return false;
-    }
+    // If signup was successful, redirect to home page
+    navigate('/playlists');
+    return true;
   };
   return (
     <>

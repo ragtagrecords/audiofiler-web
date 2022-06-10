@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './AuthForm.scss';
 import { useNavigate } from 'react-router-dom';
+import { authorize } from 'Services/AuthSvc';
 import BackButton from 'Components/Common/BackButton/BackButton';
 
 const LoginRoute = () => {
@@ -22,43 +23,35 @@ const LoginRoute = () => {
     }
   };
 
+  const hasSpecialCharAndNumber = (str: string) => {
+    const hasSpecialChar = !/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(str);
+    const hasNumber = /\d/.test(str);
+    return hasSpecialChar && hasNumber;
+  };
+
+  const validateForm = () => {
+    let message = '';
+    if (!username) {
+      message = 'Must enter a username!';
+    } else if (!password) {
+      message = 'Password is not valid!';
+    }
+    setMessage(message);
+    return message === '';
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    if (!username) {
-      setMessage('Username is not valid!');
-      return false;
-    }
-    if (!password) {
-      setMessage('Password is not valid!');
-      return false;
-    }
-    setMessage('');
-    const formData = new FormData();
-
-    // add songs to form data
-    formData.append('username', username);
-    formData.append('password', password);
-
-    // post files and info to API
-    try {
-      const baseUrl = process.env.REACT_APP_API_BASE_URL;
-      const res = await axios.post(
-        `${baseUrl}public/login`,
-        formData,
-      );
-      if (!res.data.auth || !res.data.token) {
-        setMessage('Failed to login!');
-        return false;
-      }
-      localStorage.setItem('token', res.data.token);
-      navigate('/playlists');
-      return true;
-    } catch (ex) {
+    validateForm();
+    const isAuthorized = await authorize(username, password);
+    if (!isAuthorized) {
       setMessage('Failed to login!');
       return false;
     }
+    navigate('/playlists');
+    return true;
   };
+
   return (
     <>
       <BackButton />

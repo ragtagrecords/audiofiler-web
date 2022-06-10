@@ -48,8 +48,12 @@ const UserOptions = (props: UserOptionsProps) => {
   };
 
   const handleLogout = async () => {
-    await logout();
-    navigate('/login');
+    const isLoggedOut = await logout();
+    if (isLoggedOut) {
+      navigate('/login');
+    } else {
+      // TODO: show some kind of error message when logout fails
+    }
   };
 
   return (
