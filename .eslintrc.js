@@ -48,6 +48,7 @@ module.exports = {
     'no-shadow': [0],
     'jsx-a11y/label-has-associated-control': [0],
     'no-param-reassign': [0],
+    'no-unreachable': [0],
   },
   settings: {
     'import/resolver': {

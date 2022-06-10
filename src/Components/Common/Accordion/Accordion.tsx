@@ -3,8 +3,9 @@ import { Playlist, Song } from 'Types';
 import axios from 'axios';
 import addSongToPlaylist from 'Services/SongSvc';
 import AccordionItem from './AccordionItem/AccordionItem';
-import './Accordion.scss';
 import SearchBar from '../SearchBar/SearchBar';
+import './Accordion.scss';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type AccordionItemsProps = {
   playlistSongs: Song[];
@@ -15,6 +16,7 @@ type AccordionItemsProps = {
   onItemAdd: any;
 }
 
+// Child of Accordion - look further down for parent Accordion component
 const AccordionItems = (props: AccordionItemsProps) => {
   let accordionItems = null;
   if (!props.isAdding) {
@@ -66,6 +68,7 @@ type AccordionProps = {
   newItemID: number;
   isAdding: boolean;
   refreshPlaylistSongs: any;
+  isLoading: boolean;
 }
 
 const Accordion = (props: AccordionProps) => {
@@ -76,9 +79,7 @@ const Accordion = (props: AccordionProps) => {
   const [allSongs, setAllSongs] = useState<Song[] | null>(null);
   const [filteredSongs, setFilteredSongs] = useState<Song[] | null>(null);
 
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+  /* ******************* FUNCTIONS ******************** */
 
   // Sets filteredSongs based on current query and playlist
   const filterSongs = (songs = null) => {
@@ -117,7 +118,7 @@ const Accordion = (props: AccordionProps) => {
     return true;
   };
 
-  // when center of accordion header is clicked
+  // When center of accordion header is clicked
   const onItemClick = (id: number) => {
     if (!id) {
       console.log('Failed to handle accordion click');
@@ -128,37 +129,14 @@ const Accordion = (props: AccordionProps) => {
     return true;
   };
 
-  // when add button is clicked for a particular item
+  // When add button is clicked for a particular item
   const onItemAdd = (id: number) => {
     addSongToPlaylist(id, props.playlist.id);
     props.refreshPlaylistSongs();
     filterSongs();
   };
 
-  // set current item to first song when songs change
-  useEffect(() => {
-    if (props.playlistSongs.length > 0 && props.playlistSongs[0].id) {
-      setCurrentItemID(props.playlistSongs[0].id);
-
-      // re-filter if currently adding
-      if (props.isAdding) {
-        filterSongs();
-      }
-    }
-  }, [props.playlistSongs]);
-
-  // set current item when an item is selected via parent
-  useEffect(() => {
-    setCurrentItemID(props.newItemID);
-  }, [props.newItemID]);
-
-  useEffect(() => {
-    if (props.isAdding) {
-      filterSongs();
-    }
-  }, [query]);
-
-  // grabs JSON info for all songs from API
+  // Grabs JSON info for all songs from API
   const fetchAllSongs = async () => {
     let res;
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -171,7 +149,7 @@ const Accordion = (props: AccordionProps) => {
     }
 
     if (res.data) {
-      // at first all and filtered are the same thing, we are filtering nothing
+      // Initially there are no filters, so both are the same songs
       setAllSongs(res.data);
       filterSongs(res.data);
       return true;
@@ -179,12 +157,52 @@ const Accordion = (props: AccordionProps) => {
     return false;
   };
 
-  // fetch songs when the user decides to add songs
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  /* ******************* EFFECTS ******************** */
+
+  // Filter songs when user query changes
+  useEffect(() => {
+    if (props.isAdding) {
+      filterSongs();
+    }
+  }, [query]);
+
+  // Set current item to first song when songs change
+  useEffect(() => {
+    if (props.playlistSongs.length > 0 && props.playlistSongs[0].id) {
+      setCurrentItemID(props.playlistSongs[0].id);
+
+      // re-filter if currently adding
+      if (props.isAdding) {
+        filterSongs();
+      }
+    }
+  }, [props.playlistSongs]);
+
+  // Set current item when an item is selected via parent
+  useEffect(() => {
+    setCurrentItemID(props.newItemID);
+  }, [props.newItemID]);
+
+  // Fetch songs when the user decides to add songs
   useEffect(() => {
     if (props.isAdding) {
       fetchAllSongs();
     }
   }, [props.isAdding]);
+
+  /* ******************* RETURN ******************** */
+
+  if (props.isLoading) {
+    return (
+      <div className="accordionContainer">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (currentItemID === 0) {
     return <div className="accordionContainer"> No songs in this playlist yet, use top menu in right to add some :)</div>;

@@ -24,9 +24,20 @@ $mainWidth: 260px;
   .optionsContainer {
     display: none;
 
+    h2 {
+      padding: 0 0 0 10px;
+      margin: 10px 0px 10px 0px;
+    }
+
+    hr {
+      border-top: 3px solid vars.$tertiaryColor;
+      width: 100%;
+    }
     &.show {
       display: flex;
       justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
       position: absolute;
       width: $mainWidth;
       top: 90px;
