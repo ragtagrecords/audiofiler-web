@@ -30,6 +30,7 @@ const PlaylistRoute = () => {
   const [song, setSong] = useState<Song>(defaultSong);
   const [userID, setUserID] = useState<number>(0);
   const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const auth = async () => {
     const userID = await authenticate();
@@ -158,6 +159,12 @@ const PlaylistRoute = () => {
     }
   }, [songs]);
 
+  useEffect(() => {
+    if (isLoading && song && song.id) {
+      setIsLoading(false);
+    }
+  }, [song]);
+
   return (
     <>
       <BackButton />
@@ -172,6 +179,7 @@ const PlaylistRoute = () => {
         playlistSongs={songs}
         onItemClick={onSongClick}
         isAdding={isAdding}
+        isLoading={isLoading}
         refreshPlaylistSongs={loadSongs}
       />
       {song && song.name !== ''
