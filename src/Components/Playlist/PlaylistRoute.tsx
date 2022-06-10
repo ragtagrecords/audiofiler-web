@@ -52,7 +52,7 @@ const PlaylistRoute = () => {
     },
     {
       href: '/',
-      text: 'Add existing song',
+      text: 'Add existing songs',
       onClick: onSongAddClick,
     },
   ];
@@ -67,8 +67,9 @@ const PlaylistRoute = () => {
     return match;
   };
 
+  /// given a songID, finds the index in songs array
   const findIndexBySongID = (id: number) => {
-    let index = null;
+    let index = -1;
     for (let i = 0; i < songs.length; i += 1) {
       if (songs[i].id === id) {
         index = i;
@@ -112,20 +113,32 @@ const PlaylistRoute = () => {
       });
   };
 
+  // ensures index is valid for the current # of songs
+  const validIndex = (i: number) => {
+    const maxIndex = songs.length;
+    const remainder = Math.abs(i % maxIndex);
+    // if index was negative, return the difference
+    return i >= 0 ? remainder : songs.length - remainder;
+  };
+
   const skipSong = () => {
+    // find index of current song based on id
     const currentSongIndex = findIndexBySongID(song.id);
-    if (!currentSongIndex) {
+    if (currentSongIndex === -1) {
       return;
     }
-    setSong(songs[currentSongIndex + 1]);
+    // change song to new index
+    const newSongIndex = validIndex(currentSongIndex + 1);
+    setSong(songs[newSongIndex]);
   };
 
   const prevSong = () => {
     const currentSongIndex = findIndexBySongID(song.id);
-    if (!currentSongIndex) {
+    if (currentSongIndex === -1) {
       return;
     }
-    setSong(songs[currentSongIndex - 1]);
+    const newSongIndex = validIndex(currentSongIndex - 1);
+    setSong(songs[newSongIndex]);
   };
 
   const onSongEnded = () => {
@@ -152,6 +165,7 @@ const PlaylistRoute = () => {
 
       {playlist && playlist.name
         && <div className="title"><div className="noClickThru" /><h1>{playlist.name}</h1></div>}
+      {playlist && songs && song && song.id}
       <Accordion
         newItemID={song.id}
         playlist={playlist}

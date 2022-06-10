@@ -10,7 +10,7 @@ type AccordionItemsProps = {
   playlistSongs: Song[];
   onItemClick: any;
   isAdding: boolean;
-  currentItem: number;
+  currentItemID: number;
   filteredSongs: Song[] | null;
   onItemAdd: any;
 }
@@ -25,7 +25,7 @@ const AccordionItems = (props: AccordionItemsProps) => {
           i += 1;
           return (
             <AccordionItem
-              show={props.currentItem === song.id}
+              show={props.currentItemID === song.id}
               key={`accordion-item-${song.id}-${i}`}
               item={song}
               onItemClick={props.onItemClick}
@@ -42,7 +42,7 @@ const AccordionItems = (props: AccordionItemsProps) => {
         {props.filteredSongs && props.filteredSongs.map((song: Song) => {
           return (
             <AccordionItem
-              show={props.currentItem === song.id}
+              show={props.currentItemID === song.id}
               key={`accordion-item-add-${song.id}`}
               item={song}
               onItemClick={props.onItemClick}
@@ -69,8 +69,9 @@ type AccordionProps = {
 }
 
 const Accordion = (props: AccordionProps) => {
-  const firstItem = props.playlistSongs[0].id;
-  const [currentItem, setCurrentItem] = useState<number>(firstItem);
+  const doesPlaylistHaveSongs = props.playlistSongs.length > 0 && props.playlistSongs[0].id;
+  const firstItemID = doesPlaylistHaveSongs ? props.playlistSongs[0].id : 0;
+  const [currentItemID, setCurrentItemID] = useState<number>(firstItemID);
   const [query, setQuery] = useState<string>('');
   const [allSongs, setAllSongs] = useState<Song[] | null>(null);
   const [filteredSongs, setFilteredSongs] = useState<Song[] | null>(null);
@@ -122,7 +123,7 @@ const Accordion = (props: AccordionProps) => {
       console.log('Failed to handle accordion click');
       return false;
     }
-    setCurrentItem(id);
+    setCurrentItemID(id);
     props.onItemClick(id);
     return true;
   };
@@ -136,17 +137,19 @@ const Accordion = (props: AccordionProps) => {
 
   // set current item to first song when songs change
   useEffect(() => {
-    setCurrentItem(props.playlistSongs[0].id);
+    if (props.playlistSongs.length > 0 && props.playlistSongs[0].id) {
+      setCurrentItemID(props.playlistSongs[0].id);
 
-    // re-filter if currently adding
-    if (props.isAdding) {
-      filterSongs();
+      // re-filter if currently adding
+      if (props.isAdding) {
+        filterSongs();
+      }
     }
   }, [props.playlistSongs]);
 
   // set current item when an item is selected via parent
   useEffect(() => {
-    setCurrentItem(props.newItemID);
+    setCurrentItemID(props.newItemID);
   }, [props.newItemID]);
 
   useEffect(() => {
@@ -183,6 +186,10 @@ const Accordion = (props: AccordionProps) => {
     }
   }, [props.isAdding]);
 
+  if (currentItemID === 0) {
+    return <div className="accordionContainer"> No songs in this playlist yet, use top menu in right to add some :)</div>;
+  }
+
   return (
     <div className="accordionContainer listContainer">
       <ul className="accordion">
@@ -201,7 +208,7 @@ const Accordion = (props: AccordionProps) => {
           playlistSongs={props.playlistSongs}
           onItemClick={onItemClick}
           isAdding={props.isAdding}
-          currentItem={currentItem}
+          currentItemID={currentItemID}
           filteredSongs={filteredSongs}
           onItemAdd={onItemAdd}
         />

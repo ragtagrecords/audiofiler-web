@@ -2,7 +2,7 @@
 @use "Styles/funcs";
 
 $playerHeight: 200px;
-$uiHeight: $playerHeight / 4;
+$uiHeight: calc($playerHeight / 4);
 
 .footer {
   .audioPlayer {
@@ -73,7 +73,7 @@ $uiHeight: $playerHeight / 4;
           $thumbRadius: 26px;
           $knob: rgb(17, 17, 17);
           $selected-knob: rgba(vars.$secondaryColor, 0.8);
-          $progressHeight: $thumbRadius / 10;
+          $progressHeight: calc($thumbRadius / 10);
 
           @mixin thumb {
             height: $thumbRadius;
