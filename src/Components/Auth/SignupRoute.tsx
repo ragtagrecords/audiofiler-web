@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './AuthForm.scss';
 import { signup } from 'Services/AuthSvc';
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +41,7 @@ const SignupRoute = () => {
     } else if (username.length < 6) {
       message = 'Username must be at least 6 characters';
     } else if (password !== confirmPassword) {
-      console.log('Passwords dont match');
+      message = 'Passwords must match';
     } else if (password.length < 15 || !hasSpecialCharAndNumber) {
       message = 'Password must use a special character and a number, or be at least 15 characters';
     } else if (password.length < 8) {
@@ -54,10 +53,13 @@ const SignupRoute = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    validateForm();
+    const isFormValid = validateForm();
+
+    if (!isFormValid) {
+      return false;
+    }
 
     const wasUserCreated = signup(username, password);
-
     if (!wasUserCreated) {
       setMessage('Failed to create user :( Please try again or reach out');
       return false;
@@ -72,6 +74,10 @@ const SignupRoute = () => {
       <BackButton />
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
+          <div
+            className="message"
+          >{message}
+          </div>
           <label>
             <h4>Username</h4>
             <input

@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 export const authenticate = async (): Promise<number> => {
+  console.log('beginning authenticate');
+
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const accessToken = localStorage.getItem('token');
@@ -24,18 +26,16 @@ export const authenticate = async (): Promise<number> => {
   }
 
   if (res.data.auth) {
-    localStorage.setItem('token', res.data.token);
     return res.data.userID;
   }
-  localStorage.removeItem('token');
+  localStorage.clear();
   return 0;
 };
 
 // returns true if local storage was successfully cleared
 export const logout = async () => {
-  await localStorage.removeItem('token');
-  await localStorage.removeitem('username');
-  return !localStorage.getItem('token') && !localStorage.getItem('username');
+  await localStorage.clear();
+  return true;
 };
 
 // Returns true if the credentials are valid, false otherwise
@@ -46,7 +46,7 @@ export const authorize = async (username: string, password: string) => {
   formData.append('username', username);
   formData.append('password', password);
 
-  let res = null;
+  let res;
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
   try {
     res = await axios.post(

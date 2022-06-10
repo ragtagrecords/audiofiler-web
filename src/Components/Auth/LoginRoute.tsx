@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './AuthForm.scss';
 import { useNavigate } from 'react-router-dom';
 import { authorize } from 'Services/AuthSvc';
@@ -21,12 +20,6 @@ const LoginRoute = () => {
     } else if (className === 'passwordInput') {
       setPassword(e.target.value);
     }
-  };
-
-  const hasSpecialCharAndNumber = (str: string) => {
-    const hasSpecialChar = !/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(str);
-    const hasNumber = /\d/.test(str);
-    return hasSpecialChar && hasNumber;
   };
 
   const validateForm = () => {

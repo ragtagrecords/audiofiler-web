@@ -47,13 +47,10 @@ const UserOptions = (props: UserOptionsProps) => {
     option.onClick();
   };
 
-  const handleLogout = async () => {
-    const isLoggedOut = await logout();
-    if (isLoggedOut) {
-      navigate('/login');
-    } else {
-      // TODO: show some kind of error message when logout fails
-    }
+  const handleLogout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await logout();
+    navigate('/login');
   };
 
   return (
@@ -93,6 +90,7 @@ const UserMenu = (props: UserMenuProps) => {
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '75px',
   }), []);
+  const username = localStorage.getItem('username');
 
   const openOrCloseMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -110,13 +108,17 @@ const UserMenu = (props: UserMenuProps) => {
 
       {/* Options that show on click */}
       <div className={`optionsContainer ${isMenuOpen ? 'show' : ''}`}>
-        {props.userID
+        {props.userID && username
           ? (
-            <UserOptions
-              options={props.options}
-              userID={props.userID}
-              openOrCloseMenu={openOrCloseMenu}
-            />
+            <>
+              <h2>{username}</h2>
+              <hr />
+              <UserOptions
+                options={props.options}
+                userID={props.userID}
+                openOrCloseMenu={openOrCloseMenu}
+              />
+            </>
           )
           : <LoginOptions />}
       </div>
