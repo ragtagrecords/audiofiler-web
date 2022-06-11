@@ -1,0 +1,12 @@
+$width: 25px;
+
+.songFileUploadContainer {
+    width: $width;
+    margin-right: 10px;
+    label {
+        cursor: pointer;
+    }
+    input {
+        display: none;
+    }
+}

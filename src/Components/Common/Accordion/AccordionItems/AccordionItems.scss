@@ -1,0 +1,46 @@
+@use "Styles/funcs";
+@use "Styles/vars";
+
+$height: 60px;
+
+li.accordionItem {
+  $depth: 4px;
+  border-radius: vars.$roundCorners;
+  color: vars.$tertiaryColor;
+  height: $height;
+  width: 99%;
+
+  @mixin inset($color) {
+    -webkit-box-shadow: inset 0px 0px 0px $depth $color;
+    -moz-box-shadow: inset 0px 0px 0px $depth $color;
+    box-shadow: inset 0px 0px 0px $depth $color;
+  }
+
+  &:hover {
+    @include inset(vars.$tertiaryColor);
+    background-color: rgba(vars.$gray, 0.4);
+    transition: 0.3s;
+    box-shadow: 0px 0px 15px 5px vars.$tertiaryColor;
+  }
+
+  &.selected {
+    @include inset(rgba(vars.$tertiaryColor, 0.5));
+    border-radius: vars.$roundCorners;
+    background-color: rgba(vars.$gray, 0.1);
+    height: auto;
+
+    button {
+      overflow: visible;
+      white-space: normal;
+      text-overflow: clip;
+    }
+
+    p {
+      color: vars.$white;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

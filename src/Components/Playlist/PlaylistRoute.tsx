@@ -43,6 +43,7 @@ const PlaylistRoute = () => {
 
   const onSongAddClick = () => {
     setIsAdding(!isAdding);
+    console.log('adding existing songs!`');
   };
 
   const menuOptions: MenuOption[] = [
@@ -110,7 +111,11 @@ const PlaylistRoute = () => {
     fetch(`${baseUrl}public/playlists/${playlistID}`)
       .then((response) => response.json())
       .then((songs) => {
-        setSongs(songs);
+        if (songs.length) {
+          setSongs(songs);
+        } else {
+          setIsLoading(false);
+        }
       });
   };
 
@@ -172,7 +177,6 @@ const PlaylistRoute = () => {
 
       {playlist && playlist.name
         && <div className="title"><div className="noClickThru" /><h1>{playlist.name}</h1></div>}
-      {playlist && songs && song && song.id}
       <Accordion
         newItemID={song.id}
         playlist={playlist}
