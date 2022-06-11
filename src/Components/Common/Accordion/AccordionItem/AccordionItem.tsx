@@ -36,7 +36,7 @@ const AccordionItem = (props: AccordionItemProps) => {
             className="accordionButton"
             id={`item-${props.item.id}`}
             onClick={props.onItemClick.bind(null, props.item.id)}
-          >{props.item.name}
+          ><span>{props.item.name}</span>
           </button>
         </div>
         <div className="accordionHeaderSection right">

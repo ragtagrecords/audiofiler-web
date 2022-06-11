@@ -24,17 +24,6 @@ li.accordionItem {
     box-shadow: inset 0px 0px 0px $depth $color;
   }
 
-  .accordionButton {
-    height: $height;
-    font-size: 1.5rem;
-    padding: 20px;
-    background: transparent;
-    color: vars.$tertiaryColor;
-    border: none;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
   &:hover {
     @include inset(vars.$tertiaryColor);
     background-color: rgba(vars.$gray, 0.4);
@@ -54,7 +43,7 @@ li.accordionItem {
         background: transparent;
         border: none;
       }
-      
+
       &.left,
       &.right {
         width: 10%;
@@ -63,8 +52,21 @@ li.accordionItem {
         width: 80%;
 
         .accordionButton {
-          width: 100%;
+          @include funcs.flexCenter();
+          height: $height;
+          font-size: 1.5rem;
+          padding: 20px;
+          background: transparent;
+          color: vars.$tertiaryColor;
+          border: none;
           cursor: pointer;
+
+          span {
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
         }
       }
     }
@@ -91,7 +93,6 @@ li.accordionItem {
     }
 
     .accordionHeaderSection {
-
       button {
         background: transparent;
         border: none;
@@ -101,7 +102,7 @@ li.accordionItem {
         display: flex;
         justify-content: center;
         align-items: center;
-        a { 
+        a {
           height: auto;
         }
       }
