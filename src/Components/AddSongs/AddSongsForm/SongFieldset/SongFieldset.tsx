@@ -52,6 +52,16 @@ const SongFieldset = (props: SongFieldsetProps) => {
           })}
         </select>
       </label>
+      <label> Upload project .zip
+        <input
+          className="songZipInput"
+          id={props.fileName}
+          name="uploadedZip"
+          type="file"
+          multiple
+          onChange={props.handleChange}
+        />
+      </label>
 
     </fieldset>
   );
