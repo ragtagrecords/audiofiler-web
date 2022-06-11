@@ -12,6 +12,12 @@ type SongInputInfo = {
     tempo?: string,
     fileName: string,
     playlistIDs?: Array<string>,
+    zipFileName?: string,
+}
+
+type SongFiles = {
+  songFile: File,
+  zipFile?: File
 }
 
 type AddSongFormProps = {
@@ -32,7 +38,7 @@ const defaultPlaylist: Playlist = {
 
 const AddSongForm = (props: AddSongFormProps) => {
   const [songs, setSongs] = useState<Array<SongInputInfo>>([defaultSong]);
-  const [files, setFiles] = useState<FileList>();
+  const [files, setFiles] = useState<SongFiles[]>();
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
   const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
   const [userID, setUserID] = useState<number>(0);
@@ -104,7 +110,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     setSongs(newSongInfo);
   };
 
-  const saveFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const saveSongFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     const newFiles = target.files;
 
@@ -112,11 +118,17 @@ const AddSongForm = (props: AddSongFormProps) => {
       console.log('ERROR: FILE NOT UPLOADED TO FE');
       return false;
     }
+    const newSongFiles: SongFiles[] = new Array<SongFiles>(newFiles.length);
 
-    // store raw files so we can POST them later
-    setFiles(newFiles);
+    for (let i = 0; i < newFiles.length; i += 1) {
+      newSongFiles[i] = {
+        songFile: newFiles[i],
+      };
+    }
+    // store raw song files so we can POST them later
+    setFiles(newSongFiles);
 
-    // build temp array of uploaded songs
+    // build temp array of uploaded song info
     const newSongs: Array<SongInputInfo> = [];
     for (let i = 0; i < newFiles.length; i += 1) {
       newSongs[i] = {
@@ -131,6 +143,38 @@ const AddSongForm = (props: AddSongFormProps) => {
     return true;
   };
 
+  const saveZip = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+
+    if (!target.files || target.files[0] === undefined) {
+      console.log(target.files);
+      return false;
+    }
+
+    const zipFile = target.files[0];
+
+    if (!zipFile || !files) {
+      console.log('ERROR: FILE NOT UPLOADED TO FE');
+      return false;
+    }
+
+    // build temp array of uploaded songs
+    const newSongFiles: SongFiles[] = files;
+    const newSongs: Array<SongInputInfo> = songs;
+    newSongs.forEach((song, i) => {
+      if (song.fileName === e.target.id) {
+        newSongFiles[i].zipFile = zipFile;
+        song.zipFileName = zipFile.name;
+      }
+    });
+
+    setSongs(newSongs);
+    setFiles(newSongFiles);
+    console.log('SUCCESS: ZIP FILE UPLOADED TO FE');
+
+    return true;
+  };
+
   const handleChange = (e : any) => {
     if (!e || !e.target || !e.target.value) {
       console.log('Error updating based on user input');
@@ -139,8 +183,11 @@ const AddSongForm = (props: AddSongFormProps) => {
 
     // save raw files to state
     const cls = e.target.className;
-    if (e.target.type === 'file') {
-      saveFiles(e);
+    if (cls.includes('songFileInput')) {
+      saveSongFiles(e);
+    } else if (cls.includes('songZipInput')) {
+      console.log({ name: 'TONY TEST', event: e });
+      saveZip(e);
     } else if (cls.includes('songNameInput')) {
       updateSongName(e.target.id, e.target.value);
     } else if (cls.includes('songTempoInput')) {
@@ -177,9 +224,16 @@ const AddSongForm = (props: AddSongFormProps) => {
       });
     }
 
+    console.log(files);
+
     // add files to form data
     for (let i = 0; i < files.length; i += 1) {
-      formData.append(files[i].name, files[i]);
+      const { songFile, zipFile } = files[i];
+      formData.append(songFile.name, songFile);
+
+      if (zipFile && zipFile.name) {
+        formData.append(zipFile.name, zipFile);
+      }
     }
 
     // add songs to form data

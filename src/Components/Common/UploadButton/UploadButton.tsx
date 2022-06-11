@@ -9,6 +9,7 @@ const UploadButton = (props:UploadButtonProps) => {
     <label>
       <h4>Choose songs to upload</h4>
       <input
+        className="songFileInput"
         id="uploadedSongs"
         name="uploadedSongs"
         type="file"
