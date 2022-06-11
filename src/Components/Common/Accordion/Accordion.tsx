@@ -2,64 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Playlist, Song } from 'Types';
 import axios from 'axios';
 import addSongToPlaylist from 'Services/SongSvc';
-import AccordionItem from './AccordionItem/AccordionItem';
+import AccordionItems from './AccordionItems/AccordionItems';
 import SearchBar from '../SearchBar/SearchBar';
 import './Accordion.scss';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-
-type AccordionItemsProps = {
-  playlistSongs: Song[];
-  onItemClick: any;
-  isAdding: boolean;
-  currentItemID: number;
-  filteredSongs: Song[] | null;
-  onItemAdd: any;
-}
-
-// Child of Accordion - look further down for parent Accordion component
-const AccordionItems = (props: AccordionItemsProps) => {
-  let accordionItems = null;
-  if (!props.isAdding) {
-    let i = 0;
-    accordionItems = (
-      <>
-        {props.playlistSongs && props.playlistSongs.map((song: Song) => {
-          i += 1;
-          return (
-            <AccordionItem
-              show={props.currentItemID === song.id}
-              key={`accordion-item-${song.id}-${i}`}
-              item={song}
-              onItemClick={props.onItemClick}
-              isAdding={props.isAdding}
-              onItemAdd={props.onItemAdd}
-            />
-          );
-        })}
-      </>
-    );
-  } else {
-    accordionItems = (
-      <>
-        {props.filteredSongs && props.filteredSongs.map((song: Song) => {
-          return (
-            <AccordionItem
-              show={props.currentItemID === song.id}
-              key={`accordion-item-add-${song.id}`}
-              item={song}
-              onItemClick={props.onItemClick}
-              isAdding={props.isAdding}
-              onItemAdd={props.onItemAdd}
-
-            />
-          );
-        })}
-      </>
-    );
-  }
-
-  return accordionItems;
-};
 
 type AccordionProps = {
   playlist: Playlist;
@@ -71,13 +17,27 @@ type AccordionProps = {
   isLoading: boolean;
 }
 
-const Accordion = (props: AccordionProps) => {
-  const doesPlaylistHaveSongs = props.playlistSongs.length > 0 && props.playlistSongs[0].id;
-  const firstItemID = doesPlaylistHaveSongs ? props.playlistSongs[0].id : 0;
+const Accordion = ({
+  playlist,
+  playlistSongs,
+  newItemID,
+  isAdding,
+  refreshPlaylistSongs,
+  isLoading,
+  onItemClick,
+}: AccordionProps) => {
+  const doesPlaylistHaveSongs = playlistSongs.length > 0 && playlistSongs[0].id;
+  const firstItemID = doesPlaylistHaveSongs ? playlistSongs[0].id : 0;
   const [currentItemID, setCurrentItemID] = useState<number>(firstItemID);
+  const [isCurrentItemOpen, setIsCurrentItemOpen] = useState<boolean>(false);
+
+  // State for searching
   const [query, setQuery] = useState<string>('');
   const [allSongs, setAllSongs] = useState<Song[] | null>(null);
   const [filteredSongs, setFilteredSongs] = useState<Song[] | null>(null);
+
+  // State for uploading
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
 
   /* ******************* FUNCTIONS ******************** */
 
@@ -96,20 +56,20 @@ const Accordion = (props: AccordionProps) => {
     // check if each song passes filters
     tempSongs.forEach((song) => {
       let isSongInPlaylist = false;
-      let doesSongMatchQuery = false;
+      let doesSongContainQuery = false;
 
       // check if song is already in playlist
-      props.playlistSongs.forEach((playlistSong) => {
+      playlistSongs.forEach((playlistSong) => {
         if (song.id === playlistSong.id) {
           isSongInPlaylist = true;
         }
       });
 
       // check if song name contains query
-      doesSongMatchQuery = song.name.includes(query);
+      doesSongContainQuery = song.name.includes(query);
 
       // if it passes, push it
-      if (!isSongInPlaylist && doesSongMatchQuery) {
+      if (!isSongInPlaylist && doesSongContainQuery) {
         tempFilteredSongs.push(song);
       }
     });
@@ -119,21 +79,46 @@ const Accordion = (props: AccordionProps) => {
   };
 
   // When center of accordion header is clicked
-  const onItemClick = (id: number) => {
+  const onItemClickLocal = (id: number) => {
     if (!id) {
       console.log('Failed to handle accordion click');
       return false;
     }
-    setCurrentItemID(id);
-    props.onItemClick(id);
+    const clickedCurrentItem = id === currentItemID;
+    if (clickedCurrentItem && !uploadedFiles) { // clicked current item
+      setIsCurrentItemOpen(!isCurrentItemOpen);
+      onItemClick(id);
+    } else if (!clickedCurrentItem && uploadedFiles) { // clicked new item while uploading files
+      const wantsToCancelUpload = confirm('Are you sure you want to cancel the upload?');
+      if (wantsToCancelUpload) {
+        setUploadedFiles(null);
+        setCurrentItemID(id);
+        onItemClick(id);
+      }
+    } else { // clicked new item
+      setCurrentItemID(id);
+      onItemClick(id);
+    }
     return true;
   };
 
   // When add button is clicked for a particular item
   const onItemAdd = (id: number) => {
-    addSongToPlaylist(id, props.playlist.id);
-    props.refreshPlaylistSongs();
+    addSongToPlaylist(id, playlist.id);
+    refreshPlaylistSongs();
     filterSongs();
+  };
+
+  const handleUploadedFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { files } = target;
+    if (!files) {
+      console.log('Upload failed');
+      return false;
+    }
+    setUploadedFiles(files);
+    setIsCurrentItemOpen(true);
+    return true;
   };
 
   // Grabs JSON info for all songs from API
@@ -165,38 +150,38 @@ const Accordion = (props: AccordionProps) => {
 
   // Filter songs when user query changes
   useEffect(() => {
-    if (props.isAdding) {
+    if (isAdding) {
       filterSongs();
     }
   }, [query]);
 
   // Set current item to first song when songs change
   useEffect(() => {
-    if (props.playlistSongs.length > 0 && props.playlistSongs[0].id) {
-      setCurrentItemID(props.playlistSongs[0].id);
+    if (playlistSongs.length > 0 && playlistSongs[0].id) {
+      setCurrentItemID(playlistSongs[0].id);
 
       // re-filter if currently adding
-      if (props.isAdding) {
+      if (isAdding) {
         filterSongs();
       }
     }
-  }, [props.playlistSongs]);
+  }, [playlistSongs]);
 
   // Set current item when an item is selected via parent
   useEffect(() => {
-    setCurrentItemID(props.newItemID);
-  }, [props.newItemID]);
+    setCurrentItemID(newItemID);
+  }, [newItemID]);
 
   // Fetch songs when the user decides to add songs
   useEffect(() => {
-    if (props.isAdding) {
+    if (isAdding) {
       fetchAllSongs();
     }
-  }, [props.isAdding]);
+  }, [isAdding]);
 
   /* ******************* RETURN ******************** */
 
-  if (props.isLoading) {
+  if (isLoading) {
     return (
       <div className="accordionContainer">
         <LoadingSpinner />
@@ -204,14 +189,14 @@ const Accordion = (props: AccordionProps) => {
     );
   }
 
-  if (currentItemID === 0) {
+  if (currentItemID === 0 && !isAdding) {
     return <div className="accordionContainer"> No songs in this playlist yet, use top menu in right to add some :)</div>;
   }
 
   return (
     <div className="accordionContainer listContainer">
       <ul className="accordion">
-        {props.isAdding
+        {isAdding
         && (
         <li className="searchItem">
           <div className="bar">
@@ -223,12 +208,15 @@ const Accordion = (props: AccordionProps) => {
         </li>
         )}
         <AccordionItems
-          playlistSongs={props.playlistSongs}
-          onItemClick={onItemClick}
-          isAdding={props.isAdding}
-          currentItemID={currentItemID}
-          filteredSongs={filteredSongs}
+          playlistSongs={playlistSongs}
+          isAdding={isAdding}
+          onItemClick={onItemClickLocal}
           onItemAdd={onItemAdd}
+          currentItemID={currentItemID}
+          isCurrentItemOpen={isCurrentItemOpen}
+          filteredSongs={filteredSongs ?? undefined}
+          uploadedFiles={uploadedFiles ?? undefined}
+          handleUploadedFiles={handleUploadedFiles}
         />
       </ul>
     </div>

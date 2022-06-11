@@ -1,0 +1,13 @@
+@use "Styles/funcs";
+@use "Styles/vars";
+
+$height: 60px;
+
+div.accordionBody {
+  display: none;
+
+  &.open {
+    display: block;
+  }
+}
+

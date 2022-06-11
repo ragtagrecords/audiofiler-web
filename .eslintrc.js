@@ -35,6 +35,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': [0],
     'react/jsx-no-useless-fragment': [0],
     'react/no-unused-prop-types': [0],
+    'react/no-array-index-key': [0],
     'react/jsx-no-bind': [0],
     'arrow-body-style': [0],
     'no-console': [0],
@@ -48,7 +49,9 @@ module.exports = {
     'no-shadow': [0],
     'jsx-a11y/label-has-associated-control': [0],
     'no-param-reassign': [0],
-    'no-unreachable': [0],
+    'no-unreachable': [1],
+    'no-alert': [0],
+    'no-restricted-globals': [0],
   },
   settings: {
     'import/resolver': {

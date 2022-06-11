@@ -1,7 +1,8 @@
-import React from 'react';
-import downloadButton from 'Assets/blue-download-arrow.png';
+import React, { useMemo } from 'react';
 import axios from 'axios';
 import './DownloadButton.scss';
+import { FiDownload } from 'react-icons/fi';
+import { IconContext } from 'react-icons';
 
 type DownloadButtonProps = {
     href: string;
@@ -25,18 +26,18 @@ const DownloadButton = (props: DownloadButtonProps) => {
       link.click();
     });
   };
+
+  const iconStyles = useMemo(() => ({
+    color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
+    size: '25px',
+  }), []);
+
   return (
-    <button
-      type="button"
-      className="downloadButton"
-      onClick={downloadFile}
-    >
-      <img
-        alt="downloadButtonIcon"
-        className="downloadButtonIcon"
-        src={downloadButton}
-      />
-    </button>
+    <div className="downloadButtonContainer" onClick={downloadFile}>
+      <IconContext.Provider value={iconStyles}>
+        <FiDownload />
+      </IconContext.Provider>
+    </div>
   );
 };
 
