@@ -21,7 +21,7 @@ const PlaylistsRoute = () => {
   const menuOptions: MenuOption[] = [
     {
       href: '/playlists/add',
-      text: 'Add playlist',
+      text: 'Add playlist TEST',
     },
   ];
 
