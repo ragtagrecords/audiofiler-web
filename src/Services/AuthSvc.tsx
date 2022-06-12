@@ -50,7 +50,7 @@ export const authorize = async (username: string, password: string) => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
   try {
     res = await axios.post(
-      `${baseUrl}public/login`,
+      `${baseUrl}public/authorize`,
       formData,
     );
   } catch (ex) {
@@ -76,7 +76,7 @@ export const signup = async (username: string, password: string) => {
   let res = null;
   try {
     res = await axios.post(
-      `${baseUrl}public/signup`,
+      `${baseUrl}public/users`,
       formData,
     );
   } catch (ex) {
