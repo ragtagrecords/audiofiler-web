@@ -8,7 +8,6 @@ const SignupRoute = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  // TODO: Actually use the message in form
   const [message, setMessage] = useState<string>('');
   const navigate = useNavigate();
 
@@ -29,7 +28,7 @@ const SignupRoute = () => {
   };
 
   const hasSpecialCharAndNumber = (str: string) => {
-    const hasSpecialChar = !/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(str);
+    const hasSpecialChar = /[.@~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(str);
     const hasNumber = /\d/.test(str);
     return hasSpecialChar && hasNumber;
   };
@@ -42,7 +41,7 @@ const SignupRoute = () => {
       message = 'Username must be at least 6 characters';
     } else if (password !== confirmPassword) {
       message = 'Passwords must match';
-    } else if (password.length < 15 || !hasSpecialCharAndNumber) {
+    } else if (password.length < 15 && !hasSpecialCharAndNumber(password)) {
       message = 'Password must use a special character and a number, or be at least 15 characters';
     } else if (password.length < 8) {
       message = 'Password must be at least 8 characters';
