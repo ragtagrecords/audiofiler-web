@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { IconContext } from 'react-icons';
 import { FiUpload } from 'react-icons/fi';
 import './AccordionUploadButton.scss';
@@ -8,7 +8,6 @@ type AccordionUploadButtonProps = {
 }
 
 const AccordionUploadButton = (props: AccordionUploadButtonProps) => {
-  const [file, setFile] = useState<File | null>(null);
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '25px',

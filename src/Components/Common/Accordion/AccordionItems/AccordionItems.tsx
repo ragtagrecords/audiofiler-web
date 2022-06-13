@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Song } from 'Types';
 import AccordionItemHeader from './AccordionItemHeader/AccordionItemHeader';
 import AccordionItemBody from './AccordionItemBody/AccordionItemBody';
