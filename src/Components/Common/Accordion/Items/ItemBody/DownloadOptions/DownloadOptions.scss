@@ -1,0 +1,12 @@
+@use 'Styles/vars';
+
+ul.downloadOptions {
+  list-style-type: none;
+  li button {
+    border: 2px vars.$tertiaryColor solid;
+    color: vars.$tertiaryColor;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+  }
+}

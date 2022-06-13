@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Playlist, Song } from 'Types';
+import { Playlist, Song, BodyType } from 'Types';
 import axios from 'axios';
 import { addSongToPlaylist } from 'Services/SongSvc';
-import AccordionItems from './AccordionItems/AccordionItems';
+import Items from './Items/Items';
 import SearchBar from '../SearchBar/SearchBar';
 import './Accordion.scss';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -10,34 +10,34 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 type AccordionProps = {
   playlist: Playlist;
   playlistSongs: Song[];
-  onItemClick: any;
-  newItemID: number;
+  selectedSongID: number;
+  setSelectedSongID: any;
   isAdding: boolean;
   refreshPlaylistSongs: any;
   isLoading: boolean;
+  changeSong: any;
 }
 
 const Accordion = ({
   playlist,
   playlistSongs,
-  newItemID,
+  selectedSongID,
+  setSelectedSongID,
   isAdding,
   refreshPlaylistSongs,
   isLoading,
-  onItemClick,
+  changeSong,
 }: AccordionProps) => {
-  const doesPlaylistHaveSongs = playlistSongs.length > 0 && playlistSongs[0].id;
-  const firstItemID = doesPlaylistHaveSongs ? playlistSongs[0].id : 0;
-  const [currentItemID, setCurrentItemID] = useState<number>(firstItemID);
-  const [isCurrentItemOpen, setIsCurrentItemOpen] = useState<boolean>(false);
+  const [isSelectedSongOpen, setIsSelectedSongOpen] = useState<boolean>(false);
+  const [bodyType, setBodyType] = useState<BodyType>('info');
 
   // State for searching
   const [query, setQuery] = useState<string>('');
   const [allSongs, setAllSongs] = useState<Song[] | null>(null);
   const [filteredSongs, setFilteredSongs] = useState<Song[] | null>(null);
 
-  // State for uploading
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
+  // State for upload option
+  const [uploadedFiles, setUploadedFiles] = useState<File[] | null>(null);
 
   /* ******************* FUNCTIONS ******************** */
 
@@ -78,32 +78,22 @@ const Accordion = ({
     return true;
   };
 
-  // When center of accordion header is clicked
-  const onItemClickLocal = (id: number) => {
-    if (!id) {
-      console.log('Failed to handle accordion click');
-      return false;
-    }
-    const clickedCurrentItem = id === currentItemID;
-    if (clickedCurrentItem && !uploadedFiles) { // clicked current item
-      setIsCurrentItemOpen(!isCurrentItemOpen);
-      onItemClick(id);
-    } else if (!clickedCurrentItem && uploadedFiles) { // clicked new item while uploading files
-      const wantsToCancelUpload = confirm('Are you sure you want to cancel the upload?');
-      if (wantsToCancelUpload) {
-        setUploadedFiles(null);
-        setCurrentItemID(id);
-        onItemClick(id);
-      }
-    } else { // clicked new item
-      setCurrentItemID(id);
-      onItemClick(id);
+  // When upload, download, or options are selected on song
+  const handleOptionsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { className } = e.currentTarget;
+
+    if (className === 'optionButton') {
+      setBodyType('versions');
+    } else if (className === 'uploadButton') {
+      setBodyType('upload');
+    } else if (className === 'downloadButton') {
+      setBodyType('download');
     }
     return true;
   };
 
   // When add button is clicked for a particular item
-  const onItemAdd = (id: number) => {
+  const addSong = (id: number) => {
     addSongToPlaylist(id, playlist.id);
     refreshPlaylistSongs();
     filterSongs();
@@ -116,8 +106,11 @@ const Accordion = ({
       console.log('Upload failed');
       return false;
     }
-    setUploadedFiles(files);
-    setIsCurrentItemOpen(true);
+    const fileArray: File[] = [];
+    for (let i = 0; i < files.length; i += 1) {
+      fileArray.push(files[i]);
+    }
+    setUploadedFiles(fileArray);
     return true;
   };
 
@@ -158,7 +151,7 @@ const Accordion = ({
   // Set current item to first song when songs change
   useEffect(() => {
     if (playlistSongs.length > 0 && playlistSongs[0].id) {
-      setCurrentItemID(playlistSongs[0].id);
+      setSelectedSongID(playlistSongs[0].id);
 
       // re-filter if currently adding
       if (isAdding) {
@@ -169,8 +162,8 @@ const Accordion = ({
 
   // Set current item when an item is selected via parent
   useEffect(() => {
-    setCurrentItemID(newItemID);
-  }, [newItemID]);
+    setSelectedSongID(selectedSongID);
+  }, [selectedSongID]);
 
   // Fetch songs when the user decides to add songs
   useEffect(() => {
@@ -189,7 +182,7 @@ const Accordion = ({
     );
   }
 
-  if (currentItemID === 0 && !isAdding) {
+  if (selectedSongID === 0 && !isAdding) {
     return <div className="accordionContainer"> No songs in this playlist yet, use top menu in right to add some :)</div>;
   }
 
@@ -207,16 +200,19 @@ const Accordion = ({
           </div>
         </li>
         )}
-        <AccordionItems
+        <Items
           playlistSongs={playlistSongs}
+          selectedSongID={selectedSongID}
+          isSelectedSongOpen={isSelectedSongOpen}
+          setIsSelectedSongOpen={setIsSelectedSongOpen}
           isAdding={isAdding}
-          onItemClick={onItemClickLocal}
-          onItemAdd={onItemAdd}
-          currentItemID={currentItemID}
-          isCurrentItemOpen={isCurrentItemOpen}
           filteredSongs={filteredSongs ?? undefined}
           uploadedFiles={uploadedFiles ?? undefined}
+          addSong={addSong}
           handleUploadedFiles={handleUploadedFiles}
+          handleClick={handleOptionsClick}
+          bodyType={bodyType}
+          changeSong={changeSong}
         />
       </ul>
     </div>

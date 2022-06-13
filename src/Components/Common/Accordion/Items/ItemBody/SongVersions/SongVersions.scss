@@ -1,0 +1,9 @@
+@use 'Styles/vars';
+
+.songVersionsList {
+  button {
+    color: vars.$tertiaryColor;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

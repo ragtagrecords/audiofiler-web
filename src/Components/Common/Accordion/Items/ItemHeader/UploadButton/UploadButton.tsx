@@ -1,33 +1,30 @@
 import React, { useMemo } from 'react';
 import { IconContext } from 'react-icons';
-import { FiDownload } from 'react-icons/fi';
-import './DownloadButton.scss';
+import { FiUpload } from 'react-icons/fi';
 
-type DownloadButtonProps = {
-    href: string;
-    fileName: string;
+// import './UploadButton.scss';
+
+type UploadAreaProps = {
     handleClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const DownloadButton = ({ handleClick }: DownloadButtonProps) => {
-  // Without this function, file opens in new tab
-  // Creates a new link using a Blob instead of href and clicks it
+const UploadButton = ({ handleClick }: UploadAreaProps) => {
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
-    size: '26px',
+    size: '25px',
   }), []);
 
   return (
     <button
       type="button"
-      className="downloadButton"
+      className="uploadButton"
       onClick={handleClick}
     >
       <IconContext.Provider value={iconStyles}>
-        <FiDownload />
+        <FiUpload />
       </IconContext.Provider>
     </button>
   );
 };
 
-export default DownloadButton;
+export default UploadButton;

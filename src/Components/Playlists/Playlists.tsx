@@ -36,8 +36,8 @@ const Playlists = () => {
         {playlists && playlists[0].name
             && playlists.map((playlist: Playlist) => {
               return (
-                <li key={`playlists-${playlist.id}`}>
-                  <Link to={`/playlists/${playlist.id}`}>
+                <li key={`playlists-${playlist.id}`} className="normalListItem">
+                  <Link to={`/playlists/${playlist.id}`} className="playlistLink">
                     <span className="nameContainer">
                       {playlist.name}
                     </span>
