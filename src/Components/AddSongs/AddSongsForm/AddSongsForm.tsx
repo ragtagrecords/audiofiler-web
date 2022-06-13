@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Playlist } from 'Types';
+import { SongInputInfo, Playlist } from 'Types';
 import axios from 'axios';
 import { authenticate } from 'Services/AuthSvc';
 import UploadButton from 'Components/Common/UploadButton/UploadButton';
 import { useNavigate } from 'react-router-dom';
 import SongFieldset from './SongFieldset/SongFieldset';
 import './AddSongsForm.scss';
-
-type SongInputInfo = {
-    name: string,
-    tempo?: string,
-    fileName: string,
-    playlistIDs?: Array<string>,
-    zipFileName?: string,
-}
 
 type SongFiles = {
   songFile: File,
@@ -26,7 +18,7 @@ type AddSongFormProps = {
 
 const defaultSong = {
   name: '',
-  tempo: '',
+  tempo: 0,
   fileName: '',
   playlistIDs: [],
 };
@@ -83,7 +75,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     const newSongInfo = songs;
     newSongInfo.every((songInfo) => {
       if (songInfo.fileName === fileName) {
-        songInfo.tempo = newSongTempo;
+        songInfo.tempo = parseInt(newSongTempo, 10);
         return false;
       }
       return true;
@@ -147,7 +139,6 @@ const AddSongForm = (props: AddSongFormProps) => {
     const target = e.target as HTMLInputElement;
 
     if (!target.files || target.files[0] === undefined) {
-      console.log(target.files);
       return false;
     }
 
@@ -208,7 +199,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     const formData = new FormData();
 
     if (!files || !songs) {
-      console.log('songs info or files not found for upload');
+      console.log('Could not find files or info to upload');
       return false;
     }
 
@@ -223,8 +214,6 @@ const AddSongForm = (props: AddSongFormProps) => {
         }
       });
     }
-
-    console.log(files);
 
     // add files to form data
     for (let i = 0; i < files.length; i += 1) {
@@ -241,15 +230,13 @@ const AddSongForm = (props: AddSongFormProps) => {
 
     // post files and info to API
     try {
-      const res = await axios.post(
+      await axios.post(
         'http://api.ragtagrecords.com/public/songs',
         formData,
       );
-      console.log(res);
       navigate(`/playlists/${globalPlaylistID ?? ''}`);
       return true;
     } catch (ex) {
-      console.log(ex);
       return false;
     }
   };

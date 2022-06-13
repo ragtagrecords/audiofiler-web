@@ -32,7 +32,6 @@ export const authenticate = async (): Promise<number> => {
   return 0;
 };
 
-// returns true if local storage was successfully cleared
 export const logout = async () => {
   await localStorage.clear();
   return true;

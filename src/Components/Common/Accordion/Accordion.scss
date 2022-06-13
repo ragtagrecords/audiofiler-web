@@ -1,13 +1,11 @@
 @use "Styles/vars";
 @use "Styles/funcs";
 
-ul {
-  &.accordion {
+ul.accordion {
     @include funcs.flexCenter;
     flex-direction: column;
     width: 65%;
     border-radius: vars.$roundCorners;
-  }
 }
 
 .accordionContainer {
@@ -20,17 +18,13 @@ ul {
 ----------------- */
 
 @media screen and (max-width: vars.$tabletBreakpoint) {
-  ul {
-    &.accordion {
+  ul.accordion {
       width: 90%;
-    }
   }
 }
 
 @media screen and (max-width: vars.$phoneBreakpoint) {
-  ul {
-    &.accordion {
+  ul.accordion {
       width: 100%;
-    }
   }
 }

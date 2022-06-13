@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import UserMenu from 'Components/Common/UserMenu/UserMenu';
 import { MenuOption, Playlist, Song } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
+import { getSongsByPlaylistID, updatePlaylistName } from 'Services/SongSvc';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from 'Components/Common/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
-import { updatePlaylistName } from 'Services/SongSvc';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 type PlaylistRouteParams = {
   playlistID: string;
@@ -29,6 +31,7 @@ const PlaylistRoute = () => {
   const [playlist, setPlaylist] = useState<Playlist>(defaultPlaylist);
   const [songs, setSongs] = useState<Array<Song>>([defaultSong]);
   const [song, setSong] = useState<Song>(defaultSong);
+  const [selectedSongID, setSelectedSongID] = useState<number>(0);
   const [userID, setUserID] = useState<number>(0);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -45,7 +48,6 @@ const PlaylistRoute = () => {
 
   const onSongAddClick = () => {
     setIsAdding(!isAdding);
-    console.log('adding existing songs!`');
   };
 
   const menuOptions: MenuOption[] = [
@@ -61,16 +63,6 @@ const PlaylistRoute = () => {
     },
   ];
 
-  const findSongByID = (id: number) => {
-    let match = null;
-    songs.forEach((song) => {
-      if (song.id === id) {
-        match = song;
-      }
-    });
-    return match;
-  };
-
   /// given a songID, finds the index in songs array
   const findIndexBySongID = (id: number) => {
     let index = -1;
@@ -82,76 +74,80 @@ const PlaylistRoute = () => {
     return index;
   };
 
-  // TODO: figure out how to tell which song was clicked
-  const onSongClick = (songID: number): void => {
-    if (!songID) {
-      console.log('Failed to change song');
-    }
-
-    const songToPlay = findSongByID(songID);
-    if (!songToPlay) {
-      return;
-    }
-    setSong(songToPlay);
-  };
-
-  const loadPlaylist = () => {
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    fetch(`${baseUrl}public/playlists`)
-      .then((response) => response.json())
-      .then((playlists) => {
-        playlists.forEach((playlist: Playlist) => {
-          if (playlistID && playlist.id === parseInt(playlistID, 10)) {
-            setPlaylist(playlist);
-            setNewPlaylistName(playlist.name);
-          }
-        });
-      });
-  };
-
-  const loadSongs = () => {
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    fetch(`${baseUrl}public/playlists/${playlistID}`)
-      .then((response) => response.json())
-      .then((songs) => {
-        if (songs.length) {
-          setSongs(songs);
-        } else {
-          setIsLoading(false);
+  // Fetch playlist info from API
+  const loadPlaylists = async () => {
+    try {
+      const response = await fetch(`${baseUrl}public/playlists`);
+      const playlists = await response.json();
+      playlists.forEach((playlist: Playlist) => {
+        if (playlistID && playlist.id === parseInt(playlistID, 10)) {
+          setPlaylist(playlist);
+          setNewPlaylistName(playlist.name);
         }
       });
+    } catch (ex) {
+      console.log('Failed to fetch playlist info');
+    }
   };
 
-  // ensures index is valid for the current # of songs
+  // Fetch song info from API
+  const loadSongs = async () => {
+    if (!playlistID) {
+      console.log('Cannot load songs without a playlistID');
+      return false;
+    }
+    const songs = await getSongsByPlaylistID(playlistID);
+
+    if (songs) {
+      setSongs(songs);
+    } else {
+      setIsLoading(false);
+    }
+    return true;
+  };
+
+  // Used locally and by children to change which song is playing
+  const changeSong = (song: Song, isChild = false) => {
+    if (!song.id) {
+      console.log('Failed to change song!');
+      return false;
+    }
+
+    setSong(song);
+    if (!isChild) {
+      setSelectedSongID(song.id);
+    }
+    return true;
+  };
+
+  // Ensures index is valid for the current # of songs
   const validIndex = (i: number) => {
     const maxIndex = songs.length;
     const remainder = Math.abs(i % maxIndex);
-    // if index was negative, return the difference
+    // If index was negative, return the difference
     return i >= 0 ? remainder : songs.length - remainder;
   };
 
-  const skipSong = () => {
-    // find index of current song based on id
-    const currentSongIndex = findIndexBySongID(song.id);
-    if (currentSongIndex === -1) {
-      return;
-    }
-    // change song to new index
-    const newSongIndex = validIndex(currentSongIndex + 1);
-    setSong(songs[newSongIndex]);
-  };
+  // Used for skipping and going to previous songs
+  const changeSongRelativeToCurrent = (relativeIndexOfNewSong: number) => {
+    const currentSongIndex = findIndexBySongID(selectedSongID);
 
-  const prevSong = () => {
-    const currentSongIndex = findIndexBySongID(song.id);
     if (currentSongIndex === -1) {
-      return;
+      console.log('Could not determine index of currently selected song');
+      return false;
     }
-    const newSongIndex = validIndex(currentSongIndex - 1);
-    setSong(songs[newSongIndex]);
-  };
 
-  const onSongEnded = () => {
-    skipSong();
+    const newSongIndex = validIndex(currentSongIndex + relativeIndexOfNewSong);
+    const newSong = songs[newSongIndex];
+
+    if (!newSong.id) {
+      console.log('Could not find valid ID for new song');
+      return false;
+    }
+
+    setSong(newSong);
+    setSelectedSongID(newSong.id);
+    return true;
   };
 
   // updating playlist name
@@ -175,22 +171,23 @@ const PlaylistRoute = () => {
       alert('Name updated successfully.');
       await updatePlaylistName(playlist.id, newPlaylistName);
     }
-    loadPlaylist();
+    loadPlaylists();
   };
 
-  // load new playlist when ID changes
+  // Load new playlist and songs when ID changes
   useEffect(() => {
-    loadPlaylist();
+    loadPlaylists();
     loadSongs();
   }, [playlistID]);
 
-  // load first song if songs change
+  // Load first song if songs change
   useEffect(() => {
-    if (songs[0]) {
-      setSong(songs[0]);
+    if (songs[0].id) {
+      changeSong(songs[0]);
     }
   }, [songs]);
 
+  // If a song exists in the state, we are no longer loading
   useEffect(() => {
     if (isLoading && song && song.id) {
       setIsLoading(false);
@@ -216,21 +213,25 @@ const PlaylistRoute = () => {
         </div>
         )}
       <Accordion
-        newItemID={song.id}
+        selectedSongID={selectedSongID}
+        setSelectedSongID={setSelectedSongID}
         playlist={playlist}
         playlistSongs={songs}
-        onItemClick={onSongClick}
         isAdding={isAdding}
         isLoading={isLoading}
         refreshPlaylistSongs={loadSongs}
+        changeSong={changeSong}
       />
       {song && song.name !== ''
         && (
           <AudioPlayer
             song={song}
-            onSongEnded={onSongEnded}
-            skipSong={skipSong}
-            prevSong={prevSong}
+            skipSong={() => {
+              changeSongRelativeToCurrent(1);
+            }}
+            prevSong={() => {
+              changeSongRelativeToCurrent(-1);
+            }}
           />
         )}
     </>

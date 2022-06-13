@@ -5,9 +5,11 @@ $height: 60px;
 
 div.accordionBody {
   display: none;
+  color: vars.$tertiaryColor;
 
   &.open {
-    display: block;
+    @include funcs.flexCenter();
+    padding: 20px 0px 30px 0px;
   }
 }
 

@@ -10,7 +10,6 @@ import {
 
 type AudioPlayerProps = {
     song: Song,
-    onSongEnded: any,
     skipSong: any,
     prevSong: any,
 }
@@ -130,7 +129,7 @@ const AudioPlayer = (props: AudioPlayerProps) => {
                   preload="metadata"
                   onTimeUpdate={onAudioPlayerTimeUpdate}
                   onLoadedMetadata={onLoadedSongMetadata}
-                  onEnded={props.onSongEnded}
+                  onEnded={props.skipSong}
                   onPause={pause}
                   onPlay={play}
                 />

@@ -4,15 +4,17 @@ import './AddButton.scss';
 
 type AddButtonProps = {
     songID: number;
-    onClick: any;
+    addSong: any;
 }
 
-const AddButton = (props: AddButtonProps) => {
+const AddButton = ({ songID, addSong }: AddButtonProps) => {
   return (
     <button
       type="button"
       className="addButton"
-      onClick={props.onClick.bind(null, props.songID)}
+      onClick={() => {
+        addSong(songID);
+      }}
     >
       <img
         alt="addButtonIcon"
