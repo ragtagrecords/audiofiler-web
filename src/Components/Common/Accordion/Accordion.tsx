@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Playlist, Song } from 'Types';
 import axios from 'axios';
-import addSongToPlaylist from 'Services/SongSvc';
+import { addSongToPlaylist } from 'Services/SongSvc';
 import AccordionItems from './AccordionItems/AccordionItems';
 import SearchBar from '../SearchBar/SearchBar';
 import './Accordion.scss';

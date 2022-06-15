@@ -7,6 +7,7 @@ import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from 'Components/Common/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
+import { updateSongName, updatePlaylistName } from 'Services/SongSvc';
 
 type PlaylistRouteParams = {
   playlistID: string;
@@ -151,6 +152,17 @@ const PlaylistRoute = () => {
     skipSong();
   };
 
+  const onClickPlaylist = () => {
+    updatePlaylistName(playlist.id, 'NEWNAME');
+  };
+
+  //  // When add button is clicked for a particular item
+  //  const onItemAdd = (id: number) => {
+  //   addSongToPlaylist(id, playlist.id);
+  //   refreshPlaylistSongs();
+  //   filterSongs();
+  // };
+
   // load new playlist when ID changes
   useEffect(() => {
     loadPlaylist();
@@ -177,6 +189,7 @@ const PlaylistRoute = () => {
 
       {playlist && playlist.name
         && <div className="title"><div className="noClickThru" /><h1>{playlist.name}</h1></div>}
+      <button className="test" type="button" onClick={onClickPlaylist}>Change</button>
       <Accordion
         newItemID={song.id}
         playlist={playlist}
