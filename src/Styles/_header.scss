@@ -6,31 +6,29 @@
   flex-direction: column;
   margin: 0;
   position: fixed;
-  height: 280px;
-  top: -50px;
+  height: 140px;
+  top: 0;
   left: 0;
   z-index: vars.$floatingZ;
-  pointer-events: none;
 
   /* transition */
 
   background: rgb(18, 31, 38);
   background: -moz-linear-gradient(
     0deg,
-    rgba(18, 31, 38, 0) 0%,
-    rgba(18, 31, 38, 1) 36%
+    rgba(vars.$primaryColor, 0) 0%,
+    rgba(vars.$primaryColor, 1) 6%
   );
   background: -webkit-linear-gradient(
     0deg,
-    rgba(18, 31, 38, 0) 0%,
-    rgba(18, 31, 38, 1) 36%
+    rgba(vars.$primaryColor, 0) 0%,
+    rgba(vars.$primaryColor, 1) 6%
   );
   background: linear-gradient(
     0deg,
-    rgba(18, 31, 38, 0) 0%,
-    rgba(18, 31, 38, 1) 36%
+    rgba(vars.$primaryColor, 0) 0%,
+    rgba(vars.$primaryColor, 1) 6%
   );
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121f26",endColorstr="#121f26",GradientType=1);
 
   .noClickThru 
   {
@@ -39,14 +37,38 @@
     pointer-events: auto;
   }
 
-  h1 {
-    position: relative;
-    top: -80px;
-    font-size: 2rem;
-    background-image: linear-gradient(vars.$tertiaryColor, rgba(white, 0.3));
-    background-clip: text;
-    color: transparent;
-    box-sizing: border-box;
-    align-items: flex-end;
+  &.editableName {
+    text-align: center;
+
+    form {
+       background: transparent;
+        input {
+          font-family: vars.$font;
+          caret-color: vars.$tertiaryColor;
+          width: 100%;
+          font-size: 2rem;
+          font-weight: bold;
+          background-image: linear-gradient(vars.$tertiaryColor, vars.$white);
+          background-clip: text;
+          color: transparent;
+          // color: ;
+  
+          box-sizing: border-box;
+          align-items: flex-end;
+          border: none;
+          outline: none;
+          border-radius: vars.$roundCorners;
+          text-align: center;
+          padding: 10px;  
+
+          &::placeholder {
+            opacity: 1;
+          }
+
+          &:focus {
+            outline: 1px solid vars.$tertiaryColor;
+          }
+        }
+    }
   }
 }

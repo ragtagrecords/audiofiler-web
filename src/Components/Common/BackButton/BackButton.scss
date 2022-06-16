@@ -1,9 +1,13 @@
 @use "Styles/vars";
 
 img.backButton {
-  width: 6%;
+  width: 50px;
   position: fixed;
   top: 20px;
   left: 20px;
   z-index: vars.$floatingZ + 10;
+
+  &:hover {
+    color: vars.$white;
+  }
 }

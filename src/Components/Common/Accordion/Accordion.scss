@@ -5,7 +5,7 @@ ul {
   &.accordion {
     @include funcs.flexCenter;
     flex-direction: column;
-    max-width: 65%;
+    width: 65%;
     border-radius: vars.$roundCorners;
   }
 }
@@ -22,7 +22,7 @@ ul {
 @media screen and (max-width: vars.$tabletBreakpoint) {
   ul {
     &.accordion {
-      max-width: 90%;
+      width: 90%;
     }
   }
 }
@@ -30,7 +30,7 @@ ul {
 @media screen and (max-width: vars.$phoneBreakpoint) {
   ul {
     &.accordion {
-      max-width: 100%;
+      width: 100%;
     }
   }
 }
