@@ -1,7 +1,7 @@
 @use "Styles/vars";
 @use "Styles/funcs";
 
-$playerHeight: 200px;
+$playerHeight: 120px;
 $uiHeight: calc($playerHeight / 4);
 
 .footer {
@@ -18,23 +18,21 @@ $uiHeight: calc($playerHeight / 4);
     pointer-events: none;
 
     /* transition fade */
-    background: rgb(18, 31, 38);
     background: -moz-linear-gradient(
       180deg,
-      rgba(18, 31, 38, 0) 0%,
-      rgba(18, 31, 38, 1) 36%
+      rgba(vars.$primaryColor, 0) 0%,
+      rgba(vars.$primaryColor, 1) 6%
     );
     background: -webkit-linear-gradient(
       180deg,
-      rgba(18, 31, 38, 0) 0%,
-      rgba(18, 31, 38, 1) 36%
+      rgba(vars.$primaryColor, 0) 0%,
+      rgba(vars.$primaryColor, 1) 6%
     );
     background: linear-gradient(
       180deg,
-      rgba(18, 31, 38, 0) 0%,
-      rgba(18, 31, 38, 1) 36%
+      rgba(vars.$primaryColor, 0) 0%,
+      rgba(vars.$primaryColor, 1) 6%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121f26",endColorstr="#121f26",GradientType=1);
 
 
 
@@ -241,10 +239,10 @@ $uiHeight: calc($playerHeight / 4);
   ----------------- */
 
   @media screen and (max-width: vars.$tabletBreakpoint) {
-    $playerHeight: 260px;
-    $nameHeight: (0.15 * $playerHeight);
-    $positionHeight: (0.15 * $playerHeight);
-    $controlsHeight: (0.2 * $playerHeight);
+    $playerHeight: 240px;
+    $nameHeight: (0.3 * $playerHeight);
+    $positionHeight: (0.3 * $playerHeight);
+    $controlsHeight: (0.4 * $playerHeight);
 
     .audioPlayer {
       flex-direction: column;

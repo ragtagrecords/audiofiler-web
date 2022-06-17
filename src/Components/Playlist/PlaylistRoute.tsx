@@ -7,6 +7,7 @@ import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from 'Components/Common/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
+import { updateSongName, updatePlaylistName } from 'Services/SongSvc';
 
 type PlaylistRouteParams = {
   playlistID: string;
@@ -31,6 +32,7 @@ const PlaylistRoute = () => {
   const [userID, setUserID] = useState<number>(0);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [newPlaylistName, setNewPlaylistName] = useState<string>('');
 
   const auth = async () => {
     const userID = await authenticate();
@@ -101,6 +103,7 @@ const PlaylistRoute = () => {
         playlists.forEach((playlist: Playlist) => {
           if (playlistID && playlist.id === parseInt(playlistID, 10)) {
             setPlaylist(playlist);
+            setNewPlaylistName(playlist.name);
           }
         });
       });
@@ -151,6 +154,30 @@ const PlaylistRoute = () => {
     skipSong();
   };
 
+  // updating playlist name
+  const handleNewPlaylistName = (e : React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    setNewPlaylistName(target.value);
+  };
+
+  const changePlaylistName = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const emptyString = newPlaylistName === '';
+    const startsWithSpace = newPlaylistName.length > 0 && newPlaylistName[0] === ' ';
+    const endsWithSpace = newPlaylistName.length > 0 && newPlaylistName.slice(-1) === ' ';
+
+    if (emptyString) {
+      alert('Playlist name can not be empty.');
+    } else if (startsWithSpace || endsWithSpace) {
+      alert('Playlist name can not start or end with spaces.');
+    } else {
+      console.log(newPlaylistName);
+      alert('Name updated successfully.');
+      await updatePlaylistName(playlist.id, newPlaylistName);
+    }
+    loadPlaylist();
+  };
+
   // load new playlist when ID changes
   useEffect(() => {
     loadPlaylist();
@@ -176,7 +203,18 @@ const PlaylistRoute = () => {
       <UserMenu userID={userID} options={menuOptions} />
 
       {playlist && playlist.name
-        && <div className="title"><div className="noClickThru" /><h1>{playlist.name}</h1></div>}
+        && (
+        <div className="title editableName">
+          <form onSubmit={changePlaylistName}>
+            <input
+              value={newPlaylistName}
+              onChange={handleNewPlaylistName}
+              disabled={!userID}
+            />
+            <button aria-label="submit" type="submit" className="submit" />
+          </form>
+        </div>
+        )}
       <Accordion
         newItemID={song.id}
         playlist={playlist}

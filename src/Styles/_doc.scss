@@ -1,8 +1,7 @@
 @use "vars";
 
-html,
 body {
-  background: vars.$primaryColor;
+  background-image: url("../Assets/image0.png");
   color: vars.$tertiaryColor;
   font-family: vars.$font;
   font-size: vars.$defaultFontSize;
