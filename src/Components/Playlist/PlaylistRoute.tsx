@@ -7,7 +7,7 @@ import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from 'Components/Common/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
-import { updateSongName, updatePlaylistName } from 'Services/SongSvc';
+import { updatePlaylistName } from 'Services/SongSvc';
 
 type PlaylistRouteParams = {
   playlistID: string;
