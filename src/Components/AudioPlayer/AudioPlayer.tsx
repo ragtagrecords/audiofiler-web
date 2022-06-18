@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Song } from 'Types';
 import Controls from './Controls/Controls';
 import './AudioPlayer.scss';
@@ -18,24 +18,30 @@ const AudioPlayer = ({ song, skipSong, prevSong }: AudioPlayerProps) => {
   const [currentTime, setCurrentTime] = useState<number>(0); // controlled by audio player
   const [seekTime, setSeekTime] = useState<number>(0);
 
+  useEffect(() => {
+    if (song.id) {
+      setIsPlaying(true);
+    }
+  }, [song]);
+
   return (
     <div className="footer">
       <div className="audioPlayer">
         {song && song.path !== ''
-                && (
-                <Player
-                  src={song.path}
-                  isPlaying={isPlaying}
-                  skipSong={skipSong}
-                  seekTime={seekTime}
-                  onTimeUpdate={(e: React.ChangeEvent<HTMLAudioElement>) => {
-                    setCurrentTime(e.target.currentTime);
-                  }}
-                  onLoadedMetadata={(e: React.ChangeEvent<HTMLAudioElement>) => {
-                    setDuration(e.target.duration);
-                  }}
-                />
-                )}
+          && (
+          <Player
+            src={song.path}
+            isPlaying={isPlaying}
+            skipSong={skipSong}
+            seekTime={seekTime}
+            onTimeUpdate={(e: React.ChangeEvent<HTMLAudioElement>) => {
+              setCurrentTime(e.target.currentTime);
+            }}
+            onLoadedMetadata={(e: React.ChangeEvent<HTMLAudioElement>) => {
+              setDuration(e.target.duration);
+            }}
+          />
+          )}
 
         <span className="audioPlayerUI name">
           {song.name}

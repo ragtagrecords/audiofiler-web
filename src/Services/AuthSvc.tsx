@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 export const authenticate = async (): Promise<number> => {
-  console.log('beginning authenticate');
-
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const accessToken = localStorage.getItem('token');

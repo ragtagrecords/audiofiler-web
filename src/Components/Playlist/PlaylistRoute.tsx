@@ -188,6 +188,7 @@ const PlaylistRoute = () => {
   }, [songs]);
 
   // If a song exists in the state, we are no longer loading
+  // We should prob find a way to do this without useEffect
   useEffect(() => {
     if (isLoading && song && song.id) {
       setIsLoading(false);
@@ -222,7 +223,7 @@ const PlaylistRoute = () => {
         refreshPlaylistSongs={loadSongs}
         changeSong={changeSong}
       />
-      {song && song.name !== ''
+      {song && song.id
         && (
           <AudioPlayer
             song={song}
