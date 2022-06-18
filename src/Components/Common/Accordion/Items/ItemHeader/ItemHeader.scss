@@ -2,10 +2,6 @@
 @use "Styles/vars";
 
 $height: 60px;
-$outerSectionWidth: 0%;
-$innerSectionWidth: 100%;
-$outerSectionWidthWhenSelected: 20%;
-$innerSectionWidthWhenSelected: 80%;
 
 .accordionHeader {
     @include funcs.flexCenter();
@@ -16,19 +12,21 @@ $innerSectionWidthWhenSelected: 80%;
         background: transparent;
         border: none;
         cursor: pointer;
+        padding: 0px;
       }
       
       &.left, &.right {
-        width: $outerSectionWidth;
+        width: 0%;
+        height: $height;
       }
       &.center {
-        width: $innerSectionWidth;
+        width: 100%;
 
         .accordionButton {
           @include funcs.flexCenter();
           height: $height;
           font-size: 1.5rem;
-          padding: 20px;
+          padding: 0px 20px;
           background: transparent;
           color: vars.$tertiaryColor;
           border: none;
@@ -47,13 +45,14 @@ $innerSectionWidthWhenSelected: 80%;
 	&.selected {
 		.accordionHeaderSection {
 			&.left, &.right {
-				width: $outerSectionWidthWhenSelected;
+				width: 15%;
 				display: flex;
 				justify-content: center;
 				align-items: center;
+        flex-shrink: 0;
 			}
 			&.center {
-				width: $innerSectionWidthWhenSelected;
+				width: 70%;
 
 				.accordionButton {
 					width: 100%;
