@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { SongInputInfo, Playlist } from 'Types';
-import axios from 'axios';
+import { Song, Playlist } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
+import { removeExtraExtensions } from 'Services/FileSvc';
+import { addSong } from 'Services/SongSvc';
 import UploadButton from 'Components/Common/UploadButton/UploadButton';
 import { useNavigate } from 'react-router-dom';
 import SongFieldset from './SongFieldset/SongFieldset';
 import './AddSongsForm.scss';
 
-type SongFiles = {
-  songFile: File,
-  zipFile?: File
-}
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 type AddSongFormProps = {
   playlist?: Playlist;
 }
-
-const defaultSong = {
-  name: '',
-  tempo: 0,
-  fileName: '',
-  playlistIDs: [],
-};
 
 const defaultPlaylist: Playlist = {
   id: 0,
@@ -29,15 +20,13 @@ const defaultPlaylist: Playlist = {
 };
 
 const AddSongForm = (props: AddSongFormProps) => {
-  const [songs, setSongs] = useState<Array<SongInputInfo>>([defaultSong]);
-  const [files, setFiles] = useState<SongFiles[]>();
+  const [songs, setSongs] = useState<Array<Song> | null>(null);
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
   const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
   const [userID, setUserID] = useState<number>(0);
   const navigate = useNavigate();
 
   const getPlaylists = () => {
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     fetch(`${baseUrl}public/playlists/`)
       .then((response) => response.json())
       .then((data) => setPlaylists(data));
@@ -59,32 +48,37 @@ const AddSongForm = (props: AddSongFormProps) => {
     }
   }, [props.playlist]);
 
-  const updateSongName = (fileName: string, newSongName: string) => {
-    const newSongInfo = songs;
-    newSongInfo.every((songInfo) => {
-      if (songInfo.fileName === fileName) {
-        songInfo.name = newSongName;
-        return false;
-      }
-      return true;
-    });
-    setSongs(newSongInfo);
-  };
+  const updateSongInfoInState = (fileName: string, newValue: string, infoType: string) => {
+    if (songs === null) {
+      return false;
+    }
 
-  const updateSongTempo = (fileName: string, newSongTempo: string) => {
-    const newSongInfo = songs;
-    newSongInfo.every((songInfo) => {
-      if (songInfo.fileName === fileName) {
-        songInfo.tempo = parseInt(newSongTempo, 10);
-        return false;
+    const tempSongs = [...songs];
+
+    tempSongs.every((song) => {
+      if (song.fileName === fileName) {
+        if (infoType === 'name') {
+          song.name = newValue;
+          return false;
+        }
+
+        if (infoType === 'tempo') {
+          song.tempo = parseInt(newValue, 10);
+          return false;
+        }
       }
+      // continue looping with every
       return true;
     });
-    setSongs(newSongInfo);
+    setSongs(tempSongs);
+    return true;
   };
 
   const updateSongPlaylistIDs = (fileName: string, options: Array<HTMLOptionElement>) => {
-    const newSongInfo = songs;
+    if (songs === null) {
+      return false;
+    }
+    const tempSongs = [...songs];
     const playlistIDs : Array<string> = [];
     // store selected dropdown values in array
     for (let i = 0; i < options.length; i += 1) {
@@ -92,14 +86,15 @@ const AddSongForm = (props: AddSongFormProps) => {
         playlistIDs.push(options[i].value);
       }
     }
-    newSongInfo.every((songInfo) => {
-      if (songInfo.fileName === fileName) {
-        songInfo.playlistIDs = playlistIDs;
+    tempSongs.every((song) => {
+      if (song.fileName === fileName) {
+        song.playlistIDs = playlistIDs;
         return false;
       }
       return true;
     });
-    setSongs(newSongInfo);
+    setSongs(tempSongs);
+    return true;
   };
 
   const saveSongFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,22 +105,13 @@ const AddSongForm = (props: AddSongFormProps) => {
       console.log('ERROR: FILE NOT UPLOADED TO FE');
       return false;
     }
-    const newSongFiles: SongFiles[] = new Array<SongFiles>(newFiles.length);
-
-    for (let i = 0; i < newFiles.length; i += 1) {
-      newSongFiles[i] = {
-        songFile: newFiles[i],
-      };
-    }
-    // store raw song files so we can POST them later
-    setFiles(newSongFiles);
 
     // build temp array of uploaded song info
-    const newSongs: Array<SongInputInfo> = [];
+    const newSongs: Array<Song> = [];
     for (let i = 0; i < newFiles.length; i += 1) {
       newSongs[i] = {
-        fileName: newFiles[i].name,
-        name: newFiles[i].name,
+        file: newFiles[i],
+        name: removeExtraExtensions(newFiles[i].name),
       };
     }
 
@@ -136,33 +122,26 @@ const AddSongForm = (props: AddSongFormProps) => {
   };
 
   const saveZip = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
+    const { files } = e.target as HTMLInputElement;
 
-    if (!target.files || target.files[0] === undefined) {
-      return false;
-    }
-
-    const zipFile = target.files[0];
-
-    if (!zipFile || !files) {
+    if (!songs || !files || files[0] === undefined) {
       console.log('ERROR: FILE NOT UPLOADED TO FE');
       return false;
     }
 
-    // build temp array of uploaded songs
-    const newSongFiles: SongFiles[] = files;
-    const newSongs: Array<SongInputInfo> = songs;
-    newSongs.forEach((song, i) => {
-      if (song.fileName === e.target.id) {
-        newSongFiles[i].zipFile = zipFile;
-        song.zipFileName = zipFile.name;
+    const zipFile = files[0];
+
+    // Build temp array of uploaded songs
+    const newSongs: Array<Song> = [...songs];
+
+    // Find and update the one that changed
+    for (let i = 0; i < newSongs.length; i += 1) {
+      if (newSongs[i].fileName === e.target.id) {
+        newSongs[i].zipFile = zipFile;
       }
-    });
+    }
 
     setSongs(newSongs);
-    setFiles(newSongFiles);
-    console.log('SUCCESS: ZIP FILE UPLOADED TO FE');
-
     return true;
   };
 
@@ -177,12 +156,11 @@ const AddSongForm = (props: AddSongFormProps) => {
     if (cls.includes('songFileInput')) {
       saveSongFiles(e);
     } else if (cls.includes('songZipInput')) {
-      console.log({ name: 'TONY TEST', event: e });
       saveZip(e);
     } else if (cls.includes('songNameInput')) {
-      updateSongName(e.target.id, e.target.value);
+      updateSongInfoInState(e.target.id, e.target.value, 'name');
     } else if (cls.includes('songTempoInput')) {
-      updateSongTempo(e.target.id, e.target.value);
+      updateSongInfoInState(e.target.id, e.target.value, 'tempo');
     } else if (cls.includes('songPlaylistInput')) {
       updateSongPlaylistIDs(e.target.id, e.target.options);
     } else if (cls === 'globalPlaylistIDInput') {
@@ -196,16 +174,17 @@ const AddSongForm = (props: AddSongFormProps) => {
 
   const handleSubmit = async (e : any) => {
     e.preventDefault();
-    const formData = new FormData();
 
-    if (!files || !songs) {
-      console.log('Could not find files or info to upload');
+    if (!songs) {
+      console.log('Could not find songs to upload');
       return false;
     }
 
-    // add selected global playlistID
+    const songsToSubmit = [...songs];
+
+    // Add selected global playlistID to all the songs
     if (globalPlaylistID !== -1) {
-      songs.forEach((song) => {
+      songsToSubmit.forEach((song) => {
         if (song.playlistIDs && song.playlistIDs[0]) {
           song.playlistIDs.push(globalPlaylistID.toString());
         } else if (song) {
@@ -215,30 +194,22 @@ const AddSongForm = (props: AddSongFormProps) => {
       });
     }
 
-    // add files to form data
-    for (let i = 0; i < files.length; i += 1) {
-      const { songFile, zipFile } = files[i];
-      formData.append(songFile.name, songFile);
-
-      if (zipFile && zipFile.name) {
-        formData.append(zipFile.name, zipFile);
-      }
+    // Asynchronously attempt to add all the songs
+    const results = [];
+    for (let i = 0; i < songsToSubmit.length; i += 1) {
+      results.push(addSong(songsToSubmit[i]));
     }
 
-    // add songs to form data
-    formData.append('songs', JSON.stringify(songs));
+    // Array of true/false values for the success of each song
+    const asyncResults = await Promise.all(results);
 
-    // post files and info to API
-    try {
-      await axios.post(
-        'http://api.ragtagrecords.com/public/songs',
-        formData,
-      );
-      navigate(`/playlists/${globalPlaylistID ?? ''}`);
-      return true;
-    } catch (ex) {
+    if (asyncResults.includes(false)) {
+      // TODO: present error to user
       return false;
     }
+
+    navigate(`/playlists/${globalPlaylistID ?? ''}`);
+    return true;
   };
 
   if (!userID) {
@@ -278,18 +249,21 @@ const AddSongForm = (props: AddSongFormProps) => {
           </div>
         </label>
 
-        {files && songs && songs.map((song : SongInputInfo, i) => {
-          return (
-            <SongFieldset
-              key={song.fileName}
-              index={i.toString()}
-              fileName={song.name}
-              playlists={playlists}
-              handleChange={handleChange}
-            />
-          );
+        {songs && songs.map((song : Song, i) => {
+          if (song.fileName) {
+            return (
+              <SongFieldset
+                key={song.fileName}
+                index={i.toString()}
+                fileName={song.fileName}
+                playlists={playlists}
+                handleChange={handleChange}
+              />
+            );
+          }
+          return null;
         })}
-        {files && songs && (
+        {songs && (
         <input
           type="submit"
           value="Add Songs"

@@ -167,7 +167,6 @@ const PlaylistRoute = () => {
     } else if (startsWithSpace || endsWithSpace) {
       alert('Playlist name can not start or end with spaces.');
     } else {
-      console.log(newPlaylistName);
       alert('Name updated successfully.');
       await updatePlaylistName(playlist.id, newPlaylistName);
     }

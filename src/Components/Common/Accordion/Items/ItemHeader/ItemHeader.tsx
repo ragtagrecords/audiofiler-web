@@ -63,7 +63,7 @@ const AccordionItemHeader = ({
       </div>
       {/* show extra buttons if song is selected */}
       <div className="accordionHeaderSection right">
-        {isSelected && username
+        {isSelected && song.path && username
           && (
           <>
             <DownloadButton
