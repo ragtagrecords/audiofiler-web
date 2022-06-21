@@ -27,7 +27,7 @@ const AudioPlayer = ({ song, skipSong, prevSong }: AudioPlayerProps) => {
   return (
     <div className="footer">
       <div className="audioPlayer">
-        {song && song.path !== ''
+        {song && song.path
           && (
           <Player
             src={song.path}

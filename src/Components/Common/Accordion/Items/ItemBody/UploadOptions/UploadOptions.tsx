@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { removeExtraExtensions } from 'Services/FileSvc';
-import { addSongs } from 'Services/SongSvc';
-import { Song, UploadedSongInfo } from 'Types';
+import { addSong } from 'Services/SongSvc';
+import { Song } from 'Types';
 import SongFieldset from './SongFieldset.tsx/SongFieldset';
 import './UploadOptions.scss';
 
@@ -11,62 +11,58 @@ type UploadOptionsProps = {
 }
 
 const UploadOptions = ({ uploadedFiles, parentSong }: UploadOptionsProps) => {
-  const initialSongInfo: UploadedSongInfo[] = [];
+  const initialSongs: Song[] = [];
   uploadedFiles.forEach((file) => {
-    initialSongInfo.push({
+    initialSongs.push({
       file,
       name: removeExtraExtensions(file.name),
-      parentSong,
-      isMainVersion: false,
+      parentID: parentSong.id,
+      isParent: false,
+      tempo: parentSong.tempo ?? undefined,
     });
   });
-  const [uploadedSongInfo, setUploadedSongInfo] = useState<UploadedSongInfo[]>(initialSongInfo);
-  const [uploadWasSuccessful, setUploadWasSuccessful] = useState<boolean | null>(null);
+  const [uploadedSongs, setUploadedSongs] = useState<Song[]>(initialSongs);
+  const [uploadWasSuccessful, setUploadStatus] = useState<boolean | null>(null);
 
-  const updateSongInfo = (newSongInfo: UploadedSongInfo) => {
-    const tempSongInfo: UploadedSongInfo[] = [...uploadedSongInfo];
-    tempSongInfo.forEach((songInfo) => {
-      if (songInfo.file.name === newSongInfo.file.name) {
-        songInfo = newSongInfo;
-      } else if (newSongInfo.isMainVersion) {
-        songInfo.isMainVersion = false;
+  // Updates song in uploadedSongs
+  const updateSong = (song: Song) => {
+    // Copy current info from state
+    const songs: Song[] = [...uploadedSongs];
+
+    const isNewParent = song.isParent;
+
+    // Find which one changed and update it
+    for (let i = 0; i < songs.length; i += 1) {
+      const namesMatch = songs[i].file?.name === song.file?.name;
+      if (namesMatch) {
+        songs[i] = song;
+      } else if (isNewParent) {
+        songs[i].isParent = false;
       }
-    });
-    setUploadedSongInfo(tempSongInfo);
-  };
-
-  const handleClick = (e: React.MouseEvent, songInfo: UploadedSongInfo) => {
-    const { name } = e.target as HTMLButtonElement;
-
-    if (!name) {
-      console.log('Unhandled click');
-      return false;
     }
-
-    if (name === 'isMainVersion') {
-      songInfo.isMainVersion = true;
-    } else if (name === 'isNewVersion') {
-      songInfo.isMainVersion = false;
-    }
-    updateSongInfo(songInfo);
-    return true;
-  };
-
-  const handleChange = (e: React.ChangeEvent, songInfo: UploadedSongInfo) => {
-    const target = e.target as HTMLInputElement;
-    const { value, className } = target;
-
-    // Determine which button was clicked based on name
-    if (className.includes('uploadedFileName')) {
-      songInfo.name = value;
-    }
-    updateSongInfo(songInfo);
+    setUploadedSongs(songs);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const songsWereAdded = await addSongs(parentSong, uploadedSongInfo);
-    setUploadWasSuccessful(songsWereAdded);
+
+    const results = [];
+    for (let i = 0; i < uploadedSongs.length; i += 1) {
+      // Add request for song to async array
+      results.push(addSong(uploadedSongs[i]));
+    }
+
+    // Array of true/false values for the success of each file
+    const asyncResults = await Promise.all(results);
+
+    // TODO: present error to user if any occured
+    if (asyncResults.includes(false)) {
+      setUploadStatus(false);
+      return false;
+    }
+
+    setUploadStatus(true);
+    return true;
   };
 
   if (uploadWasSuccessful) {
@@ -94,12 +90,16 @@ const UploadOptions = ({ uploadedFiles, parentSong }: UploadOptionsProps) => {
   return (
     <form className="uploadOptionsContainer" onSubmit={handleSubmit}>
       <ul>
-        {uploadedSongInfo.map((songInfo: UploadedSongInfo) => {
+        {uploadedSongs && uploadedSongs.map((song: Song) => {
+          if (!song.file) {
+            return null;
+          }
           return (
             <SongFieldset
-              songInfo={songInfo}
-              handleChange={handleChange}
-              handleClick={handleClick}
+              song={song}
+              updateSong={updateSong}
+              parentSongID={parentSong.id ?? -1}
+              key={`song-fieldset-${song.file.name}`}
             />
           );
         })}

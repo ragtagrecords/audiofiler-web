@@ -19,7 +19,7 @@ const DownloadOptions = ({ song }: DownloadOptionsProps) => {
     downloadFile(file.url, file.fileName);
   };
 
-  if (song) {
+  if (song && song.path) {
     const files: DownloadableFile[] = [];
     const songFileExt = `${song.path.split('.').pop()}` ?? 'mp3';
     files.push({

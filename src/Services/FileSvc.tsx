@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const fileServerURL = 'http://files.ragtagrecords.com';
+
 export const downloadFile = (fileUrl: string, fileName: string) => {
   axios({
     url: fileUrl,
@@ -13,6 +15,25 @@ export const downloadFile = (fileUrl: string, fileName: string) => {
     document.body.appendChild(link);
     link.click();
   });
+};
+
+export const uploadFile = async (file: File, dir: string) => {
+  if (!file || !dir) {
+    return false;
+  }
+  const url = `${fileServerURL}${dir}`;
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    await axios.post(
+      url,
+      formData,
+    );
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
 export const getExtension = (fileName: string): string => {

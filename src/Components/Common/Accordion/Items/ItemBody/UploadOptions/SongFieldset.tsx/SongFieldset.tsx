@@ -1,36 +1,45 @@
 import React from 'react';
 import { getExtension } from 'Services/FileSvc';
 
-import { UploadedSongInfo } from 'Types';
+import { Song } from 'Types';
 
 type SongFieldsetProps = {
-  songInfo: UploadedSongInfo;
-  handleChange: any;
-  handleClick: any;
+  song: Song;
+  updateSong: any;
+  parentSongID: number;
 }
 
-const SongFieldset = ({ songInfo, handleChange, handleClick }: SongFieldsetProps) => {
+const SongFieldset = ({ song, updateSong, parentSongID }: SongFieldsetProps) => {
+  if (!song.file || parentSongID === -1) {
+    return null;
+  }
+
   return (
-    <li key={songInfo.file.name}>
+    <li>
       <input
         type="text"
         className="uploadedFileName"
-        value={songInfo.name}
+        value={song.name}
         onChange={(e) => {
-          handleChange(e, songInfo);
+          const updatedSong = { ...song };
+          updatedSong.name = e.target.value;
+          updateSong(updatedSong);
         }}
       />
       <p className="uploadedFileType">
-        ({getExtension(songInfo.file.name)} detected)
+        ({getExtension(song.file.name)} detected)
       </p>
       <div className="uploadVersionOptions">
         {}
         <button
           type="button"
-          name="isMainVersion"
-          className={`uploadVersionButton ${songInfo.isMainVersion ? 'selected' : ''}`}
-          onClick={(e) => {
-            handleClick(e, songInfo);
+          name="isParent"
+          className={`uploadVersionButton ${song.isParent ? 'selected' : ''}`}
+          onClick={() => {
+            const updatedSong = { ...song };
+            updatedSong.isParent = true;
+            updatedSong.parentID = null;
+            updateSong(updatedSong);
           }}
         >
           Replace main version
@@ -38,9 +47,12 @@ const SongFieldset = ({ songInfo, handleChange, handleClick }: SongFieldsetProps
         <button
           type="button"
           name="isNewVersion"
-          className={`uploadVersionButton ${!songInfo.isMainVersion ? 'selected' : ''}`}
-          onClick={(e) => {
-            handleClick(e, songInfo);
+          className={`uploadVersionButton ${!song.isParent ? 'selected' : ''}`}
+          onClick={() => {
+            const updatedSong = { ...song };
+            updatedSong.isParent = false;
+            updatedSong.parentID = parentSongID;
+            updateSong(updatedSong);
           }}
         >
           Add new version
