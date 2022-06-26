@@ -3,10 +3,12 @@ import { Song, Playlist } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
 import { removeExtraExtensions } from 'Services/FileSvc';
 import { addSong } from 'Services/SongSvc';
-import UploadButton from 'Components/Common/UploadButton/UploadButton';
 import { useNavigate } from 'react-router-dom';
-import SongFieldset from './SongFieldset/SongFieldset';
+import UploadButton from 'Components/Common/UploadButton/UploadButton';
+import guessTempo from 'Services/AudioSvc';
+
 import './AddSongsForm.scss';
+import SongsFields from './SongsFields/SongsFields';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -24,6 +26,7 @@ const AddSongForm = (props: AddSongFormProps) => {
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
   const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
   const [userID, setUserID] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const getPlaylists = () => {
@@ -42,6 +45,13 @@ const AddSongForm = (props: AddSongFormProps) => {
     getPlaylists();
   }, []);
 
+  // When songs are not null, we are no longer loading
+  useEffect(() => {
+    if (songs && songs[0] && songs[0].file) {
+      setIsLoading(false);
+    }
+  }, [songs]);
+
   useEffect(() => {
     if (props.playlist) {
       setGlobalPlaylist(props.playlist.id);
@@ -55,6 +65,8 @@ const AddSongForm = (props: AddSongFormProps) => {
 
     const tempSongs = [...songs];
 
+    // Note that returns inside every() do not actually end code
+    // Return true to continue looping, or false to break the loop
     tempSongs.every((song) => {
       if (song.fileName === fileName) {
         if (infoType === 'name') {
@@ -97,7 +109,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     return true;
   };
 
-  const saveSongFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const saveSongFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     const newFiles = target.files;
 
@@ -106,18 +118,23 @@ const AddSongForm = (props: AddSongFormProps) => {
       return false;
     }
 
+    setIsLoading(true);
+
     // build temp array of uploaded song info
     const newSongs: Array<Song> = [];
+    let tempo = 0;
     for (let i = 0; i < newFiles.length; i += 1) {
+      tempo = await guessTempo(newFiles[i]);
       newSongs[i] = {
         file: newFiles[i],
         name: removeExtraExtensions(newFiles[i].name),
+        tempo,
       };
     }
 
     // update songs in state so map will update
     setSongs(newSongs);
-    console.log('SUCCESS: FILE UPLOADED TO FE');
+    console.log('SUCCESS: FILES STORED IN MEMORY');
     return true;
   };
 
@@ -125,7 +142,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     const { files } = e.target as HTMLInputElement;
 
     if (!songs || !files || files[0] === undefined) {
-      console.log('ERROR: FILE NOT UPLOADED TO FE');
+      console.log('ERROR: ZIP FILE NOT STORED IN MEMORY');
       return false;
     }
 
@@ -249,20 +266,12 @@ const AddSongForm = (props: AddSongFormProps) => {
           </div>
         </label>
 
-        {songs && songs.map((song : Song, i) => {
-          if (song.fileName) {
-            return (
-              <SongFieldset
-                key={song.fileName}
-                index={i.toString()}
-                fileName={song.fileName}
-                playlists={playlists}
-                handleChange={handleChange}
-              />
-            );
-          }
-          return null;
-        })}
+        <SongsFields
+          songs={songs}
+          isLoading={isLoading}
+          playlists={playlists}
+          handleChange={handleChange}
+        />
         {songs && (
         <input
           type="submit"

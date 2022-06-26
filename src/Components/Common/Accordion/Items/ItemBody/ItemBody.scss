@@ -9,7 +9,12 @@ div.accordionBody {
 
   &.open {
     @include funcs.flexCenter();
+    flex-direction: column;
     padding: 20px 0px 30px 0px;
+
+    p {
+      margin: 10px 0px;
+    }
   }
 }
 

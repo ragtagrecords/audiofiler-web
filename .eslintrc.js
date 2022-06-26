@@ -54,6 +54,7 @@ module.exports = {
     'no-alert': [0],
     'no-restricted-globals': [0],
     'no-unused-expressions': [0],
+    'no-await-in-loop': [0],
   },
   settings: {
     'import/resolver': {
