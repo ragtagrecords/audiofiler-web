@@ -35,10 +35,6 @@ const AccordionItemBody = ({
         className={`accordionBody ${(isSelected && isOpen) ? 'open' : ''}`}
       >
         <p>
-          id:
-          {song.id}
-        </p>
-        <p>
           artist:
           {song.artist}
         </p>

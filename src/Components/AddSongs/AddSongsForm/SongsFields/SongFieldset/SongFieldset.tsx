@@ -1,47 +1,56 @@
 import React, { ChangeEventHandler } from 'react';
 import './SongFieldset.scss';
-import { Playlist } from 'Types';
+import { Playlist, Song } from 'Types';
 
 type SongFieldsetProps = {
-  fileName: string,
+  song: Song,
   index: string,
   playlists: Array<Playlist>,
   handleChange: ChangeEventHandler,
 }
 
-const SongFieldset = (props: SongFieldsetProps) => {
+const SongFieldset = ({
+  song,
+  index,
+  playlists,
+  handleChange,
+}: SongFieldsetProps) => {
+  if (!song.file?.name) {
+    return null;
+  }
+
   return (
     <fieldset className="songInfoFieldset">
       <label> Song Name
         <input
           type="text"
-          id={props.fileName}
+          id={song.file.name}
           className="songNameInput"
-          name={`songName${props.index}`}
-          defaultValue={props.fileName}
-          onChange={props.handleChange}
+          name={`songName${index}`}
+          defaultValue={song.file.name}
+          onChange={handleChange}
         />
       </label>
       <label> Tempo
         <input
           type="text"
-          id={props.fileName}
+          id={song.file.name}
           className="songTempoInput"
-          name={`tempo${props.index}`}
-          defaultValue=""
-          onChange={props.handleChange}
+          name={`tempo${index}`}
+          defaultValue={song.tempo ?? ''}
+          onChange={handleChange}
         />
       </label>
       <label>
         Playlists
         <select
           multiple
-          id={props.fileName}
+          id={song.file.name}
           className="songPlaylistInput"
-          name={`playlists${props.index}`}
-          onChange={props.handleChange}
+          name={`playlists${index}`}
+          onChange={handleChange}
         >
-          {props.playlists.map((playlist : Playlist) => {
+          {playlists.map((playlist : Playlist) => {
             return (
               <option
                 key={playlist.id}
@@ -55,11 +64,11 @@ const SongFieldset = (props: SongFieldsetProps) => {
       <label> Upload project .zip
         <input
           className="songZipInput"
-          id={props.fileName}
+          id={song.file.name}
           name="uploadedZip"
           type="file"
           multiple
-          onChange={props.handleChange}
+          onChange={handleChange}
         />
       </label>
 
