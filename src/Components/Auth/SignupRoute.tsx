@@ -58,7 +58,7 @@ const SignupRoute = () => {
       return false;
     }
 
-    const wasUserCreated = signup(username, password);
+    const wasUserCreated = await signup(username, password);
     if (!wasUserCreated) {
       setMessage('Failed to create user :( Please try again or reach out');
       return false;

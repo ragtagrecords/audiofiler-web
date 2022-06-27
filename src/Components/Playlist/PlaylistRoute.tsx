@@ -1,50 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import UserMenu from 'Components/Common/UserMenu/UserMenu';
 import { MenuOption, Playlist, Song } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
-import { getSongsByPlaylistID, updatePlaylistName } from 'Services/SongSvc';
+import { getSongs } from 'Services/SongSvc';
+import { getPlaylistByID, updatePlaylist } from 'Services/PlaylistSvc';
+import UserMenu from 'Components/Common/UserMenu/UserMenu';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from 'Components/Common/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
-
-const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 type PlaylistRouteParams = {
   playlistID: string;
 }
 
 const PlaylistRoute = () => {
-  const defaultSong: Song = {
-    id: 0,
-    name: '',
-    path: '',
-    artist: '',
-    tempo: 0,
-  };
-  const defaultPlaylist: Playlist = {
-    id: 0,
-    name: '',
-  };
+  // Get playlistID from query params
   const { playlistID } = useParams<PlaylistRouteParams>();
-  const [playlist, setPlaylist] = useState<Playlist>(defaultPlaylist);
-  const [songs, setSongs] = useState<Array<Song>>([defaultSong]);
-  const [song, setSong] = useState<Song>(defaultSong);
+
+  if (!playlistID) {
+    return (<div>No playlistID found</div>);
+  }
+
+  const [playlist, setPlaylist] = useState<Playlist | null>(null);
+  const [playlistSongs, setPlaylistSongs] = useState<Song[] | null>(null);
+  const [song, setSong] = useState<Song | null>(null);
   const [selectedSongID, setSelectedSongID] = useState<number>(0);
   const [userID, setUserID] = useState<number>(0);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [newPlaylistName, setNewPlaylistName] = useState<string>('');
 
   const auth = async () => {
     const userID = await authenticate();
     setUserID(userID);
   };
-
-  useEffect(() => {
-    auth();
-  }, []);
 
   const onSongAddClick = () => {
     setIsAdding(!isAdding);
@@ -63,47 +52,16 @@ const PlaylistRoute = () => {
     },
   ];
 
-  /// given a songID, finds the index in songs array
+  /// given a songID, finds the index in playlistSongs array
   const findIndexBySongID = (id: number) => {
+    if (!playlistSongs) { 'ERROR: no songs in playlist'; return false; }
     let index = -1;
-    for (let i = 0; i < songs.length; i += 1) {
-      if (songs[i].id === id) {
+    for (let i = 0; i < playlistSongs.length; i += 1) {
+      if (playlistSongs[i].id === id) {
         index = i;
       }
     }
     return index;
-  };
-
-  // Fetch playlist info from API
-  const loadPlaylists = async () => {
-    try {
-      const response = await fetch(`${baseUrl}public/playlists`);
-      const playlists = await response.json();
-      playlists.forEach((playlist: Playlist) => {
-        if (playlistID && playlist.id === parseInt(playlistID, 10)) {
-          setPlaylist(playlist);
-          setNewPlaylistName(playlist.name);
-        }
-      });
-    } catch (ex) {
-      console.log('Failed to fetch playlist info');
-    }
-  };
-
-  // Fetch song info from API
-  const loadSongs = async () => {
-    if (!playlistID) {
-      console.log('Cannot load songs without a playlistID');
-      return false;
-    }
-    const songs = await getSongsByPlaylistID(playlistID);
-
-    if (songs) {
-      setSongs(songs);
-    } else {
-      setIsLoading(false);
-    }
-    return true;
   };
 
   // Used locally and by children to change which song is playing
@@ -120,25 +78,26 @@ const PlaylistRoute = () => {
     return true;
   };
 
-  // Ensures index is valid for the current # of songs
+  // Ensures index is valid for the current # of playlistSongs
   const validIndex = (i: number) => {
-    const maxIndex = songs.length;
+    if (!playlistSongs) { console.log('ERROR: no songs in playlist'); return 0; }
+    const maxIndex = playlistSongs.length;
     const remainder = Math.abs(i % maxIndex);
     // If index was negative, return the difference
-    return i >= 0 ? remainder : songs.length - remainder;
+    return i >= 0 ? remainder : playlistSongs.length - remainder;
   };
 
-  // Used for skipping and going to previous songs
+  // Used for skipping and going to previous playlistSongs
   const changeSongRelativeToCurrent = (relativeIndexOfNewSong: number) => {
     const currentSongIndex = findIndexBySongID(selectedSongID);
 
-    if (currentSongIndex === -1) {
+    if (!currentSongIndex) {
       console.log('Could not determine index of currently selected song');
       return false;
     }
-
+    if (!playlistSongs) { console.log('ERROR: no songs in playlist'); return 0; }
     const newSongIndex = validIndex(currentSongIndex + relativeIndexOfNewSong);
-    const newSong = songs[newSongIndex];
+    const newSong = playlistSongs[newSongIndex];
 
     if (!newSong.id) {
       console.log('Could not find valid ID for new song');
@@ -150,41 +109,60 @@ const PlaylistRoute = () => {
     return true;
   };
 
-  // updating playlist name
-  const handleNewPlaylistName = (e : React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    setNewPlaylistName(target.value);
-  };
-
   const changePlaylistName = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const emptyString = newPlaylistName === '';
-    const startsWithSpace = newPlaylistName.length > 0 && newPlaylistName[0] === ' ';
-    const endsWithSpace = newPlaylistName.length > 0 && newPlaylistName.slice(-1) === ' ';
+    if (!playlist || !playlist.name) { console.log("ERROR: Couldn't update playlist name"); return false; }
+    const emptyString = playlist.name === '';
+    const startsWithSpace = playlist.name.length > 0 && playlist.name[0] === ' ';
+    const endsWithSpace = playlist.name.length > 0 && playlist.name.slice(-1) === ' ';
 
     if (emptyString) {
       alert('Playlist name can not be empty.');
     } else if (startsWithSpace || endsWithSpace) {
       alert('Playlist name can not start or end with spaces.');
-    } else {
+    } else if (playlist) {
       alert('Name updated successfully.');
-      await updatePlaylistName(playlist.id, newPlaylistName);
+      return !!updatePlaylist(playlist);
     }
-    loadPlaylists();
+    return false;
   };
 
-  // Load new playlist and songs when ID changes
-  useEffect(() => {
-    loadPlaylists();
-    loadSongs();
-  }, [playlistID]);
-
-  // Load first song if songs change
-  useEffect(() => {
-    if (songs[0].id) {
-      changeSong(songs[0]);
+  const loadPlaylist = async () => {
+    const p = await getPlaylistByID(playlistID);
+    if (!p || !p.name) {
+      setIsLoading(false);
+      return false;
     }
-  }, [songs]);
+    setPlaylist(p);
+    return true;
+  };
+
+  const loadPlaylistSongs = async () => {
+    const s = await getSongs(playlistID);
+    if (!s || s.length === 0) {
+      setIsLoading(false);
+      return false;
+    }
+    setPlaylistSongs(s);
+    return true;
+  };
+
+  // When component is initally loaded
+  useEffect(() => {
+    auth();
+    setIsLoading(true);
+    loadPlaylist();
+    loadPlaylistSongs();
+  }, []);
+
+  // Load first song if playlistSongs change
+  useEffect(() => {
+    if (playlistSongs && playlistSongs[0]) {
+      if (playlistSongs[0].id) {
+        changeSong(playlistSongs[0]);
+      }
+    }
+  }, [playlistSongs]);
 
   // If a song exists in the state, we are no longer loading
   // We should prob find a way to do this without useEffect
@@ -204,8 +182,12 @@ const PlaylistRoute = () => {
         <div className="title editableName">
           <form onSubmit={changePlaylistName}>
             <input
-              value={newPlaylistName}
-              onChange={handleNewPlaylistName}
+              value={playlist.name}
+              onChange={(e) => {
+                const updatedPlaylist = { ...playlist };
+                updatedPlaylist.name = e.target.value;
+                setPlaylist(updatedPlaylist);
+              }}
               disabled={!userID}
             />
             <button aria-label="submit" type="submit" className="submit" />
@@ -216,10 +198,10 @@ const PlaylistRoute = () => {
         selectedSongID={selectedSongID}
         setSelectedSongID={setSelectedSongID}
         playlist={playlist}
-        playlistSongs={songs}
+        playlistSongs={playlistSongs}
         isAdding={isAdding}
         isLoading={isLoading}
-        refreshPlaylistSongs={loadSongs}
+        loadPlaylistSongs={loadPlaylistSongs} // TODO:
         changeSong={changeSong}
       />
       {song && song.id

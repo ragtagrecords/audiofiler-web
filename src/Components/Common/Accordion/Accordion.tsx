@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Playlist, Song, BodyType } from 'Types';
-import axios from 'axios';
-import { addSongToPlaylist } from 'Services/SongSvc';
+import { getSongs } from 'Services/SongSvc';
+import { addSongToPlaylist } from 'Services/PlaylistSvc';
 import Items from './Items/Items';
 import SearchBar from '../SearchBar/SearchBar';
-import './Accordion.scss';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import './Accordion.scss';
 
 type AccordionProps = {
-  playlist: Playlist;
-  playlistSongs: Song[];
+  playlist: Playlist | null;
+  playlistSongs: Song[] | null;
   selectedSongID: number;
   setSelectedSongID: any;
+  loadPlaylistSongs: any;
   isAdding: boolean;
-  refreshPlaylistSongs: any;
   isLoading: boolean;
   changeSong: any;
 }
@@ -23,8 +23,8 @@ const Accordion = ({
   playlistSongs,
   selectedSongID,
   setSelectedSongID,
+  loadPlaylistSongs,
   isAdding,
-  refreshPlaylistSongs,
   isLoading,
   changeSong,
 }: AccordionProps) => {
@@ -32,7 +32,7 @@ const Accordion = ({
   const [bodyType, setBodyType] = useState<BodyType>('info');
 
   // State for searching
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState<string>(''); // The input provided by user
   const [allSongs, setAllSongs] = useState<Song[] | null>(null);
   const [filteredSongs, setFilteredSongs] = useState<Song[] | null>(null);
 
@@ -42,39 +42,32 @@ const Accordion = ({
   /* ******************* FUNCTIONS ******************** */
 
   // Sets filteredSongs based on current query and playlist
-  const filterSongs = (songs = null) => {
-    // if allSongs not available yet, expect songs to be passed in param
-    const tempSongs = allSongs ?? songs;
-    if (!tempSongs) {
-      console.log('Found no songs to filter!');
+  const filterSongs = () => {
+    if (!allSongs || !playlistSongs) {
+      console.log("Can't filter based on search unless all songs are fetched");
       return false;
     }
 
-    // new empty array we will use to store our results
-    const tempFilteredSongs: Song[] = [];
+    const tempSongs: Song[] = [];
+    for (let i = 0; i < allSongs.length; i += 1) {
+      let songAlreadyInPlaylist = false;
+      const song = allSongs[i];
 
-    // check if each song passes filters
-    tempSongs.forEach((song) => {
-      let isSongInPlaylist = false;
-      let doesSongContainQuery = false;
-
-      // check if song is already in playlist
-      playlistSongs.forEach((playlistSong) => {
-        if (song.id === playlistSong.id) {
-          isSongInPlaylist = true;
+      // Loop through playlist to see if song already exists here
+      for (let j = 0; j < playlistSongs.length; j += 1) {
+        const playlistSong = playlistSongs[j];
+        if (playlistSong.id === song.id) {
+          songAlreadyInPlaylist = true;
         }
-      });
-
-      // check if song name contains query
-      doesSongContainQuery = song.name.includes(query);
-
-      // if it passes, push it
-      if (!isSongInPlaylist && doesSongContainQuery) {
-        tempFilteredSongs.push(song);
       }
-    });
 
-    setFilteredSongs(tempFilteredSongs);
+      const songMatchesQuery = query === '' ? true : song.name.includes(query);
+      if (!songAlreadyInPlaylist && songMatchesQuery) {
+        tempSongs.push(song); // Add song to results
+      }
+    }
+
+    setFilteredSongs(tempSongs);
     return true;
   };
 
@@ -94,9 +87,14 @@ const Accordion = ({
 
   // When add button is clicked for a particular item
   const addSong = (id: number) => {
+    if (!playlist) {
+      console.log("Couldn't add song");
+      return false;
+    }
     addSongToPlaylist(id, playlist.id);
-    refreshPlaylistSongs();
+    loadPlaylistSongs();
     filterSongs();
+    return true;
   };
 
   const handleUploadedFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,32 +112,25 @@ const Accordion = ({
     return true;
   };
 
-  // Grabs JSON info for all songs from API
-  const fetchAllSongs = async () => {
-    let res;
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    try {
-      res = await axios.get(
-        `${baseUrl}public/songs`,
-      );
-    } catch (e) {
-      return 0;
-    }
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
 
-    if (res.data) {
-      // Initially there are no filters, so both are the same songs
-      setAllSongs(res.data);
-      filterSongs(res.data);
+  const fetchAllSongs = async () => {
+    const songs = await getSongs(null);
+    if (songs) {
+      setAllSongs(songs);
       return true;
     }
     return false;
   };
 
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
-
   /* ******************* EFFECTS ******************** */
+
+  // When component is loaded
+  useEffect(() => {
+    fetchAllSongs();
+  }, []);
 
   // Filter songs when user query changes
   useEffect(() => {
@@ -150,7 +141,7 @@ const Accordion = ({
 
   // Set current item to first song when songs change
   useEffect(() => {
-    if (playlistSongs.length > 0 && playlistSongs[0].id) {
+    if (playlistSongs && playlistSongs.length > 0 && playlistSongs[0].id) {
       setSelectedSongID(playlistSongs[0].id);
 
       // re-filter if currently adding
@@ -165,12 +156,12 @@ const Accordion = ({
     setSelectedSongID(selectedSongID);
   }, [selectedSongID]);
 
-  // Fetch songs when the user decides to add songs
+  // Filter songs when allSongs is updated
   useEffect(() => {
-    if (isAdding) {
-      fetchAllSongs();
+    if (allSongs) {
+      filterSongs();
     }
-  }, [isAdding]);
+  }, [allSongs]);
 
   /* ******************* RETURN ******************** */
 
@@ -183,7 +174,7 @@ const Accordion = ({
   }
 
   if (selectedSongID === 0 && !isAdding) {
-    return <div className="accordionContainer"> No songs in this playlist yet, use top menu in right to add some :)</div>;
+    return <div className="accordionContainer"> No songs in this playlist yet, use three dots in upper right to add some</div>;
   }
 
   return (
@@ -200,20 +191,22 @@ const Accordion = ({
           </div>
         </li>
         )}
-        <Items
-          playlistSongs={playlistSongs}
-          selectedSongID={selectedSongID}
-          isSelectedSongOpen={isSelectedSongOpen}
-          setIsSelectedSongOpen={setIsSelectedSongOpen}
-          isAdding={isAdding}
-          filteredSongs={filteredSongs ?? undefined}
-          uploadedFiles={uploadedFiles ?? undefined}
-          addSong={addSong}
-          handleUploadedFiles={handleUploadedFiles}
-          handleClick={handleOptionsClick}
-          bodyType={bodyType}
-          changeSong={changeSong}
-        />
+        {playlistSongs && (
+          <Items
+            playlistSongs={playlistSongs}
+            selectedSongID={selectedSongID}
+            isSelectedSongOpen={isSelectedSongOpen}
+            setIsSelectedSongOpen={setIsSelectedSongOpen}
+            isAdding={isAdding}
+            filteredSongs={filteredSongs ?? undefined}
+            uploadedFiles={uploadedFiles ?? undefined}
+            addSong={addSong}
+            handleUploadedFiles={handleUploadedFiles}
+            handleClick={handleOptionsClick}
+            bodyType={bodyType}
+            changeSong={changeSong}
+          />
+        )}
       </ul>
     </div>
   );

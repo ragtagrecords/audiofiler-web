@@ -29,7 +29,7 @@ const AccordionItemHeader = ({
 }: ItemHeaderProps) => {
   const username = localStorage.getItem('username');
   return (
-    <div className={`accordionHeader ${isSelected ? 'selected' : ''}`}>
+    <div className={`accordionHeader ${isSelected ? 'selected' : ''} ${isUserAddingSongs ? 'adding' : ''}`}>
       {/* show add button when adding songs */}
       <div className="accordionHeaderSection left">
         {isUserAddingSongs && (

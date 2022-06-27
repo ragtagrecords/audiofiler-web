@@ -38,7 +38,6 @@ const SongFieldset = ({ song, updateSong, parentSongID }: SongFieldsetProps) => 
           onClick={() => {
             const updatedSong = { ...song };
             updatedSong.isParent = true;
-            updatedSong.parentID = null;
             updateSong(updatedSong);
           }}
         >
@@ -51,7 +50,6 @@ const SongFieldset = ({ song, updateSong, parentSongID }: SongFieldsetProps) => 
           onClick={() => {
             const updatedSong = { ...song };
             updatedSong.isParent = false;
-            updatedSong.parentID = parentSongID;
             updateSong(updatedSong);
           }}
         >

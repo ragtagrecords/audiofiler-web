@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Song } from 'Types';
-import { getSongsByParentID } from 'Services/SongSvc';
+import { getSongs } from 'Services/SongSvc';
 import './SongVersions.scss';
 
 type SongVersionsProps = {
@@ -11,8 +11,8 @@ type SongVersionsProps = {
 const SongVersions = ({ parentID, changeSong }: SongVersionsProps) => {
   const [songs, setSongs] = useState<Song[] | null>(null);
 
-  const getSongs = async () => {
-    const tempSongs = await getSongsByParentID(parentID);
+  const getSongVersions = async () => {
+    const tempSongs = await getSongs(null, parentID.toString(10));
     if (!tempSongs) {
       console.log("Couldn't retrieve different versions of the parent song");
       return false;
@@ -22,7 +22,7 @@ const SongVersions = ({ parentID, changeSong }: SongVersionsProps) => {
   };
 
   useEffect(() => {
-    getSongs();
+    getSongVersions();
   }, []);
 
   if (songs) {

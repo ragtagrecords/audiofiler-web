@@ -42,7 +42,7 @@ $height: 60px;
       }
     }
 
-	&.selected {
+	&.selected, &.adding {
 		.accordionHeaderSection {
 			&.left, &.right {
 				width: 15%;

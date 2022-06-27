@@ -33,6 +33,7 @@ $transition: all 0.3s ease;
   }
 
   label {
+    @include funcs.flexCenter();
     position: absolute;
     bottom: 15px;
     left: 5%;
@@ -40,7 +41,7 @@ $transition: all 0.3s ease;
     height: 40px;
     pointer-events: none;
     border-bottom: 1px solid vars.$white;
-    overflow: hidden;
+    overflow: hidden;    
 
     &:after {
       content: "";
@@ -56,10 +57,8 @@ $transition: all 0.3s ease;
 
     .contentName {
       position: absolute;
-      top: -8px;
-      left: 5.5vw;
       transition: $transition;
-      color: rgba(vars.$tertiaryColor, 0.4);
+      font-size: 2rem;
     }
   }
 }
