@@ -17,14 +17,14 @@ type AddSongFormProps = {
 }
 
 const defaultPlaylist: Playlist = {
-  id: 0,
+  id: '',
   name: '',
 };
 
-const AddSongForm = (props: AddSongFormProps) => {
+const AddSongForm = ({ playlist }: AddSongFormProps) => {
   const [songs, setSongs] = useState<Array<Song> | null>(null);
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
-  const [globalPlaylistID, setGlobalPlaylist] = useState<number>(-1);
+  const [globalPlaylistID, setGlobalPlaylist] = useState<string>(playlist ? playlist.id : '');
   const [userID, setUserID] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     setUserID(userID);
   };
 
+  // Authorize and load playlists when component is mounted
   useEffect(() => {
     auth();
     getPlaylists();
@@ -53,56 +54,43 @@ const AddSongForm = (props: AddSongFormProps) => {
   }, [songs]);
 
   useEffect(() => {
-    if (props.playlist) {
-      setGlobalPlaylist(props.playlist.id);
+    if (playlist) {
+      setGlobalPlaylist(playlist.id);
     }
-  }, [props.playlist]);
+  }, [playlist]);
 
-  const updateSongInfoInState = (fileName: string, newValue: string, infoType: string) => {
+  // Change handler for song properties
+  // Finds the matching song in state based on file.name, then updates it accordingly
+  const updateSongsState = (fileName: string, newValue: any, infoType: string) => {
     if (songs === null) {
       return false;
     }
 
     const tempSongs = [...songs];
 
-    // Note that returns inside every() do not actually end code
+    // Note that returning true inside every() does not actually end code
     // Return true to continue looping, or false to break the loop
     tempSongs.every((song) => {
-      if (song.fileName === fileName) {
-        if (infoType === 'name') {
-          song.name = newValue;
-          return false;
+      if (song.file && song.file.name === fileName) {
+        switch (infoType) {
+          case 'name':
+            song.name = newValue;
+            return false;
+          case 'tempo':
+            song.tempo = newValue;
+            return false;
+          case 'zipFile':
+            song.zipFile = newValue;
+            return false;
+          case 'playlistIDs':
+            song.playlistIDs = newValue;
+            return false;
+          default:
+            console.log('Unhandled song update');
+            break;
         }
-
-        if (infoType === 'tempo') {
-          song.tempo = parseInt(newValue, 10);
-          return false;
-        }
       }
-      // continue looping with every
-      return true;
-    });
-    setSongs(tempSongs);
-    return true;
-  };
-
-  const updateSongPlaylistIDs = (fileName: string, options: Array<HTMLOptionElement>) => {
-    if (songs === null) {
-      return false;
-    }
-    const tempSongs = [...songs];
-    const playlistIDs : Array<string> = [];
-    // store selected dropdown values in array
-    for (let i = 0; i < options.length; i += 1) {
-      if (options[i].selected) {
-        playlistIDs.push(options[i].value);
-      }
-    }
-    tempSongs.every((song) => {
-      if (song.fileName === fileName) {
-        song.playlistIDs = playlistIDs;
-        return false;
-      }
+      // We haven't found the matching song yet, continue looping with every
       return true;
     });
     setSongs(tempSongs);
@@ -118,11 +106,16 @@ const AddSongForm = (props: AddSongFormProps) => {
       return false;
     }
 
+    // Reset state if new songs are uploaded
+    if (songs) {
+      setSongs(null);
+    }
+
     setIsLoading(true);
 
     // build temp array of uploaded song info
     const newSongs: Array<Song> = [];
-    let tempo = 0;
+    let tempo = '';
     for (let i = 0; i < newFiles.length; i += 1) {
       tempo = await guessTempo(newFiles[i]);
       newSongs[i] = {
@@ -138,57 +131,6 @@ const AddSongForm = (props: AddSongFormProps) => {
     return true;
   };
 
-  const saveZip = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target as HTMLInputElement;
-
-    if (!songs || !files || files[0] === undefined) {
-      console.log('ERROR: ZIP FILE NOT STORED IN MEMORY');
-      return false;
-    }
-
-    const zipFile = files[0];
-
-    // Build temp array of uploaded songs
-    const newSongs: Array<Song> = [...songs];
-
-    // Find and update the one that changed
-    for (let i = 0; i < newSongs.length; i += 1) {
-      if (newSongs[i].fileName === e.target.id) {
-        newSongs[i].zipFile = zipFile;
-      }
-    }
-
-    setSongs(newSongs);
-    return true;
-  };
-
-  const handleChange = (e : any) => {
-    if (!e || !e.target || !e.target.value) {
-      console.log('Error updating based on user input');
-      return false;
-    }
-
-    // save raw files to state
-    const cls = e.target.className;
-    if (cls.includes('songFileInput')) {
-      saveSongFiles(e);
-    } else if (cls.includes('songZipInput')) {
-      saveZip(e);
-    } else if (cls.includes('songNameInput')) {
-      updateSongInfoInState(e.target.id, e.target.value, 'name');
-    } else if (cls.includes('songTempoInput')) {
-      updateSongInfoInState(e.target.id, e.target.value, 'tempo');
-    } else if (cls.includes('songPlaylistInput')) {
-      updateSongPlaylistIDs(e.target.id, e.target.options);
-    } else if (cls === 'globalPlaylistIDInput') {
-      setGlobalPlaylist(e.target.value);
-    } else {
-      console.log('Unexpected event in AddSongsForm::handleChange()');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e : any) => {
     e.preventDefault();
 
@@ -200,7 +142,7 @@ const AddSongForm = (props: AddSongFormProps) => {
     const songsToSubmit = [...songs];
 
     // Add selected global playlistID to all the songs
-    if (globalPlaylistID !== -1) {
+    if (globalPlaylistID !== '') {
       songsToSubmit.forEach((song) => {
         if (song.playlistIDs && song.playlistIDs[0]) {
           song.playlistIDs.push(globalPlaylistID.toString());
@@ -211,7 +153,7 @@ const AddSongForm = (props: AddSongFormProps) => {
       });
     }
 
-    // Asynchronously attempt to add all the songs
+    // Asynchronously attempt to add all the songs to DB and file server
     const results = [];
     for (let i = 0; i < songsToSubmit.length; i += 1) {
       results.push(addSong(songsToSubmit[i]));
@@ -238,18 +180,20 @@ const AddSongForm = (props: AddSongFormProps) => {
   return (
     <div className="formContainer">
       <form className="addSongsForm" onSubmit={handleSubmit} key="addSongsForm">
-        <UploadButton handleChange={handleChange} />
+        <UploadButton saveSongFiles={saveSongFiles} />
         <label>
           <h4>Playlist</h4>
           <div className="selectContainer">
             <select
               className="globalPlaylistIDInput"
-              onChange={handleChange}
               value={globalPlaylistID}
+              onChange={(e) => {
+                setGlobalPlaylist(e.target.value);
+              }}
             >
               <option
                 key={-1}
-                value={-1}
+                value=""
               > -
               </option>
               {playlists && playlists[0].name !== '' && playlists.map((playlist : Playlist) => {
@@ -269,8 +213,7 @@ const AddSongForm = (props: AddSongFormProps) => {
         <SongsFields
           songs={songs}
           isLoading={isLoading}
-          playlists={playlists}
-          handleChange={handleChange}
+          updateSongsState={updateSongsState}
         />
         {songs && (
         <input

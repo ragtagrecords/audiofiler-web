@@ -1,34 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-
-import './Playlists.scss';
 import { Playlist } from 'Types';
+import { getPlaylists } from 'Services/PlaylistSvc';
+import './Playlists.scss';
 
 const Playlists = () => {
-  const defaultPlaylist = {
-    id: 0,
-    name: '',
-  };
+  const [playlists, setPlaylists] = useState<Playlist[] | null>(null);
 
-  const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
-
-  const getPlaylists = (): void => {
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    axios
-      .get(`${baseUrl}public/playlists`)
-      .then((response) => {
-        if (!response.data) {
-          console.log("Couldn't retrieve playlists");
-          return;
-        }
-        setPlaylists(response.data);
-      });
+  const loadPlaylists = async () => {
+    setPlaylists(await getPlaylists());
   };
 
   useEffect(() => {
-    getPlaylists();
+    loadPlaylists();
   }, []);
+
+  if (!playlists) {
+    return null;
+  }
 
   return (
     <div className="playlists listContainer">

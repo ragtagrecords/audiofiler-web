@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export const authenticate = async (): Promise<number> => {
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
+export const authenticate = async (): Promise<number> => {
   const accessToken = localStorage.getItem('token');
   if (!accessToken) {
     console.log('No access token found in local storage, try logging in again');
@@ -12,7 +12,7 @@ export const authenticate = async (): Promise<number> => {
   let res;
   try {
     res = await axios.get(
-      `${baseUrl}public/authenticate`,
+      `${baseURL}public/authenticate`,
       {
         headers: {
           'x-access-token': accessToken,
@@ -44,10 +44,9 @@ export const authorize = async (username: string, password: string) => {
   formData.append('password', password);
 
   let res;
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
   try {
     res = await axios.post(
-      `${baseUrl}public/authorize`,
+      `${baseURL}public/authorize`,
       formData,
     );
   } catch (ex) {
@@ -69,11 +68,11 @@ export const signup = async (username: string, password: string) => {
   // add songs to form data
   formData.append('username', username);
   formData.append('password', password);
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
   let res = null;
   try {
     res = await axios.post(
-      `${baseUrl}public/users`,
+      `${baseURL}public/users`,
       formData,
     );
   } catch (ex) {

@@ -1,10 +1,10 @@
-import React, { ChangeEventHandler } from 'react';
+import React from 'react';
 
 type UploadButtonProps = {
-    handleChange: ChangeEventHandler<HTMLInputElement>;
+  saveSongFiles: any;
 }
 
-const UploadButton = (props:UploadButtonProps) => {
+const UploadButton = ({ saveSongFiles }: UploadButtonProps) => {
   return (
     <label>
       <h4>Choose songs to upload</h4>
@@ -14,7 +14,9 @@ const UploadButton = (props:UploadButtonProps) => {
         name="uploadedSongs"
         type="file"
         multiple
-        onChange={props.handleChange}
+        onChange={(e) => {
+          saveSongFiles(e);
+        }}
       />
     </label>
   );

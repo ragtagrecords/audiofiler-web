@@ -1,5 +1,5 @@
 export type Playlist = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -11,7 +11,7 @@ export interface Song {
   zipFile?: File;
   zipFileName?: string;
   path?: string;
-  tempo?: number;
+  tempo?: string;
   artist?: string;
   zipPath?: string;
   isParent?: boolean;

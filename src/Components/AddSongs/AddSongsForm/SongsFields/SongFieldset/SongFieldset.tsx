@@ -1,19 +1,18 @@
-import React, { ChangeEventHandler } from 'react';
+import React from 'react';
+import { Song } from 'Types';
+import SelectPlaylists from 'Components/Common/SelectPlaylists/SelectPlaylists';
 import './SongFieldset.scss';
-import { Playlist, Song } from 'Types';
 
 type SongFieldsetProps = {
   song: Song,
   index: string,
-  playlists: Array<Playlist>,
-  handleChange: ChangeEventHandler,
+  updateSongsState: any;
 }
 
 const SongFieldset = ({
   song,
   index,
-  playlists,
-  handleChange,
+  updateSongsState,
 }: SongFieldsetProps) => {
   if (!song.file?.name) {
     return null;
@@ -24,54 +23,49 @@ const SongFieldset = ({
       <label> Song Name
         <input
           type="text"
-          id={song.file.name}
-          className="songNameInput"
           name={`songName${index}`}
           defaultValue={song.file.name}
-          onChange={handleChange}
+          onChange={(e) => {
+            song.file && updateSongsState(song.file.name, e.target.value, 'name');
+          }}
         />
       </label>
       <label> Tempo
         <input
           type="text"
-          id={song.file.name}
-          className="songTempoInput"
           name={`tempo${index}`}
           defaultValue={song.tempo ?? ''}
-          onChange={handleChange}
+          onChange={(e) => {
+            song.file && updateSongsState(song.file.name, e.target.value, 'tempo');
+          }}
         />
       </label>
-      <label>
-        Playlists
-        <select
-          multiple
-          id={song.file.name}
-          className="songPlaylistInput"
-          name={`playlists${index}`}
-          onChange={handleChange}
-        >
-          {playlists.map((playlist : Playlist) => {
-            return (
-              <option
-                key={playlist.id}
-                value={playlist.id}
-              > {playlist.name}
-              </option>
-            );
-          })}
-        </select>
-      </label>
+      <SelectPlaylists
+        _index={index}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          if (song.file && e.target.options) {
+            const { options } = e.target;
+
+            // store selected dropdown values in array
+            const playlistIDs : Array<string> = [];
+            for (let i = 0; i < options.length; i += 1) {
+              if (options[i].selected) {
+                playlistIDs.push(options[i].value);
+              }
+            }
+            updateSongsState(song.file.name, playlistIDs, 'playlistIDs');
+          }
+        }}
+      />
       <label> Upload project .zip
         <input
-          className="songZipInput"
-          id={song.file.name}
           name="uploadedZip"
           type="file"
-          multiple
-          onChange={handleChange}
+          onChange={(e) => {
+            song.file && e.target.files && updateSongsState(song.file.name, e.target.files[0], 'zipFile');
+          }}
         />
       </label>
-
     </fieldset>
   );
 };

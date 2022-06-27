@@ -43,9 +43,9 @@ const AddPlaylistRoute = () => {
           state: { playlist: res.data },
         });
       } else {
-        navigate(`/playlist/${res.data.playlist}`);
+        const newPlaylistID = res.data.id;
+        navigate(`/playlists/${newPlaylistID}`);
       }
-      console.log(res);
     } catch (ex) {
       console.log(ex);
     }
