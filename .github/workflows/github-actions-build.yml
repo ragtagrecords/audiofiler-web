@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - main
+      - temptestdeploy
 
 jobs:
   build:
@@ -15,6 +16,19 @@ jobs:
       - run: echo "Job triggered by ${{ github.event_name }} on ${{ github.repository }}."
 
       - uses: actions/checkout@v3
+
+      - name: Set up secret file
+        env:
+          DEBUG_KEY: ${{ secrets.SSH_KEY }}
+          DEBUG_USERNAME: ${{ secrets.SSH_USERNAME }}
+          DEBUG_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          echo $DEBUG_USERNAME >> secrets.txt
+          echo $DEBUG_KEY >> secrets.txt
+          echo $DEBUG_HOST >> secrets.txt
+
+      - name: Run tmate
+        uses: mxschmitt/action-tmate@v2
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
