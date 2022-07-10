@@ -27,22 +27,24 @@ const SongVersions = ({ parentID, changeSong }: SongVersionsProps) => {
 
   if (songs) {
     return (
-      <ul className="songVersionsList">
-        {songs.map((song) => {
-          return (
-            <button
-              type="button"
-              onClick={() => {
-                changeSong(song, true);
-              }}
-              className="songVersionButton"
-              key={`version-link-${song.id}`}
-            >
-              {song.name}
-            </button>
-          );
-        })}
-      </ul>
+      <>
+        <ul className="songVersionsList">
+          {songs.map((song) => {
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  changeSong(song, true);
+                }}
+                className="songVersionButton"
+                key={`version-link-${song.id}`}
+              >
+                {song.name}
+              </button>
+            );
+          })}
+        </ul>
+      </>
     );
   }
 
