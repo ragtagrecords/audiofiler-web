@@ -25,9 +25,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "export REACT_APP_API_BASE_URL=https://api.ragtagrecords.com/ || set REACT_APP_API_BASE_URL=https://api.ragtagrecords.com/&& react-scripts start",
-    "start:dev": "export REACT_APP_API_BASE_URL=http://localhost:3000/ || set REACT_APP_API_BASE_URL=http://localhost:3000/&& react-scripts start",
-    "build": "export REACT_APP_API_BASE_URL=https://api.ragtagrecords.com/ || set REACT_APP_API_BASE_URL=https://api.ragtagrecords.com/&& react-scripts build",
+    "start": "export REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/ || set REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/&& react-scripts start",
+    "start:dev": "export PORT=3001 REACT_APP_API_BASE_URL=http://localhost:3001/ || set REACT_APP_API_BASE_URL=http://localhost:3001/&& react-scripts start",
+    "build": "export REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/ || set REACT_APP_API_BASE_URL=http://api.ragtagrecords.com/&& react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

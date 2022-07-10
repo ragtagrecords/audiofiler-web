@@ -1,7 +1,11 @@
 @use "vars";
 
 body {
+<<<<<<< HEAD
   background-image: url("../Assets/background-1.webp");
+=======
+  background-image: url("../Assets/image0.webp");
+>>>>>>> 522ddba... start react dev on port 3001 by default
   color: vars.$tertiaryColor;
   font-family: vars.$font;
   font-size: vars.$defaultFontSize;
