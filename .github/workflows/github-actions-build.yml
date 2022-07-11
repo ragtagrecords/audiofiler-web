@@ -43,9 +43,9 @@ jobs:
       - name: Extract build.tar
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.SERVER_SSH_HOST }}
+          username: ${{ secrets.SERVER_SSH_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: rm -rf ~/Apps/audiofiler-web/build && tar -xvf ~/Apps/audiofiler-web/build.tar -C ~/Apps/audiofiler-web/ && rm -rf ~/Apps/audiofiler-web/build.tar
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
