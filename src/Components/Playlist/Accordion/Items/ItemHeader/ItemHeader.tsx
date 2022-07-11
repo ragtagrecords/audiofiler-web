@@ -31,9 +31,9 @@ const AccordionItemHeader = ({
 
   // Either show the add button or the upload button
   let left = null;
-  if (isUserAddingSongs) {
+  if (username && isUserAddingSongs) {
     left = <AddButton addSong={addSong} songID={song.id ?? 0} />;
-  } else if (isSelected) {
+  } else if (username && isSelected) {
     left = <UploadButton setBodyType={setBodyType} setIsBodyOpen={setIsBodyOpen} />;
   }
 
