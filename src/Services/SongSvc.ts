@@ -89,7 +89,7 @@ export const addSong = async (song: Song) => {
     return false;
   }
 
-  const fileServerBaseURL = 'http://files.ragtagrecords.com';
+  const fileServerBaseURL = 'https://files.ragtagrecords.com';
 
   // Store paths and remove files before turning into JSON
   const { file, zipFile } = song;

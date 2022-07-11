@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const fileServerURL = 'http://files.ragtagrecords.com';
+const fileServerURL = 'https://files.ragtagrecords.com';
 
 export const downloadFile = (fileUrl: string, fileName: string) => {
   axios({
