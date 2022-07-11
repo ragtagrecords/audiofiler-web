@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import UserMenu from 'Components/Common/UserMenu/UserMenu';
-import Logo from 'Assets/audio-logo-192.png';
+import Logo from 'Assets/audio-logo-192.webp';
 import { MenuOption } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
 import Playlists from './Playlists';
