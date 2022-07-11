@@ -7,30 +7,30 @@ import './Items.scss';
 type ItemsProps = {
   playlistSongs: Song[];
   selectedSongID: number;
-  isSelectedSongOpen: boolean;
-  setIsSelectedSongOpen: any;
+  isBodyOpen: boolean;
+  setIsBodyOpen: any;
+  setBodyType: any;
   isAdding: boolean;
   filteredSongs?: Song[];
   uploadedFiles?: File[],
   addSong: any;
   bodyType: BodyType;
   handleUploadedFiles: React.ChangeEventHandler<HTMLInputElement>,
-  handleClick: React.MouseEventHandler<HTMLButtonElement>,
   changeSong: any;
 }
 
 const Items = ({
   playlistSongs,
   selectedSongID,
-  isSelectedSongOpen,
-  setIsSelectedSongOpen,
+  isBodyOpen,
+  setIsBodyOpen,
+  setBodyType,
   bodyType,
   isAdding,
   filteredSongs,
   uploadedFiles,
   addSong,
   handleUploadedFiles,
-  handleClick,
   changeSong,
 }: ItemsProps) => {
   const songs = isAdding ? filteredSongs : playlistSongs;
@@ -46,18 +46,18 @@ const Items = ({
             <ItemHeader
               song={song}
               isSelected={!isAdding && isSelected}
-              isSelectedSongOpen={isSelectedSongOpen}
-              setIsSelectedSongOpen={setIsSelectedSongOpen}
+              isBodyOpen={isBodyOpen}
+              setIsBodyOpen={setIsBodyOpen}
+              setBodyType={setBodyType}
               isUserAddingSongs={isAdding}
               addSong={addSong}
-              handleClick={handleClick}
               changeSong={changeSong}
             />
             <ItemBody
               song={song}
               // items cant be selected or opened while adding songs
               isSelected={!isAdding && isSelected}
-              isOpen={!isAdding && isSelectedSongOpen && isSelected}
+              isOpen={!isAdding && isBodyOpen && isSelected}
               bodyType={bodyType}
               uploadedFiles={uploadedFiles}
               handleUploadedFiles={handleUploadedFiles}

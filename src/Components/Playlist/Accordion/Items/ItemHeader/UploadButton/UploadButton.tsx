@@ -4,11 +4,12 @@ import { FiUpload } from 'react-icons/fi';
 
 // import './UploadButton.scss';
 
-type UploadAreaProps = {
-    handleClick: React.MouseEventHandler<HTMLButtonElement>;
+type UploadButtonProps = {
+    setBodyType: any;
+    setIsBodyOpen: any;
 }
 
-const UploadButton = ({ handleClick }: UploadAreaProps) => {
+const UploadButton = ({ setBodyType, setIsBodyOpen }: UploadButtonProps) => {
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '25px',
@@ -18,7 +19,10 @@ const UploadButton = ({ handleClick }: UploadAreaProps) => {
     <button
       type="button"
       className="uploadButton"
-      onClick={handleClick}
+      onClick={() => {
+        setBodyType('upload');
+        setIsBodyOpen(true);
+      }}
     >
       <IconContext.Provider value={iconStyles}>
         <FiUpload />

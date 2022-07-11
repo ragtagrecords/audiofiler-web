@@ -6,10 +6,11 @@ import './DownloadButton.scss';
 type DownloadButtonProps = {
     href: string;
     fileName: string;
-    handleClick: React.MouseEventHandler<HTMLButtonElement>;
+    setBodyType: any;
+    setIsBodyOpen: any;
 }
 
-const DownloadButton = ({ handleClick }: DownloadButtonProps) => {
+const DownloadButton = ({ setBodyType, setIsBodyOpen }: DownloadButtonProps) => {
   // Without this function, file opens in new tab
   // Creates a new link using a Blob instead of href and clicks it
   const iconStyles = useMemo(() => ({
@@ -21,7 +22,10 @@ const DownloadButton = ({ handleClick }: DownloadButtonProps) => {
     <button
       type="button"
       className="downloadButton"
-      onClick={handleClick}
+      onClick={() => {
+        setBodyType('download');
+        setIsBodyOpen(true);
+      }}
     >
       <IconContext.Provider value={iconStyles}>
         <FiDownload />

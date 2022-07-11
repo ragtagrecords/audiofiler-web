@@ -3,8 +3,8 @@ import { Playlist, Song, BodyType } from 'Types';
 import { getSongs } from 'Services/SongSvc';
 import { addSongToPlaylist } from 'Services/PlaylistSvc';
 import Items from './Items/Items';
-import SearchBar from '../SearchBar/SearchBar';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import SearchBar from '../../Common/SearchBar/SearchBar';
+import LoadingSpinner from '../../Common/LoadingSpinner/LoadingSpinner';
 import './Accordion.scss';
 
 type AccordionProps = {
@@ -28,7 +28,7 @@ const Accordion = ({
   isLoading,
   changeSong,
 }: AccordionProps) => {
-  const [isSelectedSongOpen, setIsSelectedSongOpen] = useState<boolean>(false);
+  const [isBodyOpen, setIsBodyOpen] = useState<boolean>(false);
   const [bodyType, setBodyType] = useState<BodyType>('info');
 
   // State for searching
@@ -68,20 +68,6 @@ const Accordion = ({
     }
 
     setFilteredSongs(tempSongs);
-    return true;
-  };
-
-  // When upload, download, or options are selected on song
-  const handleOptionsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { className } = e.currentTarget;
-
-    if (className === 'optionButton') {
-      setBodyType('versions');
-    } else if (className === 'uploadButton') {
-      setBodyType('upload');
-    } else if (className === 'downloadButton') {
-      setBodyType('download');
-    }
     return true;
   };
 
@@ -195,14 +181,14 @@ const Accordion = ({
           <Items
             playlistSongs={playlistSongs}
             selectedSongID={selectedSongID}
-            isSelectedSongOpen={isSelectedSongOpen}
-            setIsSelectedSongOpen={setIsSelectedSongOpen}
+            isBodyOpen={isBodyOpen}
+            setIsBodyOpen={setIsBodyOpen}
+            setBodyType={setBodyType}
             isAdding={isAdding}
             filteredSongs={filteredSongs ?? undefined}
             uploadedFiles={uploadedFiles ?? undefined}
             addSong={addSong}
             handleUploadedFiles={handleUploadedFiles}
-            handleClick={handleOptionsClick}
             bodyType={bodyType}
             changeSong={changeSong}
           />

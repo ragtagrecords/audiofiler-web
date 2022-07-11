@@ -6,7 +6,7 @@ import { getSongs } from 'Services/SongSvc';
 import { getPlaylistByID, updatePlaylist } from 'Services/PlaylistSvc';
 import UserMenu from 'Components/Common/UserMenu/UserMenu';
 import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
-import Accordion from 'Components/Common/Accordion/Accordion';
+import Accordion from 'Components/Playlist/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
 import './PlaylistRoute.scss';
 

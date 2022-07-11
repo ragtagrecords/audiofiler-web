@@ -29,11 +29,11 @@ const AccordionItemBody = ({
     return null;
   }
 
+  let body = null;
+
   if (bodyType === 'info') {
-    return (
-      <div
-        className={`accordionBody ${(isSelected && isOpen) ? 'open' : ''}`}
-      >
+    body = (
+      <>
         <p>
           artist:
           {song.artist}
@@ -42,71 +42,44 @@ const AccordionItemBody = ({
           tempo:
           {song.tempo}
         </p>
-      </div>
+      </>
     );
   }
 
   if (bodyType === 'upload') {
     // After files are uploaded
     if (uploadedFiles) {
-      return (
-        <div
-          className={`accordionBody ${isSelected && isOpen ? 'open' : ''}`}
-        >
-          <UploadOptions
-            uploadedFiles={uploadedFiles}
-            parentSong={song}
-          />
-        </div>
+      body = (
+        <UploadOptions
+          uploadedFiles={uploadedFiles}
+          parentSong={song}
+        />
       );
     }
     // Before files are uploaded
-    return (
-      <div
-        className={`accordionBody ${isSelected && isOpen ? 'open' : ''}`}
-      >
-        <UploadArea
-          handleUpload={handleUploadedFiles}
-        />
-      </div>
+    body = (
+      <UploadArea handleUpload={handleUploadedFiles} />
     );
   }
 
   if (bodyType === 'download') {
-    return (
-      <div
-        className={`accordionBody ${isSelected && isOpen ? 'open' : ''}`}
-      >
-        <DownloadOptions
-          song={song}
-        />
-      </div>
+    body = (
+      <DownloadOptions song={song} />
     );
   }
 
   if (bodyType === 'versions') {
     if (song.id && song.isParent) {
-      return (
-        <div
-          className="accordionBody open"
-        >
-          <SongVersions
-            parentID={song.id}
-            changeSong={changeSong}
-          />
-        </div>
-      );
+      body = <SongVersions parentID={song.id} changeSong={changeSong} />;
     }
-    return (
-      <div
-        className="accordionBody open"
-      >
-        No additional versions found
-      </div>
-    );
+    body = <span>No additional versions found</span>;
   }
 
-  return null;
+  return (
+    <div className={`accordionBody ${(isSelected && isOpen) ? 'open' : ''}`}>
+      {body}
+    </div>
+  );
 };
 
 AccordionItemBody.defaultProps = {

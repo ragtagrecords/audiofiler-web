@@ -5,10 +5,11 @@ import './OptionButton.scss';
 
 type OptionButtonProps = {
     username: string;
-    handleClick: React.MouseEventHandler<HTMLButtonElement>;
+    setBodyType: any;
+    setIsBodyOpen: any;
 }
 
-const OptionButton = ({ handleClick }: OptionButtonProps) => {
+const OptionButton = ({ setBodyType, setIsBodyOpen }: OptionButtonProps) => {
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '40px',
@@ -18,7 +19,10 @@ const OptionButton = ({ handleClick }: OptionButtonProps) => {
     <button
       type="button"
       className="optionButton"
-      onClick={handleClick}
+      onClick={() => {
+        setBodyType('versions');
+        setIsBodyOpen(true);
+      }}
     >
       <IconContext.Provider value={iconStyles}>
         <BiDotsVerticalRounded />
