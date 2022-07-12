@@ -7,6 +7,7 @@ type PlayerProps = {
   skipSong: any;
   onTimeUpdate: any;
   onLoadedMetadata: any;
+  isLooping: boolean;
 }
 
 const Player = ({
@@ -16,6 +17,7 @@ const Player = ({
   skipSong,
   onTimeUpdate,
   onLoadedMetadata,
+  isLooping,
 }: PlayerProps) => {
   // Ref gives us access to dom properties
   // https://www.w3schools.com/tags/ref_av_dom.asp
@@ -39,6 +41,7 @@ const Player = ({
       onTimeUpdate={onTimeUpdate}
       onLoadedMetadata={onLoadedMetadata}
       onEnded={skipSong}
+      loop={isLooping}
     />
   );
 };
