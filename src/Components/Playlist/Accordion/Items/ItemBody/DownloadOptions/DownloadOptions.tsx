@@ -26,7 +26,6 @@ const DownloadOptions = ({ song }: DownloadOptionsProps) => {
       url: song.path,
       fileName: `${removeExtraExtensions(song.name)}.${songFileExt}`,
     });
-    console.log(song.zipPath);
     if (song.zipPath) {
       files.push({
         url: song.zipPath,
@@ -35,7 +34,6 @@ const DownloadOptions = ({ song }: DownloadOptionsProps) => {
     }
     return (
       <>
-        {console.log(files)}
         <ul className="downloadOptions">
           {files.map((file: DownloadableFile) => {
             return (
