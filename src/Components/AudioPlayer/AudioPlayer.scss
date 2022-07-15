@@ -193,7 +193,8 @@ $uiHeight: calc($playerHeight / 4);
 
         .forwardBackward {
           @include funcs.flexCenter();
-          color: vars.$tertiaryColor;
+          width: 60px;
+          color: vars.$white;
           background-color: transparent;
           border: none;
           font-family: monospace;
@@ -205,7 +206,7 @@ $uiHeight: calc($playerHeight / 4);
           }
 
           &:not(&:hover), &:not(&:active) {
-            color: vars.$tertiaryColor;
+            color: vars.$white;
           }
 
           &#forward {
@@ -219,6 +220,7 @@ $uiHeight: calc($playerHeight / 4);
 
         .playPause {
           @include funcs.flexCenter();
+          width: 100px;
           background-color: transparent;
           border: none;
           border-radius: 50%;
@@ -229,6 +231,23 @@ $uiHeight: calc($playerHeight / 4);
             color: vars.$secondaryColor;
           }
          
+        }
+
+        .loop {
+          background-color: transparent;
+          border: none;
+          font-size: 1.2rem;
+          color: vars.$white;
+          margin: 10px;
+          width: 60px;
+
+          #isLooping {
+            color: vars.$tertiaryColor;
+            border: 1px solid vars.$tertiaryColor;
+            border-radius: 50%;
+            padding: 10px;
+            margin: -11px;
+          }
         }
       }
     }
@@ -250,7 +269,7 @@ $uiHeight: calc($playerHeight / 4);
       height: $playerHeight;
 
       .audioPlayerUI {
-        padding-bottom: 0 0 15px;
+        padding-bottom: 15px;
 
         &.name {
           width: 90%;

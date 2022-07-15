@@ -5,7 +5,6 @@ import {
   Route,
 } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import AddSongsRoute from 'Components/AddSongs/AddSongsRoute';
 import AddPlaylistRoute from 'Components/AddPlaylist/AddPlaylistRoute';
 import PlaylistRoute from 'Components/Playlist/PlaylistRoute';
@@ -15,22 +14,19 @@ import SignupRoute from 'Components/Auth/SignupRoute';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement!);
-const queryClient = new QueryClient();
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient} contextSharing>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<PlaylistsRoute />} />
-          <Route path="/playlists" element={<PlaylistsRoute />} />
-          <Route path="/playlists/:playlistID" element={<PlaylistRoute />} />
-          <Route path="/playlists/add" element={<AddPlaylistRoute />} />
-          <Route path="/songs/add" element={<AddSongsRoute />} />
-          <Route path="/signup" element={<SignupRoute />} />
-          <Route path="/login" element={<LoginRoute />} />
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PlaylistsRoute />} />
+        <Route path="/playlists" element={<PlaylistsRoute />} />
+        <Route path="/playlists/:playlistID" element={<PlaylistRoute />} />
+        <Route path="/playlists/add" element={<AddPlaylistRoute />} />
+        <Route path="/songs/add" element={<AddSongsRoute />} />
+        <Route path="/signup" element={<SignupRoute />} />
+        <Route path="/login" element={<LoginRoute />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
 );
 

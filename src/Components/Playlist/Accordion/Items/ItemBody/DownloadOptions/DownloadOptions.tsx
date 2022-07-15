@@ -33,17 +33,19 @@ const DownloadOptions = ({ song }: DownloadOptionsProps) => {
       });
     }
     return (
-      <ul className="downloadOptions">
-        {files.map((file: DownloadableFile) => {
-          return (
-            <li key={file.url}>
-              <button type="button" onClick={handleClick.bind(null, file)}>
-                {file.fileName}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <>
+        <ul className="downloadOptions">
+          {files.map((file: DownloadableFile) => {
+            return (
+              <li key={file.url}>
+                <button type="button" onClick={handleClick.bind(null, file)}>
+                  {file.fileName}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </>
     );
   }
   return (

@@ -17,6 +17,7 @@ const AudioPlayer = ({ song, skipSong, prevSong }: AudioPlayerProps) => {
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0); // controlled by audio player
   const [seekTime, setSeekTime] = useState<number>(0);
+  const [isLooping, setIsLooping] = useState<boolean>(false);
 
   useEffect(() => {
     if (song.id) {
@@ -40,6 +41,7 @@ const AudioPlayer = ({ song, skipSong, prevSong }: AudioPlayerProps) => {
             onLoadedMetadata={(e: React.ChangeEvent<HTMLAudioElement>) => {
               setDuration(e.target.duration);
             }}
+            isLooping={isLooping}
           />
           )}
 
@@ -58,6 +60,8 @@ const AudioPlayer = ({ song, skipSong, prevSong }: AudioPlayerProps) => {
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
           skipSong={skipSong}
+          isLooping={isLooping}
+          setIsLooping={setIsLooping}
         />
       </div>
     </div>
