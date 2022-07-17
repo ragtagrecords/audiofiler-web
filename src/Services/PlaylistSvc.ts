@@ -4,10 +4,8 @@ import { Playlist } from 'Types';
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 export const getPlaylists = async () => {
-  const endpoint = 'public/playlists';
-
   try {
-    const res = await axios.get(`${baseURL}${endpoint}`);
+    const res = await axios.get(`${baseURL}/playlists`);
     return res.data as Playlist[];
   } catch (ex) {
     console.log(ex);
@@ -17,7 +15,7 @@ export const getPlaylists = async () => {
 
 export const getPlaylistByID = async (id: string | number): Promise<Playlist | null> => {
   try {
-    const res = await axios.get(`${baseURL}public/playlists/${id}`);
+    const res = await axios.get(`${baseURL}/playlists/${id}`);
     if (!res.data) {
       return null;
     }
@@ -29,7 +27,7 @@ export const getPlaylistByID = async (id: string | number): Promise<Playlist | n
 
 export const addSongToPlaylist = async (songID: number, playlistID: string) => {
   try {
-    await axios.post(`${baseURL}public/playlists/${playlistID}/song/${songID}`);
+    await axios.post(`${baseURL}/playlists/${playlistID}/song/${songID}`);
     return true;
   } catch (ex) {
     return false;
@@ -44,7 +42,7 @@ export const updatePlaylist = async ({
 
   formData.append('name', name);
   try {
-    const res = await axios.put(`${baseURL}public/playlists/${id}`, formData);
+    const res = await axios.put(`${baseURL}/playlists/${id}`, formData);
     return res;
   } catch (ex) {
     console.log(ex);

@@ -10,16 +10,16 @@ export const getSongs = async (
   parentID: string | null = null,
 ): Promise<Song[]> => {
   // By default, gets all the songs
-  let endpoint = 'public/songs';
+  let endpoint = '/songs';
 
   // Get songs from a specific playlist
   if (playlistID) {
-    endpoint = `public/songs/playlist/${playlistID}`;
+    endpoint = `/songs/playlist/${playlistID}`;
   }
 
   // Get different versions of a song
   if (parentID) {
-    endpoint = `public/songs/parent/${parentID}`;
+    endpoint = `/songs/parent/${parentID}`;
   }
 
   try {
@@ -34,7 +34,7 @@ export const getSongs = async (
 
 export const updateSongName = async (songID: number, newName: string) => {
   try {
-    const res = await axios.put(`${baseURL}public/songs/${songID}/${newName}`);
+    const res = await axios.put(`${baseURL}/songs/${songID}/${newName}`);
     return res;
   } catch (ex) {
     console.log(ex);
@@ -48,7 +48,7 @@ export const updateSong = async (song: Song) => {
     return false;
   }
 
-  const url = `${baseURL}public/songs/${song.id}`;
+  const url = `${baseURL}/songs/${song.id}`;
   delete song.id;
 
   if (Object.keys.length === 0) {
@@ -80,7 +80,7 @@ export const addSongToDB = async (song: Song) => {
   // post song info to API
   try {
     await axios.post(
-      `${baseURL}public/songs`,
+      `${baseURL}/songs`,
       payload,
     );
     return true;
@@ -96,7 +96,7 @@ export const deleteSongFromDB = async (id: Song['id']) => {
   }
 
   try {
-    const songDeleted = await axios.delete(`${baseURL}public/songs/${id}`);
+    const songDeleted = await axios.delete(`${baseURL}/songs/${id}`);
     if (!songDeleted) {
       console.log('ERROR: Failed to delete song from DB');
       return false;

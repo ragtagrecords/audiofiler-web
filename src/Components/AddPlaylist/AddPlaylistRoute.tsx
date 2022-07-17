@@ -33,7 +33,7 @@ const AddPlaylistRoute = () => {
 
       // POST new playlist to API
       const res = await axios.post(
-        `${baseURL}public/playlists`,
+        `${baseURL}/playlists`,
         formData,
       );
 
