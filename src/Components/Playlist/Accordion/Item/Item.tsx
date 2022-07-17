@@ -38,11 +38,19 @@ const Item = ({
 }: ItemProps) => {
   const [editedSong, setEditedSong] = useState<Song>(song);
 
-  const isEdited = isEditing && (song.name !== editedSong.name || song.tempo !== editedSong.tempo);
+  const wereEditsMade = () => {
+    let wasTempoChanged = null;
+    if (typeof editedSong.tempo === 'number') {
+      wasTempoChanged = song.tempo !== editedSong.tempo;
+    } else if (typeof editedSong.tempo === 'string') {
+      wasTempoChanged = song.tempo !== parseInt(editedSong.tempo, 10);
+    }
+    const wasNameChanged = song.name !== editedSong.name;
+    return wasTempoChanged || wasNameChanged;
+  };
 
   const discardEdits = () => {
     setEditedSong({ ...song });
-    console.log(editedSong);
   };
 
   const saveEditedSongToDB = async () => {
@@ -57,13 +65,12 @@ const Item = ({
 
     const success = await updateSong({ ...editedSong });
 
-    if (!success) {
-      return false;
-    }
-
+    if (!success) { return false; }
     loadPlaylistSongs();
     return true;
   };
+
+  const isEdited = isEditing && wereEditsMade();
 
   return (
     <li
@@ -86,7 +93,8 @@ const Item = ({
         discardEdits={discardEdits}
       />
       <ItemBody
-        song={song}
+        song={isEditing ? editedSong : song}
+        setEditedSong={setEditedSong}
         // items cant be selected or opened while adding songs
         isSelected={!isAdding && isSelected}
         isOpen={(isEditing && isSelected) || (!isAdding && isOpen && isSelected)}

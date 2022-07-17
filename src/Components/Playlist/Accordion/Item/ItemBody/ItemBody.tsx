@@ -8,6 +8,7 @@ import SongVersions from './SongVersions/SongVersions';
 
 type AccordionItemBodyProps = {
   song: Song;
+  setEditedSong: any;
   bodyType: BodyType
   isSelected: boolean;
   isOpen: boolean;
@@ -19,6 +20,7 @@ type AccordionItemBodyProps = {
 
 const ItemBody = ({
   song,
+  setEditedSong,
   isSelected,
   isOpen,
   isEditing, // TODO: edit info
@@ -33,18 +35,27 @@ const ItemBody = ({
 
   let body = null;
 
-  if (bodyType === 'info') {
+  if (bodyType === 'info' || isEditing) {
     body = (
       <>
         <p>
-          tempo:
-          {song.tempo}
+          <span>tempo: </span>
+          {isEditing ? (
+            <input
+              value={song.tempo}
+              onChange={(e) => {
+                const editedSong = { ...song };
+                editedSong.tempo = e.target.value;
+                setEditedSong(editedSong);
+              }}
+            />
+          ) : (
+            <span> {song.tempo} </span>
+          )}
         </p>
       </>
     );
-  }
-
-  if (bodyType === 'upload') {
+  } else if (bodyType === 'upload') {
     // After files are uploaded
     if (uploadedFiles) {
       body = (
@@ -58,15 +69,11 @@ const ItemBody = ({
     body = (
       <UploadArea handleUpload={handleUploadedFiles} />
     );
-  }
-
-  if (bodyType === 'download') {
+  } else if (bodyType === 'download') {
     body = (
       <DownloadOptions song={song} />
     );
-  }
-
-  if (bodyType === 'versions') {
+  } else if (bodyType === 'versions') {
     if (song.id && song.isParent) {
       body = <SongVersions parentID={song.id} changeSong={changeSong} />;
     }
