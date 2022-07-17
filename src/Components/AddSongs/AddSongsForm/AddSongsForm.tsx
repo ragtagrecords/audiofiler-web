@@ -30,7 +30,7 @@ const AddSongForm = ({ playlist }: AddSongFormProps) => {
   const navigate = useNavigate();
 
   const getPlaylists = () => {
-    fetch(`${baseUrl}public/playlists/`)
+    fetch(`${baseUrl}/playlists`)
       .then((response) => response.json())
       .then((data) => setPlaylists(data));
   };

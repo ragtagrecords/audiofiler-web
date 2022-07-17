@@ -12,7 +12,7 @@ export const authenticate = async (): Promise<number> => {
   let res;
   try {
     res = await axios.get(
-      `${baseURL}public/authenticate`,
+      `${baseURL}/authenticate`,
       {
         headers: {
           'x-access-token': accessToken,
@@ -46,7 +46,7 @@ export const authorize = async (username: string, password: string) => {
   let res;
   try {
     res = await axios.post(
-      `${baseURL}public/authorize`,
+      `${baseURL}/authorize`,
       formData,
     );
   } catch (ex) {
@@ -72,7 +72,7 @@ export const signup = async (username: string, password: string) => {
   let res = null;
   try {
     res = await axios.post(
-      `${baseURL}public/users`,
+      `${baseURL}/users`,
       formData,
     );
   } catch (ex) {
