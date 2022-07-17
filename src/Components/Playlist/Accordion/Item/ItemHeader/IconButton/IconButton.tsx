@@ -9,8 +9,6 @@ type IconButtonProps = {
 }
 
 const IconButton = ({ type, onClick }: IconButtonProps) => {
-  // Without this function, file opens in new tab
-  // Creates a new link using a Blob instead of href and clicks it
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '26px',
@@ -18,8 +16,16 @@ const IconButton = ({ type, onClick }: IconButtonProps) => {
 
   let icon = null;
 
-  if (type === 'save') { icon = <AiOutlineCheck />; }
-  if (type === 'cancel') { icon = <AiOutlineClose />; }
+  switch (type) {
+    case 'save':
+      icon = <AiOutlineCheck />;
+      break;
+    case 'cancel':
+      icon = <AiOutlineClose />;
+      break;
+    default:
+      return null;
+  }
 
   return (
     <button

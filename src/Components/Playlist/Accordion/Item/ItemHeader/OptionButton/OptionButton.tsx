@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { IconContext } from 'react-icons';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import './OptionButton.scss';
 
 type OptionButtonProps = {
     username: string;
