@@ -23,7 +23,7 @@ const ItemBody = ({
   setEditedSong,
   isSelected,
   isOpen,
-  isEditing, // TODO: edit info
+  isEditing,
   bodyType,
   uploadedFiles,
   handleUploadedFiles,
@@ -56,19 +56,18 @@ const ItemBody = ({
       </>
     );
   } else if (bodyType === 'upload') {
-    // After files are uploaded
-    if (uploadedFiles) {
+    if (uploadedFiles) { // After files are uploaded
       body = (
         <UploadOptions
           uploadedFiles={uploadedFiles}
           parentSong={song}
         />
       );
+    } else { // Before files are uploaded
+      body = (
+        <UploadArea handleUpload={handleUploadedFiles} />
+      );
     }
-    // Before files are uploaded
-    body = (
-      <UploadArea handleUpload={handleUploadedFiles} />
-    );
   } else if (bodyType === 'download') {
     body = (
       <DownloadOptions song={song} />
@@ -76,8 +75,9 @@ const ItemBody = ({
   } else if (bodyType === 'versions') {
     if (song.id && song.isParent) {
       body = <SongVersions parentID={song.id} changeSong={changeSong} />;
+    } else {
+      body = <span>No additional versions found</span>;
     }
-    body = <span>No additional versions found</span>;
   }
 
   return (
