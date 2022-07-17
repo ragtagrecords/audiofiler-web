@@ -1,34 +1,34 @@
 import React, { useMemo } from 'react';
 import { IconContext } from 'react-icons';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
-import './OptionButton.scss';
+import { FiUpload } from 'react-icons/fi';
 
-type OptionButtonProps = {
-    username: string;
+// import './UploadButton.scss';
+
+type UploadButtonProps = {
     setBodyType: any;
-    setIsBodyOpen: any;
+    setIsOpen: any;
 }
 
-const OptionButton = ({ setBodyType, setIsBodyOpen }: OptionButtonProps) => {
+const UploadButton = ({ setBodyType, setIsOpen }: UploadButtonProps) => {
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
-    size: '40px',
+    size: '25px',
   }), []);
 
   return (
     <button
       type="button"
-      className="optionButton"
+      className="uploadButton"
       onClick={() => {
-        setBodyType('versions');
-        setIsBodyOpen(true);
+        setBodyType('upload');
+        setIsOpen(true);
       }}
     >
       <IconContext.Provider value={iconStyles}>
-        <BiDotsVerticalRounded />
+        <FiUpload />
       </IconContext.Provider>
     </button>
   );
 };
 
-export default OptionButton;
+export default UploadButton;

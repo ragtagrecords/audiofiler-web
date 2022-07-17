@@ -29,6 +29,7 @@ const PlaylistRoute = () => {
   const [userID, setUserID] = useState<number>(0);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const auth = async () => {
     const userID = await authenticate();
@@ -37,6 +38,10 @@ const PlaylistRoute = () => {
 
   const onSongAddClick = () => {
     setIsAdding(!isAdding);
+  };
+
+  const onSongEditClick = () => {
+    setIsEditing(!isEditing);
   };
 
   const menuOptions: MenuOption[] = [
@@ -50,18 +55,28 @@ const PlaylistRoute = () => {
       text: 'Add existing songs',
       onClick: onSongAddClick,
     },
+    {
+      href: '/',
+      text: 'Edit songs',
+      onClick: onSongEditClick,
+    },
   ];
 
-  /// given a songID, finds the index in playlistSongs array
+  /// Given a songID, finds the index in playlistSongs array
   const findIndexBySongID = (id: number) => {
-    if (!playlistSongs) { 'ERROR: no songs in playlist'; return false; }
-    let index = -1;
+    if (!playlistSongs) {
+      console.log('ERROR: no songs in playlist');
+      return 0;
+    }
+
+    let index = 0;
     for (let i = 0; i < playlistSongs.length; i += 1) {
       if (playlistSongs[i].id === id) {
         index = i;
+        return index;
       }
     }
-    return index;
+    return 0;
   };
 
   // Used locally and by children to change which song is playing
@@ -71,10 +86,8 @@ const PlaylistRoute = () => {
       return false;
     }
 
-    setSong(song);
-    if (!isChild) {
-      setSelectedSongID(song.id);
-    }
+    if (!isEditing) { setSong(song); }
+    if (!isChild) { setSelectedSongID(song.id); }
     return true;
   };
 
@@ -159,7 +172,8 @@ const PlaylistRoute = () => {
   useEffect(() => {
     if (playlistSongs && playlistSongs[0]) {
       if (playlistSongs[0].id) {
-        changeSong(playlistSongs[0]);
+        const newSongIndex = selectedSongID ? findIndexBySongID(selectedSongID) : 0;
+        changeSong(playlistSongs[newSongIndex]);
       }
     }
   }, [playlistSongs]);
@@ -201,7 +215,8 @@ const PlaylistRoute = () => {
         playlistSongs={playlistSongs}
         isAdding={isAdding}
         isLoading={isLoading}
-        loadPlaylistSongs={loadPlaylistSongs} // TODO:
+        isEditing={isEditing}
+        loadPlaylistSongs={loadPlaylistSongs}
         changeSong={changeSong}
       />
       {song && song.id

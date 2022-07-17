@@ -7,10 +7,10 @@ type DownloadButtonProps = {
     href: string;
     fileName: string;
     setBodyType: any;
-    setIsBodyOpen: any;
+    setIsOpen: any;
 }
 
-const DownloadButton = ({ setBodyType, setIsBodyOpen }: DownloadButtonProps) => {
+const DownloadButton = ({ setBodyType, setIsOpen }: DownloadButtonProps) => {
   // Without this function, file opens in new tab
   // Creates a new link using a Blob instead of href and clicks it
   const iconStyles = useMemo(() => ({
@@ -24,7 +24,7 @@ const DownloadButton = ({ setBodyType, setIsBodyOpen }: DownloadButtonProps) => 
       className="downloadButton"
       onClick={() => {
         setBodyType('download');
-        setIsBodyOpen(true);
+        setIsOpen(true);
       }}
     >
       <IconContext.Provider value={iconStyles}>

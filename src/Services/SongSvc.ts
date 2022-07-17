@@ -42,6 +42,32 @@ export const updateSongName = async (songID: number, newName: string) => {
   }
 };
 
+export const updateSong = async (song: Song) => {
+  if (!song.id) {
+    console.log('Song ID is required');
+    return false;
+  }
+
+  const url = `${baseURL}public/songs/${song.id}`;
+  delete song.id;
+
+  if (Object.keys.length === 0) {
+    console.log('No fields to update');
+    return false;
+  }
+
+  const payload = new FormData();
+  payload.append('song', JSON.stringify(song));
+
+  try {
+    await axios.put(url, payload);
+    return true;
+  } catch (ex) {
+    console.log(ex);
+    return false;
+  }
+};
+
 export const addSongToDB = async (song: Song) => {
   if (!song.name || !song.path) {
     console.log('ERROR: DbSvc::addSongToDB()');

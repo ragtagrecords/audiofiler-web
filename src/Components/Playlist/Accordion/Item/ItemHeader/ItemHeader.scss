@@ -25,18 +25,22 @@ $height: 60px;
         .accordionButton {
           @include funcs.flexCenter();
           height: $height;
-          font-size: 1.5rem;
           padding: 0px 20px;
-          background: transparent;
-          color: vars.$tertiaryColor;
-          border: none;
           cursor: pointer;
 
           span {
-            min-width: 0;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+          }
+
+          span, input {
+            background: transparent;
+            color: vars.$tertiaryColor;
+            text-align: center;
+            font-size: 1.5rem;
+            border: none;
+            min-width: 0;
           };
         }
       }

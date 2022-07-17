@@ -11,15 +11,17 @@ type AccordionItemBodyProps = {
   bodyType: BodyType
   isSelected: boolean;
   isOpen: boolean;
+  isEditing: boolean;
   uploadedFiles?: File[];
   handleUploadedFiles: React.ChangeEventHandler<HTMLInputElement>;
   changeSong: any;
 }
 
-const AccordionItemBody = ({
+const ItemBody = ({
   song,
   isSelected,
   isOpen,
+  isEditing, // TODO: edit info
   bodyType,
   uploadedFiles,
   handleUploadedFiles,
@@ -34,10 +36,6 @@ const AccordionItemBody = ({
   if (bodyType === 'info') {
     body = (
       <>
-        <p>
-          artist:
-          {song.artist}
-        </p>
         <p>
           tempo:
           {song.tempo}
@@ -82,8 +80,8 @@ const AccordionItemBody = ({
   );
 };
 
-AccordionItemBody.defaultProps = {
+ItemBody.defaultProps = {
   uploadedFiles: null,
 };
 
-export default AccordionItemBody;
+export default ItemBody;
