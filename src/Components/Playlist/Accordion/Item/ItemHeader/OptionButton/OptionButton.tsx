@@ -1,15 +1,14 @@
 import React, { useMemo } from 'react';
 import { IconContext } from 'react-icons';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import './OptionButton.scss';
 
 type OptionButtonProps = {
     username: string;
     setBodyType: any;
-    setIsBodyOpen: any;
+    setIsOpen: any;
 }
 
-const OptionButton = ({ setBodyType, setIsBodyOpen }: OptionButtonProps) => {
+const OptionButton = ({ setBodyType, setIsOpen }: OptionButtonProps) => {
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '40px',
@@ -21,7 +20,7 @@ const OptionButton = ({ setBodyType, setIsBodyOpen }: OptionButtonProps) => {
       className="optionButton"
       onClick={() => {
         setBodyType('versions');
-        setIsBodyOpen(true);
+        setIsOpen(true);
       }}
     >
       <IconContext.Provider value={iconStyles}>

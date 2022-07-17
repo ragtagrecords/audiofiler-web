@@ -8,18 +8,22 @@ import SongVersions from './SongVersions/SongVersions';
 
 type AccordionItemBodyProps = {
   song: Song;
+  setEditedSong: any;
   bodyType: BodyType
   isSelected: boolean;
   isOpen: boolean;
+  isEditing: boolean;
   uploadedFiles?: File[];
   handleUploadedFiles: React.ChangeEventHandler<HTMLInputElement>;
   changeSong: any;
 }
 
-const AccordionItemBody = ({
+const ItemBody = ({
   song,
+  setEditedSong,
   isSelected,
   isOpen,
+  isEditing, // TODO: edit info
   bodyType,
   uploadedFiles,
   handleUploadedFiles,
@@ -31,22 +35,27 @@ const AccordionItemBody = ({
 
   let body = null;
 
-  if (bodyType === 'info') {
+  if (bodyType === 'info' || isEditing) {
     body = (
       <>
         <p>
-          artist:
-          {song.artist}
-        </p>
-        <p>
-          tempo:
-          {song.tempo}
+          <span>tempo: </span>
+          {isEditing ? (
+            <input
+              value={song.tempo}
+              onChange={(e) => {
+                const editedSong = { ...song };
+                editedSong.tempo = e.target.value;
+                setEditedSong(editedSong);
+              }}
+            />
+          ) : (
+            <span> {song.tempo} </span>
+          )}
         </p>
       </>
     );
-  }
-
-  if (bodyType === 'upload') {
+  } else if (bodyType === 'upload') {
     // After files are uploaded
     if (uploadedFiles) {
       body = (
@@ -60,15 +69,11 @@ const AccordionItemBody = ({
     body = (
       <UploadArea handleUpload={handleUploadedFiles} />
     );
-  }
-
-  if (bodyType === 'download') {
+  } else if (bodyType === 'download') {
     body = (
       <DownloadOptions song={song} />
     );
-  }
-
-  if (bodyType === 'versions') {
+  } else if (bodyType === 'versions') {
     if (song.id && song.isParent) {
       body = <SongVersions parentID={song.id} changeSong={changeSong} />;
     }
@@ -82,8 +87,8 @@ const AccordionItemBody = ({
   );
 };
 
-AccordionItemBody.defaultProps = {
+ItemBody.defaultProps = {
   uploadedFiles: null,
 };
 
-export default AccordionItemBody;
+export default ItemBody;

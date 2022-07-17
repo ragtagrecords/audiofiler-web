@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Playlist, Song, BodyType } from 'Types';
 import { getSongs } from 'Services/SongSvc';
 import { addSongToPlaylist } from 'Services/PlaylistSvc';
-import Items from './Items/Items';
+import Item from './Item/Item';
 import SearchBar from '../../Common/SearchBar/SearchBar';
 import LoadingSpinner from '../../Common/LoadingSpinner/LoadingSpinner';
 import './Accordion.scss';
@@ -15,6 +15,7 @@ type AccordionProps = {
   loadPlaylistSongs: any;
   isAdding: boolean;
   isLoading: boolean;
+  isEditing: boolean;
   changeSong: any;
 }
 
@@ -26,6 +27,7 @@ const Accordion = ({
   loadPlaylistSongs,
   isAdding,
   isLoading,
+  isEditing,
   changeSong,
 }: AccordionProps) => {
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(false);
@@ -163,11 +165,12 @@ const Accordion = ({
     return <div className="accordionContainer"> No songs in this playlist yet, use three dots in upper right to add some</div>;
   }
 
+  const songs = isAdding ? filteredSongs : playlistSongs;
+
   return (
     <div className="accordionContainer listContainer">
       <ul className="accordion">
-        {isAdding
-        && (
+        {isAdding && (
         <li className="searchItem">
           <div className="bar">
             <SearchBar
@@ -177,22 +180,24 @@ const Accordion = ({
           </div>
         </li>
         )}
-        {playlistSongs && (
-          <Items
-            playlistSongs={playlistSongs}
-            selectedSongID={selectedSongID}
-            isBodyOpen={isBodyOpen}
-            setIsBodyOpen={setIsBodyOpen}
+        {songs && songs.map((song: Song) => (
+          <Item
+            key={`accordion-item-${song.id}`}
+            song={song}
+            isSelected={selectedSongID === song.id}
+            isOpen={isBodyOpen}
+            setIsOpen={setIsBodyOpen}
             setBodyType={setBodyType}
             isAdding={isAdding}
-            filteredSongs={filteredSongs ?? undefined}
+            isEditing={isEditing}
             uploadedFiles={uploadedFiles ?? undefined}
             addSong={addSong}
             handleUploadedFiles={handleUploadedFiles}
             bodyType={bodyType}
             changeSong={changeSong}
+            loadPlaylistSongs={loadPlaylistSongs}
           />
-        )}
+        ))}
       </ul>
     </div>
   );

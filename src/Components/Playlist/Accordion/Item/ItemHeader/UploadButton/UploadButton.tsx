@@ -6,10 +6,10 @@ import { FiUpload } from 'react-icons/fi';
 
 type UploadButtonProps = {
     setBodyType: any;
-    setIsBodyOpen: any;
+    setIsOpen: any;
 }
 
-const UploadButton = ({ setBodyType, setIsBodyOpen }: UploadButtonProps) => {
+const UploadButton = ({ setBodyType, setIsOpen }: UploadButtonProps) => {
   const iconStyles = useMemo(() => ({
     color: '#5ae7ff', // this is tertiaryColor from Styles/vars.. couldnt figure out how to import it
     size: '25px',
@@ -21,7 +21,7 @@ const UploadButton = ({ setBodyType, setIsBodyOpen }: UploadButtonProps) => {
       className="uploadButton"
       onClick={() => {
         setBodyType('upload');
-        setIsBodyOpen(true);
+        setIsOpen(true);
       }}
     >
       <IconContext.Provider value={iconStyles}>
