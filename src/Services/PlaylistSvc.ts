@@ -25,7 +25,7 @@ export const getPlaylistByID = async (id: string | number): Promise<Playlist | n
   }
 };
 
-export const addSongToPlaylist = async (songID: number, playlistID: string) => {
+export const addSongToPlaylist = async (songID: number, playlistID: number) => {
   try {
     await axios.post(`${baseURL}/playlists/${playlistID}/song/${songID}`);
     return true;

@@ -1,0 +1,21 @@
+@use "Styles/funcs";
+
+.appContainer {
+  height: 100vh;
+}
+
+.tempPlayer {
+  width: 100%;
+  height: 100px;
+  background-color: red;
+  z-index: 10000000000;
+  position: fixed;
+  bottom: 0;
+  @include funcs.flexCenter();
+
+
+  span {
+    color: white;
+    z-index: 10000000001;
+  }
+}

@@ -30,7 +30,6 @@ const Accordion = ({
   isEditing,
   changeSong,
 }: AccordionProps) => {
-  const [isBodyOpen, setIsBodyOpen] = useState<boolean>(false);
   const [bodyType, setBodyType] = useState<BodyType>('info');
 
   // State for searching
@@ -182,11 +181,9 @@ const Accordion = ({
         )}
         {songs && songs.map((song: Song) => (
           <Item
-            key={`accordion-item-${song.id}`}
+            key={`accordion-item-${song.id}-${playlist?.id || '-1'}`}
             song={song}
             isSelected={selectedSongID === song.id}
-            isOpen={isBodyOpen}
-            setIsOpen={setIsBodyOpen}
             setBodyType={setBodyType}
             isAdding={isAdding}
             isEditing={isEditing}
@@ -195,6 +192,7 @@ const Accordion = ({
             handleUploadedFiles={handleUploadedFiles}
             bodyType={bodyType}
             changeSong={changeSong}
+            setSelectedSongID={setSelectedSongID}
             loadPlaylistSongs={loadPlaylistSongs}
           />
         ))}

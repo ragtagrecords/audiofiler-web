@@ -10,12 +10,11 @@ type ItemProps = {
   isSelected: boolean;
   isEditing: boolean;
   isAdding: boolean;
-  isOpen: boolean;
-  setIsOpen: any;
   bodyType: BodyType;
   setBodyType: any;
   addSong: any;
   changeSong: boolean;
+  setSelectedSongID: any;
   loadPlaylistSongs: any;
   uploadedFiles?: File[];
   handleUploadedFiles: React.ChangeEventHandler<HTMLInputElement>;
@@ -26,16 +25,16 @@ const Item = ({
   isSelected,
   isEditing,
   isAdding,
-  isOpen,
-  setIsOpen,
   bodyType,
   setBodyType,
   addSong,
   changeSong,
+  setSelectedSongID,
   loadPlaylistSongs,
   uploadedFiles,
   handleUploadedFiles,
 }: ItemProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [editedSong, setEditedSong] = useState<Song>(song);
 
   const wereEditsMade = () => {
@@ -82,13 +81,13 @@ const Item = ({
         setEditedSong={setEditedSong}
         isEdited={isEdited}
         isSelected={!isAdding && isSelected}
-        isOpen={isOpen}
         setIsOpen={setIsOpen}
         setBodyType={setBodyType}
         isAdding={isAdding}
         isEditing={isEditing}
         addSong={addSong}
         changeSong={changeSong}
+        setSelectedSongID={setSelectedSongID}
         saveEditedSongToDB={saveEditedSongToDB}
         discardEdits={discardEdits}
       />

@@ -17,14 +17,14 @@ type AddSongFormProps = {
 }
 
 const defaultPlaylist: Playlist = {
-  id: '',
+  id: 0,
   name: '',
 };
 
 const AddSongForm = ({ playlist }: AddSongFormProps) => {
   const [songs, setSongs] = useState<Array<Song> | null>(null);
   const [playlists, setPlaylists] = useState<Array<Playlist>>([defaultPlaylist]);
-  const [globalPlaylistID, setGlobalPlaylist] = useState<string>(playlist ? playlist.id : '');
+  const [globalPlaylistID, setGlobalPlaylist] = useState<number>(playlist ? playlist.id : 0);
   const [userID, setUserID] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -142,7 +142,7 @@ const AddSongForm = ({ playlist }: AddSongFormProps) => {
     const songsToSubmit = [...songs];
 
     // Add selected global playlistID to all the songs
-    if (globalPlaylistID !== '') {
+    if (globalPlaylistID !== 0) {
       songsToSubmit.forEach((song) => {
         if (song.playlistIDs && song.playlistIDs[0]) {
           song.playlistIDs.push(globalPlaylistID.toString());
@@ -188,7 +188,7 @@ const AddSongForm = ({ playlist }: AddSongFormProps) => {
               className="globalPlaylistIDInput"
               value={globalPlaylistID}
               onChange={(e) => {
-                setGlobalPlaylist(e.target.value);
+                setGlobalPlaylist(parseInt(e.target.value, 10));
               }}
             >
               <option
