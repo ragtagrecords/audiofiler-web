@@ -81,9 +81,15 @@ const ItemBody = ({
   }
 
   return (
-    <div className={`accordionBody ${(isSelected && isOpen) ? 'open' : ''}`}>
+    <button
+      type="button"
+      className={`accordionBody ${(isSelected && isOpen) ? 'open' : ''} ${bodyType}`}
+      onClick={() => {
+        if (bodyType === 'info') { changeSong(song); }
+      }}
+    >
       {body}
-    </div>
+    </button>
   );
 };
 

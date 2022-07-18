@@ -33,6 +33,7 @@ module.exports = {
     'linebreak-style': [0],
     'react/function-component-definition': [0],
     'react/jsx-one-expression-per-line': [0],
+    'react/jsx-no-constructed-context-values': [0],
     'react/jsx-no-useless-fragment': [0],
     'react/jsx-wrap-multilines': [1, { logical: 'parens-new-line' }],
     'react/no-unused-prop-types': [0],

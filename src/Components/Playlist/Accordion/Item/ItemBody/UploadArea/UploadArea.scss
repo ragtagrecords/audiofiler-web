@@ -3,22 +3,18 @@
 $width: 25px;
 
 
-.uploadArea {
+label.uploadArea {
+    @include funcs.flexCenter;
+    flex-direction: column;
     width: 80%;
     height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border: 4px vars.$tertiaryColor dashed;
     z-index: vars.$floatingZ - 20;
     border-radius: 20px;
     font-size: 1rem;
-    label {
-        cursor: pointer;
-        @include funcs.flexCenter;
-        flex-direction: column;
-        padding-top: 10px;
-    }
+    cursor: pointer;
+    padding-top: 10px;
+    
     input {
         display: none;
     }

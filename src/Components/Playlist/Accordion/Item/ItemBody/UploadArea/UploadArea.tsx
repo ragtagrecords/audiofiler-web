@@ -14,16 +14,13 @@ const UploadArea = ({ handleUpload }: UploadAreaProps) => {
   }), []);
 
   return (
-    <div className="uploadArea">
+    <label className="uploadArea">
+      click, or drag files to upload!
       <IconContext.Provider value={iconStyles}>
-        <label>
-          click, or drag files to upload!
-          <AiOutlineCloudUpload />
-          <input type="file" onChange={handleUpload} multiple />
-        </label>
+        <AiOutlineCloudUpload />
       </IconContext.Provider>
-
-    </div>
+      <input type="file" onChange={handleUpload} multiple />
+    </label>
   );
 };
 

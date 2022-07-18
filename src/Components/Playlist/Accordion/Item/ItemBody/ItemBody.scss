@@ -3,9 +3,14 @@
 
 $height: 60px;
 
-div.accordionBody {
+button.accordionBody {
   display: none;
   color: vars.$tertiaryColor;
+  font-size: 2.2rem;
+
+  &.info {
+    cursor: pointer;
+  }
 
   &.open {
     @include funcs.flexCenter();
@@ -20,7 +25,7 @@ div.accordionBody {
         border: none;
         background: none;
         color: whitesmoke;
-        font-size: 2.2rem;
+        font-size: inherit;
         width: 60px;
       }
     }

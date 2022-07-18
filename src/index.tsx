@@ -11,22 +11,26 @@ import PlaylistRoute from 'Components/Playlist/PlaylistRoute';
 import PlaylistsRoute from 'Components/Playlists/PlaylistsRoute';
 import LoginRoute from 'Components/Auth/LoginRoute';
 import SignupRoute from 'Components/Auth/SignupRoute';
+import { App } from './App/App';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement!);
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<PlaylistsRoute />} />
-        <Route path="/playlists" element={<PlaylistsRoute />} />
-        <Route path="/playlists/:playlistID" element={<PlaylistRoute />} />
-        <Route path="/playlists/add" element={<AddPlaylistRoute />} />
-        <Route path="/songs/add" element={<AddSongsRoute />} />
-        <Route path="/signup" element={<SignupRoute />} />
-        <Route path="/login" element={<LoginRoute />} />
-      </Routes>
-    </BrowserRouter>
+    <App>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PlaylistsRoute />} />
+          <Route path="/playlists" element={<PlaylistsRoute />} />
+          <Route path="/playlists/:playlistID" element={<PlaylistRoute />} />
+          <Route path="/playlists/add" element={<AddPlaylistRoute />} />
+          <Route path="/songs/add" element={<AddSongsRoute />} />
+          <Route path="/signup" element={<SignupRoute />} />
+          <Route path="/login" element={<LoginRoute />} />
+        </Routes>
+      </BrowserRouter>
+    </App>
   </React.StrictMode>,
 );
 

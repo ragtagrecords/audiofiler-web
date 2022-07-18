@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MenuOption, Playlist, Song } from 'Types';
 import { authenticate } from 'Services/AuthSvc';
 import { getSongs } from 'Services/SongSvc';
 import { getPlaylistByID, updatePlaylist } from 'Services/PlaylistSvc';
 import UserMenu from 'Components/Common/UserMenu/UserMenu';
-import AudioPlayer from 'Components/AudioPlayer/AudioPlayer';
 import Accordion from 'Components/Playlist/Accordion/Accordion';
 import BackButton from 'Components/Common/BackButton/BackButton';
+import { AppCtx } from 'App/App';
 import './PlaylistRoute.scss';
 
 type PlaylistRouteParams = {
@@ -17,6 +17,7 @@ type PlaylistRouteParams = {
 const PlaylistRoute = () => {
   // Get playlistID from query params
   const { playlistID } = useParams<PlaylistRouteParams>();
+  const appContext = useContext(AppCtx);
 
   if (!playlistID) {
     return (<div>No playlistID found</div>);
@@ -24,7 +25,6 @@ const PlaylistRoute = () => {
 
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [playlistSongs, setPlaylistSongs] = useState<Song[] | null>(null);
-  const [song, setSong] = useState<Song | null>(null);
   const [selectedSongID, setSelectedSongID] = useState<number>(0);
   const [userID, setUserID] = useState<number>(0);
   const [isAdding, setIsAdding] = useState<boolean>(false);
@@ -44,6 +44,7 @@ const PlaylistRoute = () => {
     setIsEditing(!isEditing);
   };
 
+  // Used for 3 dots in upper right of page
   const menuOptions: MenuOption[] = [
     {
       href: '/songs/add',
@@ -62,63 +63,28 @@ const PlaylistRoute = () => {
     },
   ];
 
-  /// Given a songID, finds the index in playlistSongs array
-  const findIndexBySongID = (id: number) => {
-    if (!playlistSongs) {
-      console.log('ERROR: no songs in playlist');
-      return 0;
-    }
-
-    let index = 0;
-    for (let i = 0; i < playlistSongs.length; i += 1) {
-      if (playlistSongs[i].id === id) {
-        index = i;
-        return index;
-      }
-    }
-    return 0;
-  };
-
-  // Used locally and by children to change which song is playing
+  // Change the song that is playing in the AudioPlayer
   const changeSong = (song: Song, isChild = false) => {
+    if (isEditing) {
+      return false;
+    }
+
     if (!song.id) {
       console.log('Failed to change song!');
       return false;
     }
 
-    if (!isEditing) { setSong(song); }
+    if (appContext?.song?.id !== song.id) {
+      appContext?.setSong(song);
+    }
+
+    // If song is in different playlist than the one playing, update songs in context
+    if (playlist?.id !== appContext?.playlistID) {
+      appContext?.setPlaylistID(playlistID);
+      appContext?.setSongs(playlistSongs);
+    }
+
     if (!isChild) { setSelectedSongID(song.id); }
-    return true;
-  };
-
-  // Ensures index is valid for the current # of playlistSongs
-  const validIndex = (i: number) => {
-    if (!playlistSongs) { console.log('ERROR: no songs in playlist'); return 0; }
-    const maxIndex = playlistSongs.length;
-    const remainder = Math.abs(i % maxIndex);
-    // If index was negative, return the difference
-    return i >= 0 ? remainder : playlistSongs.length - remainder;
-  };
-
-  // Used for skipping and going to previous playlistSongs
-  const changeSongRelativeToCurrent = (relativeIndexOfNewSong: number) => {
-    const currentSongIndex = findIndexBySongID(selectedSongID);
-
-    if (!currentSongIndex) {
-      console.log('Could not determine index of currently selected song');
-      return false;
-    }
-    if (!playlistSongs) { console.log('ERROR: no songs in playlist'); return 0; }
-    const newSongIndex = validIndex(currentSongIndex + relativeIndexOfNewSong);
-    const newSong = playlistSongs[newSongIndex];
-
-    if (!newSong.id) {
-      console.log('Could not find valid ID for new song');
-      return false;
-    }
-
-    setSong(newSong);
-    setSelectedSongID(newSong.id);
     return true;
   };
 
@@ -168,23 +134,22 @@ const PlaylistRoute = () => {
     loadPlaylistSongs();
   }, []);
 
-  // Load first song if playlistSongs change
+  // If there is no song currently being played, play the first one in the playlist
   useEffect(() => {
-    if (playlistSongs && playlistSongs[0]) {
+    const isFirstSong = appContext?.song === null;
+    if (isFirstSong && playlistSongs && playlistSongs[0]) {
       if (playlistSongs[0].id) {
-        const newSongIndex = selectedSongID ? findIndexBySongID(selectedSongID) : 0;
-        changeSong(playlistSongs[newSongIndex]);
+        changeSong(playlistSongs[0]);
       }
     }
   }, [playlistSongs]);
 
-  // If a song exists in the state, we are no longer loading
-  // We should prob find a way to do this without useEffect
+  // When songs from playlist are in state, we are done loading
   useEffect(() => {
-    if (isLoading && song && song.id) {
+    if (isLoading && playlistSongs && playlistSongs[0].id) {
       setIsLoading(false);
     }
-  }, [song]);
+  }, [playlistSongs]);
 
   return (
     <>
@@ -219,18 +184,6 @@ const PlaylistRoute = () => {
         loadPlaylistSongs={loadPlaylistSongs}
         changeSong={changeSong}
       />
-      {song && song.id
-        && (
-          <AudioPlayer
-            song={song}
-            skipSong={() => {
-              changeSongRelativeToCurrent(1);
-            }}
-            prevSong={() => {
-              changeSongRelativeToCurrent(-1);
-            }}
-          />
-        )}
     </>
   );
 };

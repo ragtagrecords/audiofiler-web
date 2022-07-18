@@ -12,7 +12,6 @@ type ItemHeaderProps = {
   song: Song;
   setEditedSong: any;
   isSelected: boolean;
-  isOpen: boolean;
   isEditing: boolean;
   isEdited: boolean;
   setIsOpen: any;
@@ -20,6 +19,7 @@ type ItemHeaderProps = {
   isAdding: boolean;
   addSong: any;
   changeSong: any;
+  setSelectedSongID: any;
   saveEditedSongToDB: any;
   discardEdits: any;
 }
@@ -28,7 +28,6 @@ const ItemHeader = ({
   song,
   setEditedSong,
   isSelected,
-  isOpen,
   isEditing,
   isEdited,
   setIsOpen,
@@ -36,6 +35,7 @@ const ItemHeader = ({
   isAdding,
   addSong,
   changeSong,
+  setSelectedSongID,
   discardEdits,
   saveEditedSongToDB,
 }: ItemHeaderProps) => {
@@ -64,17 +64,28 @@ const ItemHeader = ({
 
   // Song name and a button to select the song and toggle body section
   const center = () => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      switch (e.detail) {
+        case 1: // click
+          setBodyType('info');
+          setSelectedSongID(song.id);
+          setIsOpen(true);
+          if (isSelected) {
+            changeSong(song);
+          }
+          break;
+        case 2: // double click
+          changeSong(song);
+          break;
+        default:
+          break;
+      }
+    };
     return (
       <button
         type="button"
         className="accordionButton"
-        onClick={() => {
-          if (!isSelected) {
-            changeSong(song);
-          } else {
-            setIsOpen(!isOpen);
-          }
-        }}
+        onClick={handleClick}
       >
         {isEditing ? (
           <input
