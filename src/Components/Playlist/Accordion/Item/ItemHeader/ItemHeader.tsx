@@ -1,5 +1,6 @@
-import React from 'react';
-import { Song } from 'Types';
+import React, { useContext } from 'react';
+import { AppCtx } from 'App/App';
+import { PlaylistCtx } from 'Components/Playlist/PlaylistRoute';
 
 import AddButton from './AddButton/AddButton';
 import DownloadButton from './DownloadButton/DownloadButton';
@@ -7,39 +8,33 @@ import UploadButton from './UploadButton/UploadButton';
 import OptionButton from './OptionButton/OptionButton';
 import IconButton from './IconButton/IconButton';
 import './ItemHeader.scss';
+import { ItemCtx } from '../Item';
 
-type ItemHeaderProps = {
-  song: Song;
-  setEditedSong: any;
-  isSelected: boolean;
-  isEditing: boolean;
-  isEdited: boolean;
-  setIsOpen: any;
-  setBodyType: any;
-  isAdding: boolean;
-  addSong: any;
-  changeSong: any;
-  setSelectedSongID: any;
-  saveEditedSongToDB: any;
-  discardEdits: any;
-}
-
-const ItemHeader = ({
-  song,
-  setEditedSong,
-  isSelected,
-  isEditing,
-  isEdited,
-  setIsOpen,
-  setBodyType,
-  isAdding,
-  addSong,
-  changeSong,
-  setSelectedSongID,
-  discardEdits,
-  saveEditedSongToDB,
-}: ItemHeaderProps) => {
+const ItemHeader = () => {
   const username = localStorage.getItem('username');
+
+  const appContext = useContext(AppCtx);
+  const playlistContext = useContext(PlaylistCtx);
+  const itemContext = useContext(ItemCtx);
+  if (appContext === null || itemContext === null || !playlistContext) {
+    return null;
+  }
+  const {
+    isEditing,
+    isAdding,
+    changeSong,
+    setBodyType,
+    addSongToCurrentPlaylist,
+  } = playlistContext;
+  const {
+    song,
+    isSelected,
+    isEdited,
+    setIsOpen,
+    discardEdits,
+    setEditedSong,
+    saveEditedSongToDB,
+  } = itemContext;
 
   // Either show the add button or the upload button
   const left = () => {
@@ -47,12 +42,24 @@ const ItemHeader = ({
       return null;
     }
 
-    if (isAdding) {
-      return (<AddButton addSong={addSong} songID={song.id ?? 0} />);
+    if (playlistContext.isAdding) {
+      return (
+        <AddButton
+          onClick={() => {
+            addSongToCurrentPlaylist(song.id);
+          }}
+        />
+      );
     }
 
     if (isSelected && !isEditing) {
-      return (<UploadButton setBodyType={setBodyType} setIsOpen={setIsOpen} />);
+      return (
+        <UploadButton onClick={() => {
+          setBodyType('upload');
+          setIsOpen(true);
+        }}
+        />
+      );
     }
 
     if (isSelected && isEditing && isEdited) {
@@ -68,7 +75,7 @@ const ItemHeader = ({
       switch (e.detail) {
         case 1: // click
           setBodyType('info');
-          setSelectedSongID(song.id);
+          playlistContext.setSelectedSongID(song.id);
           setIsOpen(true);
           if (isSelected) {
             changeSong(song);
@@ -76,6 +83,9 @@ const ItemHeader = ({
           break;
         case 2: // double click
           changeSong(song);
+          if (appContext?.song?.id === song.id) {
+            setIsOpen(false);
+          }
           break;
         default:
           break;
@@ -113,16 +123,17 @@ const ItemHeader = ({
       return (
         <>
           <DownloadButton
-            href={song.path}
-            fileName={song.path.split('/')[5]}
             key={`download-song-${song.id}`}
-            setBodyType={setBodyType}
-            setIsOpen={setIsOpen}
+            onClick={() => {
+              setBodyType('download');
+              setIsOpen(true);
+            }}
           />
           <OptionButton
-            username={username}
-            setBodyType={setBodyType}
-            setIsOpen={setIsOpen}
+            onClick={() => {
+              setBodyType('versions');
+              setIsOpen(true);
+            }}
           />
         </>
       );
