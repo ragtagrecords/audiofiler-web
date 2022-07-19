@@ -4,13 +4,10 @@ import { FiDownload } from 'react-icons/fi';
 import './DownloadButton.scss';
 
 type DownloadButtonProps = {
-    href: string;
-    fileName: string;
-    setBodyType: any;
-    setIsOpen: any;
+    onClick: any;
 }
 
-const DownloadButton = ({ setBodyType, setIsOpen }: DownloadButtonProps) => {
+const DownloadButton = ({ onClick }: DownloadButtonProps) => {
   // Without this function, file opens in new tab
   // Creates a new link using a Blob instead of href and clicks it
   const iconStyles = useMemo(() => ({
@@ -22,10 +19,7 @@ const DownloadButton = ({ setBodyType, setIsOpen }: DownloadButtonProps) => {
     <button
       type="button"
       className="downloadButton"
-      onClick={() => {
-        setBodyType('download');
-        setIsOpen(true);
-      }}
+      onClick={onClick}
     >
       <IconContext.Provider value={iconStyles}>
         <FiDownload />

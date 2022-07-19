@@ -80,7 +80,7 @@ const UserOptions = (props: UserOptionsProps) => {
 };
 
 type UserMenuProps = {
-  userID: number;
+  userID: number | null;
   options: MenuOption[];
 }
 

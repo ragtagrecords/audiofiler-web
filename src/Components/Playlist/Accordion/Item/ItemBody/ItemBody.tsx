@@ -1,34 +1,34 @@
-import React from 'react';
-import { BodyType, Song } from 'Types';
-import './ItemBody.scss';
+import React, { useContext } from 'react';
+import { PlaylistCtx } from 'Components/Playlist/PlaylistRoute';
 import UploadArea from './UploadArea/UploadArea';
 import DownloadOptions from './DownloadOptions/DownloadOptions';
 import UploadOptions from './UploadOptions/UploadOptions';
 import SongVersions from './SongVersions/SongVersions';
+import { ItemCtx } from '../Item';
+import './ItemBody.scss';
 
-type AccordionItemBodyProps = {
-  song: Song;
-  setEditedSong: any;
-  bodyType: BodyType
-  isSelected: boolean;
-  isOpen: boolean;
-  isEditing: boolean;
-  uploadedFiles?: File[];
-  handleUploadedFiles: React.ChangeEventHandler<HTMLInputElement>;
-  changeSong: any;
-}
+const ItemBody = () => {
+  const playlistContext = useContext(PlaylistCtx);
+  const itemContext = useContext(ItemCtx);
+  if (!playlistContext || !itemContext) {
+    return null;
+  }
 
-const ItemBody = ({
-  song,
-  setEditedSong,
-  isSelected,
-  isOpen,
-  isEditing,
-  bodyType,
-  uploadedFiles,
-  handleUploadedFiles,
-  changeSong,
-}: AccordionItemBodyProps) => {
+  const {
+    isEditing,
+    changeSong,
+    bodyType,
+    uploadedFiles,
+    handleUploadedFiles,
+  } = playlistContext;
+
+  const {
+    song,
+    isSelected,
+    isOpen,
+    setEditedSong,
+  } = itemContext;
+
   if (bodyType === 'collapsed' || !isSelected) {
     return null;
   }
@@ -91,10 +91,6 @@ const ItemBody = ({
       {body}
     </button>
   );
-};
-
-ItemBody.defaultProps = {
-  uploadedFiles: null,
 };
 
 export default ItemBody;

@@ -3,18 +3,15 @@ import addButton from 'Assets/blue-plus.svg';
 import './AddButton.scss';
 
 type AddButtonProps = {
-    songID: number;
-    addSong: any;
+    onClick: any;
 }
 
-const AddButton = ({ songID, addSong }: AddButtonProps) => {
+const AddButton = ({ onClick }: AddButtonProps) => {
   return (
     <button
       type="button"
       className="addButton"
-      onClick={() => {
-        addSong(songID);
-      }}
+      onClick={onClick}
     >
       <img
         alt="addButtonIcon"
